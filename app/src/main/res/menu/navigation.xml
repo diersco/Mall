@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_front"
+        android:icon="@drawable/main_tab_front_page_unselected"
+        android:title="@string/main_front_page" />
+
+    <item
+        android:id="@+id/navigation_classification"
+        android:icon="@drawable/main_tab_classification_unselected"
+        android:title="@string/main_classification" />
+    <item
+        android:id="@+id/navigation_cart"
+        android:icon="@drawable/main_tab_cart_unselected"
+        android:title="@string/main_cart" />
+    <item
+        android:id="@+id/navigation_mine"
+        android:icon="@drawable/main_tab_mine_unselected"
+        android:title="@string/main_mine" />
+</menu>

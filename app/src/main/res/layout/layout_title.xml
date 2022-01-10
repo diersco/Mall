@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/title_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:background="?attr/colorPrimary"
+        android:navigationIcon="@drawable/ic_unite_return_black"
+        app:layout_scrollFlags="enterAlways"
+        app:navigationIcon="@drawable/ic_unite_return_black"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
+
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_16"
+            tools:text="个人设置" />
+
+    </androidx.appcompat.widget.Toolbar>
+    <!--    <androidx.appcompat.widget.Toolbar-->
+    <!--        android:id="@+id/toolbar"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="@dimen/actionBarSize"-->
+    <!--        android:background="?attr/colorPrimary"-->
+    <!--        app:navigationIcon="@drawable/ic_tools_back"-->
+    <!--        android:navigationIcon="@drawable/ic_tools_back"-->
+    <!--        app:layout_scrollFlags="enterAlways"-->
+    <!--        app:popupTheme="@style/AppTheme.PopupOverlay"-->
+    <!--        app:theme="@style/ToolBar" >-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/toolbar_title"-->
+    <!--            style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_gravity="center"-->
+    <!--            android:maxLines="1"-->
+    <!--            android:ellipsize="end"-->
+    <!--            android:text="text"-->
+    <!--            android:textColor="@color/black"/>-->
+
+    <!--    <RelativeLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:visibility="gone">-->
+
+    <!--        <ImageView-->
+    <!--            android:id="@+id/img_unite_return"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_centerVertical="true"-->
+    <!--            android:layout_marginStart="@dimen/dp_10"-->
+    <!--            android:padding="@dimen/dp_5"-->
+    <!--            android:src="@drawable/ic_unite_return_black" />-->
+
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/tv_title"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_centerInParent="true"-->
+    <!--            android:textColor="@color/black"-->
+    <!--            android:textSize="@dimen/sp_16"-->
+    <!--            tools:text="个人设置" />-->
+
+    <!--    </RelativeLayout>-->
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#DDDDDD" />
+
+
+</LinearLayout>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".activity.PersonalSettingsActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include layout="@layout/layout_title" />
+
+
+        <RelativeLayout
+            android:id="@+id/layout_personal_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingStart="@dimen/dp_15"
+            android:paddingEnd="@dimen/dp_18">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/dp_15"
+                android:paddingBottom="@dimen/dp_15">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/setting_personal_information"
+                    android:textColor="@color/default_font_gray_262"
+                    android:textSize="@dimen/sp_14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:includeFontPadding="false"
+                    android:text="@string/setting_avatar_nickname"
+                    android:textColor="@color/default_font_gray_909"
+                    android:textSize="@dimen/sp_12" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_front_right" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/default_font_gray_f5f" />
+
+        <RelativeLayout
+            android:id="@+id/layout_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingStart="@dimen/dp_15"
+            android:paddingEnd="@dimen/dp_18">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="@dimen/dp_15"
+                android:paddingBottom="@dimen/dp_15">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:includeFontPadding="false"
+                    android:text="@string/setting_shipping_address"
+                    android:textColor="@color/default_font_gray_262"
+                    android:textSize="@dimen/sp_14" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_10"
+                    android:includeFontPadding="false"
+                    android:text="@string/setting_my_shipping_address"
+                    android:textColor="@color/default_font_gray_909"
+                    android:textSize="@dimen/sp_12" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_front_right" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_mine_contact_customer_service"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_12"
+            android:background="@color/white"
+            android:drawablePadding="@dimen/dp_11"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/dp_15"
+            android:paddingTop="@dimen/dp_15"
+            android:paddingEnd="@dimen/dp_18"
+            android:paddingBottom="@dimen/dp_15"
+            android:text="@string/mine_contact_customer_service"
+            android:textColor="@color/default_font_gray_262"
+            android:textSize="@dimen/sp_14"
+            app:drawableRightCompat="@drawable/ic_front_right" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/default_font_gray_f5f"
+            android:paddingStart="@dimen/dp_15"
+            android:paddingEnd="@dimen/dp_18" />
+
+        <TextView
+            android:id="@+id/tv_mine_about_us"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:drawablePadding="@dimen/dp_11"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/dp_15"
+            android:paddingTop="@dimen/dp_15"
+            android:paddingEnd="@dimen/dp_18"
+            android:paddingBottom="@dimen/dp_15"
+            android:text="@string/mine_about_us"
+            android:textColor="@color/default_font_gray_262"
+            android:textSize="@dimen/sp_14"
+            app:drawableRightCompat="@drawable/ic_front_right" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_quit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="退出"
+        android:textColor="@color/default_font_gray_666"
+        android:textSize="@dimen/sp_14" />
+</RelativeLayout>
