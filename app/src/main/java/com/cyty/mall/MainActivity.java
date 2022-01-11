@@ -2,7 +2,6 @@ package com.cyty.mall;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.KeyEvent;
@@ -11,12 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.cyty.mall.adapter.MainNavigationAdapter;
 import com.cyty.mall.base.BaseActivity;
-import com.cyty.mall.contants.MKParameter;
-import com.cyty.mall.view.CustomViewPager;
 import com.cyty.mall.view.ForbidScrollViewpager;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
