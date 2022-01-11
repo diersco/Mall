@@ -2,7 +2,6 @@ package com.cyty.mall.http;
 
 import android.content.Context;
 
-import com.blankj.utilcode.util.LogUtils;
 import com.cyty.mall.contants.MKParameter;
 import com.cyty.mall.util.MkUtils;
 import com.google.gson.JsonObject;
@@ -125,6 +124,72 @@ public class HttpManager {
                 .post(requestBody)
                 .build();
         mHttpEngine.request(request, HttpResponse.addressListResponse.class, callback);
+    }
+
+    /**
+     * 新增或者修改地址
+     *
+     * @param defaults        默认  1是默认 2不是
+     * @param detailedAddress 详细地址
+     * @param id              收货地址编号
+     * @param name            姓名
+     * @param phone           电话号码
+     * @param region          地区
+     * @param callback
+     */
+    public void addOrReviseAddressList(int defaults, String detailedAddress, int id, String name, String phone, String region, HttpEngine.HttpResponseResultCallback<HttpResponse.addOrReviseAddressResponse> callback) {
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("defaults", defaults + "");
+        jsonObject.addProperty("detailedAddress", detailedAddress);
+        if (id > 0) {
+            jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        }
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_NAME, name);
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PHONE, phone);
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_REGION, region);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_ADD_MALL_ADDRESS)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.addOrReviseAddressResponse.class, callback);
+    }
+
+    /**
+     * 选择默认地址
+     *
+     * @param defaults 默认  1是默认 2不是
+     * @param id
+     */
+    public void reviseDefaultsAddress(int id, int defaults, HttpEngine.HttpResponseResultCallback<HttpResponse.reviseDefaultsAddress> callback) {
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("defaults", defaults + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_ADD_MALL_ADDRESS)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.reviseDefaultsAddress.class, callback);
+    }
+
+    /**
+     * 删除地址
+     *
+     * @param id
+     */
+    public void deleteAddress(int id, HttpEngine.HttpResponseResultCallback<HttpResponse.deleteAddress> callback) {
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_REMOVE_MALL_ADDRESS)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.deleteAddress.class, callback);
     }
 
     /**

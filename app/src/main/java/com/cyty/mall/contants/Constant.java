@@ -12,4 +12,6 @@ public interface Constant {
      */
     String PHONE_REGEX = "^[1][3,4,5,6,7,8,9][0-9]{9}$";
     String AUTHORIZATION = "Authorization";
+    String INTENT_DATA = "intent_data";
+    String INTENT_TYPE = "intent_type";
 }

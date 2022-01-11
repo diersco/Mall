@@ -120,4 +120,6 @@ dependencies {
     implementation 'com.contrarywind:Android-PickerView:4.1.9'
     //状态栏工具类
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
+    implementation 'com.github.crazyandcoder:citypicker:6.0.2'
+    implementation 'com.bigkoo:alertview:1.0.3'
 }

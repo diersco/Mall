@@ -34,6 +34,14 @@ public class ServerApiConstants {
      * 查询地址列表
      */
     public static final String URL_GET_ADDRESS_LIST = BASE_URL + "/basic/selectMallAddressesList";
+    /**
+     * 新增或修改地址
+     */
+    public static final String URL_ADD_MALL_ADDRESS = BASE_URL + "/basic/addMallAddresses";
+    /**
+     * 删除地址
+     */
+    public static final String URL_REMOVE_MALL_ADDRESS = BASE_URL + "/basic/removeMallAddresses";
 
     /**
      * 获取首页数据

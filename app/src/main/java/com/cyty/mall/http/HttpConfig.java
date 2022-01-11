@@ -14,6 +14,9 @@ public class HttpConfig {
         String FORM_KEY_PAGE_INDEX = "pageNum";
         String FORM_KEY_PAGE_SIZE = "pageSize";
         String FORM_KEY_SEARCH = "search";
+        String FORM_KEY_PHONE = "phone";
+        String FORM_KEY_NAME = "name";
+        String FORM_KEY_REGION = "region";
     }
 }
 

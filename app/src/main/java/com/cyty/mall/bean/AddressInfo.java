@@ -133,4 +133,18 @@ public class AddressInfo implements Parcelable {
         parcel.writeInt(defaults);
         parcel.writeInt(deletes);
     }
+
+    @Override
+    public String toString() {
+        return "AddressInfo{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", region='" + region + '\'' +
+                ", detailedAddress='" + detailedAddress + '\'' +
+                ", defaults=" + defaults +
+                ", deletes=" + deletes +
+                '}';
+    }
 }

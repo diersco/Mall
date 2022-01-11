@@ -53,6 +53,27 @@ public class HttpResponse {
     }
 
     /**
+     * 新增或修改地址
+     */
+    public class addOrReviseAddressResponse extends HttpResponse {
+        public AddressInfo data;
+    }
+
+    /**
+     * 选择默认地址
+     */
+    public class reviseDefaultsAddress extends HttpResponse {
+        public AddressInfo data;
+    }
+
+    /**
+     * 删除
+     */
+    public class deleteAddress extends HttpResponse {
+        public AddressInfo data;
+    }
+
+    /**
      * 获取验证码
      */
     public class SendSmsCodeResponse extends HttpResponse {
