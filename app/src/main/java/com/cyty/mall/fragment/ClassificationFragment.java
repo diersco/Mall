@@ -5,13 +5,12 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.blankj.utilcode.util.BarUtils;
 import com.cyty.mall.R;
+import com.cyty.mall.activity.SearchActivity;
 import com.cyty.mall.adapter.ImageBannerAdapter;
 import com.cyty.mall.base.BaseFragment;
 import com.cyty.mall.bean.ClassIfPageBannerInfo;
@@ -37,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * main-分类
@@ -49,6 +49,14 @@ public class ClassificationFragment extends BaseFragment {
     MagicIndicator magicIndicator;
     @BindView(R.id.fragment_container)
     FrameLayout fragmentContainer;
+    @BindView(R.id.tv_hour)
+    TextView tvHour;
+    @BindView(R.id.tv_minute)
+    TextView tvMinute;
+    @BindView(R.id.tv_second)
+    TextView tvSecond;
+    @BindView(R.id.tv_more)
+    TextView tvMore;
 
 
     private ImageBannerAdapter imageBannerAdapter;
@@ -240,6 +248,17 @@ public class ClassificationFragment extends BaseFragment {
         if (instance != null) {
             instance.cancelRequest(ServerApiConstants.URL_GET_CLASSIFY);
             instance.cancelRequest(ServerApiConstants.URL_GET_BANNER);
+        }
+    }
+
+    @OnClick({R.id.tv_more, R.id.tv_search})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_more:
+                break;
+            case R.id.tv_search:
+                SearchActivity.startActivity(mActivity);
+                break;
         }
     }
 }

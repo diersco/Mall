@@ -117,7 +117,7 @@ public class ClassificationSubpageFragment extends BaseFragment {
     }
 
     /**
-     * 获取分类
+     * 获取分类数据
      */
     private void getGoodsList() {
         HttpManager.getInstance().getGoodsList(typeId, pageIndex, pageSize, search,
