@@ -79,4 +79,12 @@ public class ServerApiConstants {
      * 个人中心未读标志数量
      */
     public static final String URL_SELECT_READ_NEWS = BASE_URL + "/basic/selectReadNews";
+    /**
+     * 查询消息管理列表（分页）
+     */
+    public static final String URL_GET_NEWS_LIST = BASE_URL + "/basic/getNewsList";
+    /**
+     * 查询消息详情
+     */
+    public static final String URL_GET_NEWS_BY_ID = BASE_URL + "/basic/getNewsById";
 }

@@ -5,6 +5,7 @@ import com.cyty.mall.bean.ClassIfPageBannerInfo;
 import com.cyty.mall.bean.ClassificationCommodity;
 import com.cyty.mall.bean.GoodsInfo;
 import com.cyty.mall.bean.GoodsListInfo;
+import com.cyty.mall.bean.NewsInfo;
 import com.cyty.mall.bean.UserInfo;
 
 import java.util.List;
@@ -106,6 +107,20 @@ public class HttpResponse {
      * 个人中心未读标志数量
      */
     public class selectReadNewsResponse extends HttpResponse {
-        public UserInfo data;
+        public int data;
+    }
+
+    /**
+     * 获取消息列表
+     */
+    public class getNewsListResponse extends HttpResponse {
+        public List<NewsInfo> rows;
+    }
+
+    /**
+     * 获取消息详情
+     */
+    public class getNewsDetailResponse extends HttpResponse {
+        public NewsInfo data;
     }
 }

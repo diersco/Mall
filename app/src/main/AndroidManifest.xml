@@ -40,7 +40,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="q">
-        <activity android:name=".activity.GoodsDetailActivity"></activity>
+        <activity android:name=".activity.NotificationDetailActivity"></activity>
+        <activity android:name=".activity.NotificationListActivity" />
+        <activity android:name=".activity.GoodsDetailActivity" />
         <activity android:name=".activity.PointsMallActivity" />
         <activity android:name=".activity.AddressManagementActivity" />
         <activity android:name=".activity.SearchActivity" />
@@ -64,7 +66,7 @@
         <activity
             android:name=".activity.PersonalSettingsActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

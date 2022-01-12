@@ -263,7 +263,7 @@ public class HttpManager {
     }
 
     /**
-     * 获取用户信息
+     * 个人中心未读标志数量
      */
     public void selectReadNews(HttpEngine.HttpResponseResultCallback<HttpResponse.selectReadNewsResponse> callback) {
         JsonObject jsonObject = new JsonObject();
@@ -274,6 +274,45 @@ public class HttpManager {
                 .build();
         mHttpEngine.request(request, HttpResponse.selectReadNewsResponse.class, callback);
     }
+    /**
+     * 获取消息列表
+     *
+     * @param id        分类id
+     * @param pageIndex 分页
+     * @param pageSize  每页个数
+     * @param callback
+     */
+    public void getNewList(int id, int pageIndex, int pageSize, HttpEngine.HttpResponseResultListCallback<HttpResponse.getNewsListResponse> callback) {
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_INDEX, pageIndex + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_SIZE, pageSize + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_GET_NEWS_LIST)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.getNewsListResponse.class, callback);
+    }
+
+
+    /**
+     * 获取消息详情
+     */
+    public void getNewDetail(int id,HttpEngine.HttpResponseResultCallback<HttpResponse.getNewsDetailResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_GET_NEWS_BY_ID)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.getNewsDetailResponse.class, callback);
+    }
+
+
+
 
     public void cancelRequest(String cancelUrl) {
         mHttpEngine.cancel(cancelUrl);
