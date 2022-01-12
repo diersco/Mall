@@ -14,4 +14,5 @@ public interface Constant {
     String AUTHORIZATION = "Authorization";
     String INTENT_DATA = "intent_data";
     String INTENT_TYPE = "intent_type";
+    String INTENT_ID = "intent_id";
 }

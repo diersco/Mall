@@ -3,6 +3,7 @@ package com.cyty.mall.http;
 import com.cyty.mall.bean.AddressInfo;
 import com.cyty.mall.bean.ClassIfPageBannerInfo;
 import com.cyty.mall.bean.ClassificationCommodity;
+import com.cyty.mall.bean.GoodsInfo;
 import com.cyty.mall.bean.GoodsListInfo;
 import com.cyty.mall.bean.UserInfo;
 
@@ -43,6 +44,13 @@ public class HttpResponse {
      */
     public class GoodsListResponse extends HttpResponse {
         public List<GoodsListInfo> rows;
+    }
+
+    /**
+     * 获取商品详情
+     */
+    public class GoodsInfoResponse extends HttpResponse {
+        public GoodsInfo data;
     }
 
     /**

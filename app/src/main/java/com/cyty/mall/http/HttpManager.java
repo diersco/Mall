@@ -103,6 +103,22 @@ public class HttpManager {
     }
 
     /**
+     * 获取商品详情
+     *
+     * @param id
+     * @param callback
+     */
+    public void getGoodsInfo(int id, HttpEngine.HttpResponseResultCallback<HttpResponse.GoodsInfoResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_GET_GOODS_INFO)
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.GoodsInfoResponse.class, callback);
+    }
+
+    /**
      * 获取地址列表
      *
      * @param id        分类id

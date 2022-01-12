@@ -99,7 +99,7 @@ public class ClassificationFragment extends BaseFragment {
                     public void onResponse(boolean result, String message, HttpResponse.ClassIfPageBannerResponse data) {
                         if (result) {
                             classIfPageBannerList = data.data.getClassifPageBannerList();
-                            ToastUtils.show(classIfPageBannerList.get(0).getResourceLink());
+//                            ToastUtils.show(classIfPageBannerList.get(0).getResourceLink());
                             initBanner();
                         } else {
                             ToastUtils.show(message);

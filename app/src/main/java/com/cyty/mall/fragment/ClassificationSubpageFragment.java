@@ -10,7 +10,10 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.cyty.mall.R;
+import com.cyty.mall.activity.GoodsDetailActivity;
 import com.cyty.mall.adapter.ClassificationSubpageAdapter;
 import com.cyty.mall.base.BaseFragment;
 import com.cyty.mall.bean.GoodsListInfo;
@@ -30,7 +33,7 @@ import java.util.List;
 import butterknife.BindView;
 
 /**
- *main-分类-商品列表
+ * main-分类-商品列表
  */
 public class ClassificationSubpageFragment extends BaseFragment {
 
@@ -103,6 +106,13 @@ public class ClassificationSubpageFragment extends BaseFragment {
         }
         recyclerviewClassificationSubpage.setItemAnimator(new DefaultItemAnimator());
         recyclerviewClassificationSubpage.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                GoodsListInfo goodsListInfo = goodsListInfoList.get(position);
+                GoodsDetailActivity.startActivity(mActivity, goodsListInfo.getGoodsId());
+            }
+        });
         getGoodsList();
     }
 
@@ -151,6 +161,7 @@ public class ClassificationSubpageFragment extends BaseFragment {
 
                 });
     }
+
     /**
      * 展示数据
      */
@@ -166,6 +177,7 @@ public class ClassificationSubpageFragment extends BaseFragment {
                 break;
         }
     }
+
     /**
      * 加载更多
      */

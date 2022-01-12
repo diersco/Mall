@@ -2,6 +2,8 @@ package com.cyty.mall.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
@@ -22,6 +24,7 @@ import android.widget.TextView;
 import com.cyty.mall.MainActivity;
 import com.cyty.mall.R;
 import com.cyty.mall.base.BaseActivity;
+import com.cyty.mall.contants.Constant;
 import com.cyty.mall.contants.MKParameter;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
@@ -114,7 +117,10 @@ public class LoginActivity extends BaseActivity {
         startTimeCode();
         sendSmsCode(phoneNum);
     }
-
+    public static void startActivity(Context mContext) {
+        Intent mIntent = new Intent(mContext, LoginActivity.class);
+        mContext.startActivity(mIntent);
+    }
     @OnClick(R.id.tv_login)
     public void onTvLoginClicked() {
         if (!isCheck) {

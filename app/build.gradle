@@ -112,8 +112,6 @@ dependencies {
     //banner
     implementation 'com.youth.banner:banner:2.1.0'
     implementation 'com.github.hackware1993:MagicIndicator:1.7.0'
-    //间隔
-    implementation 'com.github.fondesa:recycler-view-divider:3.3.0'
     //仿ios switchButton
     implementation 'com.kyleduo.switchbutton:library:2.1.0'
     //选择器
@@ -122,4 +120,7 @@ dependencies {
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
     implementation 'com.github.crazyandcoder:citypicker:6.0.2'
     implementation 'com.bigkoo:alertview:1.0.3'
+    implementation 'io.github.razerdp:BasePopup:3.2.0'
+    //流式布局
+    implementation 'com.hyman:flowlayout-lib:1.1.2'
 }

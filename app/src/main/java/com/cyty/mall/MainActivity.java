@@ -11,15 +11,24 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+import com.cyty.mall.activity.LoginActivity;
 import com.cyty.mall.adapter.MainNavigationAdapter;
+import com.cyty.mall.base.ActivityCollector;
 import com.cyty.mall.base.BaseActivity;
+import com.cyty.mall.contants.MKParameter;
+import com.cyty.mall.event.ExitLoginSuccess;
+import com.cyty.mall.util.MkUtils;
 import com.cyty.mall.view.ForbidScrollViewpager;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.hjq.toast.ToastUtils;
 import com.jaeger.library.StatusBarUtil;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.BindView;
+import kotlin.TuplesKt;
 
 /**
  * 主main
@@ -46,6 +55,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        isUseEventBus(true);
         navigationAdapter = new MainNavigationAdapter(getSupportFragmentManager());
         viewpagerMain.setOffscreenPageLimit(4);
         viewpagerMain.setAdapter(navigationAdapter);
@@ -142,7 +152,18 @@ public class MainActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+    /**
+     * 重新登录
+     */
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void exitLoginSuccess(ExitLoginSuccess event) {
+        MkUtils.encode(MKParameter.TOKEN, "");
+        ToastUtils.show("登陆已失效，请重新登陆");
+        LoginActivity.startActivity(mContext);
+        ActivityCollector.finishAll();
+
+    }
     @Override
     protected void setStatusBar() {
 //        StatusBarUtil.setTransparent(this);

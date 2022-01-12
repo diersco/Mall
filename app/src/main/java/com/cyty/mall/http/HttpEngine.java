@@ -2,7 +2,10 @@ package com.cyty.mall.http;
 
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ThreadUtils;
+import com.cyty.mall.event.ExitLoginSuccess;
 import com.google.gson.Gson;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -144,7 +147,7 @@ public class HttpEngine {
                     int totalNum = resp.total;
                     boolean isTrue = false;
                     if (resp.code == 200) isTrue = true;
-
+                    if (resp.code == 401) EventBus.getDefault().post(new ExitLoginSuccess());
 
                     if (callback != null) {
                         final String finalErrorMessage = message;
