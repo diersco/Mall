@@ -6,11 +6,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.cyty.mall.R;
+import com.cyty.mall.activity.AddressManagementActivity;
+import com.cyty.mall.activity.CollectionActivity;
+import com.cyty.mall.activity.CouponActivity;
 import com.cyty.mall.activity.NotificationListActivity;
 import com.cyty.mall.activity.PersonalSettingsActivity;
+import com.cyty.mall.activity.SignInActivity;
 import com.cyty.mall.base.BaseFragment;
 import com.cyty.mall.bean.UserInfo;
-import com.cyty.mall.event.RefreshAddressListEvent;
 import com.cyty.mall.event.RefreshNewsListEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
@@ -54,6 +57,7 @@ public class MineFragment extends BaseFragment {
 
     private int messageNum;
     private int userID;
+
     @Override
     protected int onCreateFragmentView() {
         return R.layout.fragment_mine;
@@ -102,7 +106,7 @@ public class MineFragment extends BaseFragment {
      */
     @SuppressLint("SetTextI18n")
     private void setUserInfo(UserInfo userInfo) {
-        userID =userInfo.getId();
+        userID = userInfo.getId();
         if (!TextUtils.isEmpty(userInfo.getNickname())) tvNickname.setText(userInfo.getNickname());
         if (!TextUtils.isEmpty(userInfo.getGradeName())) tvVip.setText(userInfo.getGradeName());
         if (userInfo.getCouponsNum() >= 0) tvCouponNum.setText(userInfo.getCouponsNum() + "");
@@ -137,13 +141,22 @@ public class MineFragment extends BaseFragment {
     }
 
 
-    @OnClick({R.id.img_avatar, R.id.tv_sign_in, R.id.tv_share, R.id.tv_mine_pending_payment, R.id.tv_mine_to_be_delivered, R.id.tv_mine_to_be_received, R.id.tv_mine_receipt, R.id.tv_mine_refund, R.id.tv_mine_member_permissions, R.id.tv_mine_address_management, R.id.tv_mine_notification, R.id.tv_mine_contact_customer_service, R.id.tv_mine_about_us})
+    @OnClick({R.id.layout_collect, R.id.layout_my_scores, R.id.layout_coupon, R.id.img_avatar, R.id.tv_sign_in, R.id.tv_share, R.id.tv_mine_pending_payment, R.id.tv_mine_to_be_delivered, R.id.tv_mine_to_be_received, R.id.tv_mine_receipt, R.id.tv_mine_refund, R.id.tv_mine_member_permissions, R.id.tv_mine_address_management, R.id.tv_mine_notification, R.id.tv_mine_contact_customer_service, R.id.tv_mine_about_us})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_avatar:
                 PersonalSettingsActivity.startActivity(mActivity);
                 break;
+            case R.id.layout_my_scores:
+                break;
+            case R.id.layout_coupon:
+                CouponActivity.startActivity(mActivity);
+                break;
+            case R.id.layout_collect:
+                CollectionActivity.startActivity(mActivity, userID);
+                break;
             case R.id.tv_sign_in:
+                SignInActivity.startActivity(mActivity);
                 break;
             case R.id.tv_share:
                 break;
@@ -160,9 +173,10 @@ public class MineFragment extends BaseFragment {
             case R.id.tv_mine_member_permissions:
                 break;
             case R.id.tv_mine_address_management:
+                AddressManagementActivity.startActivity(mActivity);
                 break;
             case R.id.tv_mine_notification:
-                NotificationListActivity.startActivity(mActivity,userID);
+                NotificationListActivity.startActivity(mActivity, userID);
                 break;
             case R.id.tv_mine_contact_customer_service:
                 break;

@@ -3,6 +3,8 @@ package com.cyty.mall.http;
 import com.cyty.mall.bean.AddressInfo;
 import com.cyty.mall.bean.ClassIfPageBannerInfo;
 import com.cyty.mall.bean.ClassificationCommodity;
+import com.cyty.mall.bean.CollectionInfo;
+import com.cyty.mall.bean.CouponInfo;
 import com.cyty.mall.bean.GoodsInfo;
 import com.cyty.mall.bean.GoodsListInfo;
 import com.cyty.mall.bean.NewsInfo;
@@ -122,5 +124,26 @@ public class HttpResponse {
      */
     public class getNewsDetailResponse extends HttpResponse {
         public NewsInfo data;
+    }
+
+    /**
+     * 获取优惠券列表
+     */
+    public class getCouponsListResponse extends HttpResponse {
+        public List<CouponInfo> rows;
+    }
+
+    /**
+     * 收藏
+     */
+    public class collectionResponse extends HttpResponse {
+        public GoodsInfo data;
+    }
+
+    /**
+     * 获取收藏列表
+     */
+    public class getCollectionListResponse extends HttpResponse {
+        public List<CollectionInfo> rows;
     }
 }

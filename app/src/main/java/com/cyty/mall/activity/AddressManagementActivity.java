@@ -169,7 +169,7 @@ public class AddressManagementActivity extends BaseActivity {
 
 
     /**
-     * 获取分类
+     * 获取地址列表
      */
     private void getAddressList() {
         HttpManager.getInstance().getAddressList(typeId, pageIndex, pageSize, search,

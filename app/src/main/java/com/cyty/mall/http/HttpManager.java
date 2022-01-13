@@ -274,6 +274,7 @@ public class HttpManager {
                 .build();
         mHttpEngine.request(request, HttpResponse.selectReadNewsResponse.class, callback);
     }
+
     /**
      * 获取消息列表
      *
@@ -300,7 +301,7 @@ public class HttpManager {
     /**
      * 获取消息详情
      */
-    public void getNewDetail(int id,HttpEngine.HttpResponseResultCallback<HttpResponse.getNewsDetailResponse> callback) {
+    public void getNewDetail(int id, HttpEngine.HttpResponseResultCallback<HttpResponse.getNewsDetailResponse> callback) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
@@ -311,7 +312,68 @@ public class HttpManager {
         mHttpEngine.request(request, HttpResponse.getNewsDetailResponse.class, callback);
     }
 
+    /**
+     * 获取优惠券列表
+     *
+     * @param id        分类id
+     * @param pageIndex 分页
+     * @param pageSize  每页个数
+     * @param callback
+     */
+    public void getCouponsList(int id, int pageIndex, int pageSize, HttpEngine.HttpResponseResultListCallback<HttpResponse.getCouponsListResponse> callback) {
 
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_INDEX, pageIndex + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_SIZE, pageSize + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_GET_MALL_COUPONS_LIST)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.getCouponsListResponse.class, callback);
+    }
+
+
+    /**
+     * 收藏
+     *
+     * @param id 规格id
+     */
+    public void collections(String id, HttpEngine.HttpResponseResultCallback<HttpResponse.collectionResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_MALL_COLLECTION)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.collectionResponse.class, callback);
+    }
+
+    /**
+     * 获取收藏列表
+     *
+     * @param id        分类id
+     * @param pageIndex 分页
+     * @param pageSize  每页个数
+     * @param search    搜索
+     * @param callback
+     */
+    public void getCollectionsList(int id, int pageIndex, int pageSize, String search, HttpEngine.HttpResponseResultListCallback<HttpResponse.getCollectionListResponse> callback) {
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_INDEX, pageIndex + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_SIZE, pageSize + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_SEARCH, search);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_GET_MALL_COLLECTION_LIST)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.getCollectionListResponse.class, callback);
+    }
 
 
     public void cancelRequest(String cancelUrl) {

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="#FBFBFB"
     tools:context=".activity.PersonalSettingsActivity">
 
     <LinearLayout
@@ -62,51 +62,10 @@
             android:layout_height="1dp"
             android:background="@color/default_font_gray_f5f" />
 
-        <RelativeLayout
-            android:id="@+id/layout_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:paddingStart="@dimen/dp_15"
-            android:paddingEnd="@dimen/dp_18">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="@dimen/dp_15"
-                android:paddingBottom="@dimen/dp_15">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:includeFontPadding="false"
-                    android:text="@string/setting_shipping_address"
-                    android:textColor="@color/default_font_gray_262"
-                    android:textSize="@dimen/sp_14" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
-                    android:includeFontPadding="false"
-                    android:text="@string/setting_my_shipping_address"
-                    android:textColor="@color/default_font_gray_909"
-                    android:textSize="@dimen/sp_12" />
-
-            </LinearLayout>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_front_right" />
-        </RelativeLayout>
 
 
         <TextView
-            android:id="@+id/tv_mine_contact_customer_service"
+            android:id="@+id/tv_clear_cache"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_12"
@@ -117,11 +76,31 @@
             android:paddingTop="@dimen/dp_15"
             android:paddingEnd="@dimen/dp_18"
             android:paddingBottom="@dimen/dp_15"
-            android:text="通用"
+            android:text="清除缓存"
             android:textColor="@color/default_font_gray_262"
             android:textSize="@dimen/sp_14"
             app:drawableRightCompat="@drawable/ic_front_right" />
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/default_font_gray_f5f"
+            android:paddingStart="@dimen/dp_15"
+            android:paddingEnd="@dimen/dp_18" />
+        <TextView
+            android:id="@+id/tv_privacy_agreement"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:drawablePadding="@dimen/dp_11"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/dp_15"
+            android:paddingTop="@dimen/dp_15"
+            android:paddingEnd="@dimen/dp_18"
+            android:paddingBottom="@dimen/dp_15"
+            android:text="隐私协议"
+            android:textColor="@color/default_font_gray_262"
+            android:textSize="@dimen/sp_14"
+            app:drawableRightCompat="@drawable/ic_front_right" />
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

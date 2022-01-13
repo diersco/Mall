@@ -12,6 +12,9 @@ import com.cyty.mall.R;
 import com.cyty.mall.adapter.GoodsFormatAdapter;
 import com.cyty.mall.adapter.GoodsFormatTwoAdapter;
 import com.cyty.mall.bean.GoodsInfo;
+import com.cyty.mall.http.HttpEngine;
+import com.cyty.mall.http.HttpManager;
+import com.cyty.mall.http.HttpResponse;
 import com.cyty.mall.util.GlideUtil;
 import com.hjq.toast.ToastUtils;
 import com.zhy.view.flowlayout.FlowLayout;
@@ -20,7 +23,6 @@ import com.zhy.view.flowlayout.TagFlowLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.OnClick;
 import razerdp.basepopup.BasePopupWindow;
 import razerdp.util.animation.AnimationHelper;
 import razerdp.util.animation.TranslationConfig;
@@ -51,12 +53,17 @@ public class GoodsFormatPopup extends BasePopupWindow {
     private List<GoodsInfo.SpecListBean> specListBeanList = new ArrayList<>();
     private List<GoodsInfo.SpecListBean.SpecTwoListBean> specTwoListList = new ArrayList<>();
     private int buyNum = 1;
+    // 判断是立即购买还是加入购物车或收藏  1 立即购买 2 加入购物车 3 收藏
+    private int type;
     private int totalStock;
+    //商品规格id
+    private String formatId;
 
-    public GoodsFormatPopup(Context context, GoodsInfo goodsInfo) {
+    public GoodsFormatPopup(Context context, GoodsInfo goodsInfo, int type) {
         super(context);
         this.mContext = context;
         this.mGoodsInfo = goodsInfo;
+        this.type = type;
         setContentView(R.layout.layout_goods_popup);
         setPopupGravity(Gravity.BOTTOM);
         initGoodsData(mGoodsInfo);
@@ -131,10 +138,24 @@ public class GoodsFormatPopup extends BasePopupWindow {
                 }
             }
         });
+        tvSure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (type == 1) {
+
+                } else if (type == 2) {
+
+                } else if (type == 3) {
+                    collections();
+                    dismiss();
+                }
+            }
+        });
     }
 
     @SuppressLint("SetTextI18n")
     private void initFormatData(GoodsInfo.SpecListBean.SpecTwoListBean specTwoListBean) {
+        formatId = specTwoListBean.getId();
         if (!specTwoListBean.getSpecTwo().isEmpty()) {
             tvTitle.setText(specTwoListBean.getSpecTwo());
         }
@@ -157,8 +178,21 @@ public class GoodsFormatPopup extends BasePopupWindow {
                 .toShow();
     }
 
-    @OnClick(R.id.tv_sure)
-    public void onViewClicked() {
+    /**
+     * 收藏
+     */
+    private void collections() {
+        HttpManager.getInstance().collections(formatId,
+                new HttpEngine.HttpResponseResultCallback<HttpResponse.collectionResponse>() {
+                    @Override
+                    public void onResponse(boolean result, String message, HttpResponse.collectionResponse data) {
+                        if (result) {
+                            ToastUtils.show("收藏成功！");
+                        } else {
+                            ToastUtils.show(message);
+                        }
+                    }
+                });
     }
 
     @Override

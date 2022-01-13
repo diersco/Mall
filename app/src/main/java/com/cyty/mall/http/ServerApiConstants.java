@@ -87,4 +87,16 @@ public class ServerApiConstants {
      * 查询消息详情
      */
     public static final String URL_GET_NEWS_BY_ID = BASE_URL + "/basic/getNewsById";
+    /**
+     * 获取优惠券列表
+     */
+    public static final String URL_GET_MALL_COUPONS_LIST = BASE_URL + "/basic/getMallCouponsList";
+    /**
+     * 收藏或取消收藏
+     */
+    public static final String URL_MALL_COLLECTION = BASE_URL + "/basic/collection";
+    /**
+     * 获取收藏列表
+     */
+    public static final String URL_GET_MALL_COLLECTION_LIST = BASE_URL + "/basic/getMallCollectionList";
 }

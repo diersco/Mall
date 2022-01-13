@@ -28,10 +28,6 @@ public class PersonalSettingsActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.tv_mine_about_us)
-    TextView tvMineAboutUs;
-    @BindView(R.id.tv_mine_contact_customer_service)
-    TextView tvMineContactCustomerService;
     @BindView(R.id.tv_quit)
     TextView tvQuit;
 
@@ -78,15 +74,14 @@ public class PersonalSettingsActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.layout_personal_info, R.id.layout_address, R.id.tv_mine_contact_customer_service, R.id.tv_mine_about_us})
+    @OnClick({R.id.layout_personal_info, R.id.tv_clear_cache, R.id.tv_privacy_agreement, R.id.tv_mine_about_us})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout_personal_info:
                 break;
-            case R.id.layout_address:
-                AddressManagementActivity.startActivity(mContext);
+            case R.id.tv_clear_cache:
                 break;
-            case R.id.tv_mine_contact_customer_service:
+            case R.id.tv_privacy_agreement:
                 break;
             case R.id.tv_mine_about_us:
                 break;

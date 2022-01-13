@@ -10,6 +10,8 @@ import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import com.cyty.mall.R;
 import com.cyty.mall.base.BaseActivity;
 import com.cyty.mall.bean.GoodsInfo;
@@ -34,12 +36,12 @@ public class GoodsDetailActivity extends BaseActivity {
     Banner bannerClass;
     @BindView(R.id.tv_goods_price)
     TextView tvGoodsPrice;
-    @BindView(R.id.tv_collect)
-    ImageView tvCollect;
     @BindView(R.id.tv_goods_name)
     TextView tvGoodsName;
     @BindView(R.id.tv_sales)
     TextView tvSales;
+    @BindView(R.id.iv_collect)
+    ImageView ivCollect;
     @BindView(R.id.tv_inventory)
     TextView tvInventory;
     @BindView(R.id.tv_mine_contact_customer_service)
@@ -48,8 +50,9 @@ public class GoodsDetailActivity extends BaseActivity {
     TextView tvEvaluationNum;
     @BindView(R.id.webView)
     WebView mWebView;
-    //商品规格编号
-    private int id;
+    //商品编号
+    private int goodsId;
+
     private GoodsInfo goodsInfo;
 
     @Override
@@ -64,20 +67,21 @@ public class GoodsDetailActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        id = getIntent().getIntExtra(Constant.INTENT_ID, 0);
+//        isUseEventBus(true);
+        goodsId = getIntent().getIntExtra(Constant.INTENT_ID, 0);
         initWebView();
     }
 
     @Override
     protected void initData() {
-        getGoodsInfo(id);
+        getGoodsInfo(goodsId);
     }
 
     /**
      * 获取商品详情
      */
-    private void getGoodsInfo(int id) {
-        HttpManager.getInstance().getGoodsInfo(id,
+    private void getGoodsInfo(int goodsId) {
+        HttpManager.getInstance().getGoodsInfo(goodsId,
                 new HttpEngine.HttpResponseResultCallback<HttpResponse.GoodsInfoResponse>() {
                     @Override
                     public void onResponse(boolean result, String message, HttpResponse.GoodsInfoResponse data) {
@@ -101,6 +105,11 @@ public class GoodsDetailActivity extends BaseActivity {
         if (!goodsInfo.getDetails().isEmpty()) tvGoodsName.setText(goodsInfo.getTitle());
         if (goodsInfo.getSalesVolume() >= 0) tvSales.setText("销量：" + goodsInfo.getSalesVolume());
         if (goodsInfo.getTotalStock() >= 0) tvInventory.setText("库存：" + goodsInfo.getTotalStock());
+        if (goodsInfo.getCollection() == 1) {
+            ivCollect.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_goods_collect));
+        } else {
+            ivCollect.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_goods_un_collect));
+        }
         if (!TextUtils.isEmpty(goodsInfo.getDetails())) {
             String content = goodsInfo.getDetails();
             mWebView.loadDataWithBaseURL(null, StringUtils.getHtmlData(content), "text/html", "UTF-8", null);
@@ -117,6 +126,7 @@ public class GoodsDetailActivity extends BaseActivity {
     protected void initToolBar() {
 
     }
+
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
         WebSettings settings = mWebView.getSettings();
@@ -140,21 +150,28 @@ public class GoodsDetailActivity extends BaseActivity {
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE); // 不加载缓存内容
     }
 
-    @OnClick({R.id.tv_collect, R.id.tv_share, R.id.tv_mine_contact_customer_service, R.id.tv_shopping_cart, R.id.tv_add_to_cart, R.id.tv_buy_now})
+
+    @OnClick({R.id.iv_collect, R.id.iv_share, R.id.tv_mine_contact_customer_service, R.id.tv_shopping_cart, R.id.tv_add_to_cart, R.id.tv_buy_now})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.tv_collect:
+            case R.id.iv_collect:
+                if (goodsInfo != null) {
+                    new GoodsFormatPopup(mContext, goodsInfo, 3).showPopupWindow();
+                }
                 break;
-            case R.id.tv_share:
+            case R.id.iv_share:
                 break;
             case R.id.tv_mine_contact_customer_service:
                 if (goodsInfo != null) {
-                    new GoodsFormatPopup(mContext, goodsInfo).showPopupWindow();
+                    new GoodsFormatPopup(mContext, goodsInfo, 1).showPopupWindow();
                 }
                 break;
             case R.id.tv_shopping_cart:
                 break;
             case R.id.tv_add_to_cart:
+                if (goodsInfo != null) {
+                    new GoodsFormatPopup(mContext, goodsInfo, 2).showPopupWindow();
+                }
                 break;
             case R.id.tv_buy_now:
                 break;
