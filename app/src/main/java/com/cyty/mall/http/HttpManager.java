@@ -192,6 +192,21 @@ public class HttpManager {
     }
 
     /**
+     * 获取默认地址
+     *
+     */
+    public void getDefaultsAddress( HttpEngine.HttpResponseResultCallback<HttpResponse. getDefaultsAddress> callback) {
+
+        JsonObject jsonObject = new JsonObject();
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_GET_DEFAULT_ADDRESS)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.getDefaultsAddress.class, callback);
+    }
+
+    /**
      * 删除地址
      *
      * @param id
@@ -375,6 +390,19 @@ public class HttpManager {
         mHttpEngine.request(request, HttpResponse.getCollectionListResponse.class, callback);
     }
 
+    /**
+     * 确认订单
+     */
+    public void confirmOrder(String ids, HttpEngine.HttpResponseResultCallback<HttpResponse.confirmOrderResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_IDS, ids);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_ORDER_CONFIRM_ORDER)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.confirmOrderResponse.class, callback);
+    }
 
     public void cancelRequest(String cancelUrl) {
         mHttpEngine.cancel(cancelUrl);

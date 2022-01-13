@@ -24,7 +24,6 @@ import android.widget.TextView;
 import com.cyty.mall.MainActivity;
 import com.cyty.mall.R;
 import com.cyty.mall.base.BaseActivity;
-import com.cyty.mall.contants.Constant;
 import com.cyty.mall.contants.MKParameter;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
@@ -43,8 +42,6 @@ import butterknife.OnClick;
 public class LoginActivity extends BaseActivity {
 
 
-    @BindView(R.id.tv_area_code)
-    TextView tvAreaCode;
     @BindView(R.id.et_phone_num)
     EditText etPhoneNum;
     @BindView(R.id.tv_verification_code)
@@ -59,13 +56,11 @@ public class LoginActivity extends BaseActivity {
     ImageView ivCheck;
     @BindView(R.id.layout_policy_protocol)
     LinearLayout layoutPolicyProtocol;
-
-    private String phoneNum;
     //用于判断验证码样式
     private boolean isClickCode = true;
     private boolean startThread = true;
     //是否点击协议
-    private boolean isCheck = true;
+    private boolean isCheck = false;
     /**
      * 倒计时最大时间
      */
@@ -85,19 +80,18 @@ public class LoginActivity extends BaseActivity {
     protected void initView() {
 
     }
+
     @Override
     protected void initToolBar() {
 
     }
+
     @Override
     protected void initData() {
-        if (!MkUtils.decodeString(MKParameter.TOKEN).isEmpty()) MainActivity.startActivity(mContext);
+        if (!MkUtils.decodeString(MKParameter.TOKEN).isEmpty())
+            MainActivity.startActivity(mContext);
     }
 
-
-    @OnClick(R.id.tv_area_code)
-    public void onTvAreaCodeClicked() {
-    }
 
     @OnClick(R.id.tv_verification_code)
     public void onTvVerificationCodeClicked() {
@@ -117,10 +111,12 @@ public class LoginActivity extends BaseActivity {
         startTimeCode();
         sendSmsCode(phoneNum);
     }
+
     public static void startActivity(Context mContext) {
         Intent mIntent = new Intent(mContext, LoginActivity.class);
         mContext.startActivity(mIntent);
     }
+
     @OnClick(R.id.tv_login)
     public void onTvLoginClicked() {
         if (!isCheck) {
@@ -151,7 +147,7 @@ public class LoginActivity extends BaseActivity {
     @OnClick(R.id.layout_policy_protocol)
     public void onLayoutPolicyProtocolClicked() {
         if (isCheck) {
-            ivCheck.setImageResource(R.drawable.ic_not_selected);
+            ivCheck.setImageResource(R.drawable.ic_selected);
             isCheck = !isCheck;
         } else {
             showProtocolDialog();
@@ -173,6 +169,7 @@ public class LoginActivity extends BaseActivity {
                         if (result) {
                             //请求成功后，保存token
                             MkUtils.encode(MKParameter.TOKEN, data.msg);
+                            MkUtils.encode(MKParameter.USER_ID, data.data.getId()+"");
                             MainActivity.startActivity(mContext);
                         } else {
                             ToastUtils.show(message);
@@ -269,13 +266,15 @@ public class LoginActivity extends BaseActivity {
         inflate.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ivCheck.setImageResource(R.drawable.ic_not_selected);
+                isCheck = false;
                 dialog.dismiss();
             }
         });
         inflate.findViewById(R.id.tv_ok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ivCheck.setImageResource(R.drawable.ic_not_selected);
+                ivCheck.setImageResource(R.drawable.ic_selected);
                 isCheck = true;
                 dialog.dismiss();
             }
@@ -290,6 +289,7 @@ public class LoginActivity extends BaseActivity {
         super.onDestroy();
         startThread = false;
     }
+
     @Override
     protected void setStatusBar() {
 

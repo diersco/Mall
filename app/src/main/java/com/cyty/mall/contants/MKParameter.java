@@ -8,5 +8,6 @@ package com.cyty.mall.contants;
 public class MKParameter {
 
     public static String TOKEN = "token";
+    public static String USER_ID = "userId";
 }
 

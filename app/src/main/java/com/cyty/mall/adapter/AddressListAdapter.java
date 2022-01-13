@@ -11,6 +11,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.cyty.mall.R;
 import com.cyty.mall.bean.AddressInfo;
+import com.cyty.mall.util.DigitUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,7 +32,7 @@ public class AddressListAdapter extends BaseQuickAdapter<AddressInfo, BaseViewHo
     @Override
     protected void convert(@NotNull BaseViewHolder baseViewHolder, AddressInfo addressInfo) {
         baseViewHolder.setText(R.id.tv_name, addressInfo.getName())
-                .setText(R.id.tv_phone_num, addressInfo.getPhone())
+                .setText(R.id.tv_phone_num, DigitUtil.phoneHide(addressInfo.getPhone()))
                 .setText(R.id.tv_address, addressInfo.getDetailedAddress());
         TextView tvCover = baseViewHolder.getView(R.id.tv_cover);
         TextView tvIfDefault = baseViewHolder.getView(R.id.tv_if_default);

@@ -42,6 +42,10 @@ public class ServerApiConstants {
      * 删除地址
      */
     public static final String URL_REMOVE_MALL_ADDRESS = BASE_URL + "/basic/removeMallAddresses";
+    /**
+     * 获取默认地址
+     */
+    public static final String URL_GET_DEFAULT_ADDRESS = BASE_URL + "/basic/selectDefaultMallSeting";
 
     /**
      * 获取首页数据
@@ -99,4 +103,8 @@ public class ServerApiConstants {
      * 获取收藏列表
      */
     public static final String URL_GET_MALL_COLLECTION_LIST = BASE_URL + "/basic/getMallCollectionList";
+    /**
+     * 确认订单信息
+     */
+    public static final String URL_ORDER_CONFIRM_ORDER = BASE_URL + "/api/order/confirmOrder";
 }

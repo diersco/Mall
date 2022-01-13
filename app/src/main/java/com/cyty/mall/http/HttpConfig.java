@@ -11,6 +11,8 @@ public class HttpConfig {
     public interface RequestKey {
         String FORM_KEY_TOKEN = "token";
         String FORM_KEY_ID = "id";
+        String FORM_KEY_USER_ID = "userId";
+        String FORM_KEY_IDS = "ids";
         String FORM_KEY_PAGE_INDEX = "pageNum";
         String FORM_KEY_PAGE_SIZE = "pageSize";
         String FORM_KEY_SEARCH = "search";

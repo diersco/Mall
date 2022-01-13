@@ -4,6 +4,7 @@ import com.cyty.mall.bean.AddressInfo;
 import com.cyty.mall.bean.ClassIfPageBannerInfo;
 import com.cyty.mall.bean.ClassificationCommodity;
 import com.cyty.mall.bean.CollectionInfo;
+import com.cyty.mall.bean.ConfirmOrderInfo;
 import com.cyty.mall.bean.CouponInfo;
 import com.cyty.mall.bean.GoodsInfo;
 import com.cyty.mall.bean.GoodsListInfo;
@@ -76,6 +77,12 @@ public class HttpResponse {
     public class reviseDefaultsAddress extends HttpResponse {
         public AddressInfo data;
     }
+    /**
+     * 获取默认地址
+     */
+    public class getDefaultsAddress extends HttpResponse {
+        public AddressInfo data;
+    }
 
     /**
      * 删除
@@ -145,5 +152,12 @@ public class HttpResponse {
      */
     public class getCollectionListResponse extends HttpResponse {
         public List<CollectionInfo> rows;
+    }
+
+    /**
+     * 确认订单
+     */
+    public class confirmOrderResponse extends HttpResponse {
+        public ConfirmOrderInfo data;
     }
 }

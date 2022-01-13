@@ -44,8 +44,6 @@ public class GoodsDetailActivity extends BaseActivity {
     ImageView ivCollect;
     @BindView(R.id.tv_inventory)
     TextView tvInventory;
-    @BindView(R.id.tv_mine_contact_customer_service)
-    TextView tvMineContactCustomerService;
     @BindView(R.id.tv_evaluation_num)
     TextView tvEvaluationNum;
     @BindView(R.id.webView)
@@ -151,7 +149,7 @@ public class GoodsDetailActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.iv_collect, R.id.iv_share, R.id.tv_mine_contact_customer_service, R.id.tv_shopping_cart, R.id.tv_add_to_cart, R.id.tv_buy_now})
+    @OnClick({R.id.iv_collect, R.id.iv_share, R.id.tv_shopping_cart, R.id.tv_add_to_cart, R.id.tv_buy_now})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_collect:
@@ -161,11 +159,6 @@ public class GoodsDetailActivity extends BaseActivity {
                 break;
             case R.id.iv_share:
                 break;
-            case R.id.tv_mine_contact_customer_service:
-                if (goodsInfo != null) {
-                    new GoodsFormatPopup(mContext, goodsInfo, 1).showPopupWindow();
-                }
-                break;
             case R.id.tv_shopping_cart:
                 break;
             case R.id.tv_add_to_cart:
@@ -174,6 +167,9 @@ public class GoodsDetailActivity extends BaseActivity {
                 }
                 break;
             case R.id.tv_buy_now:
+                if (goodsInfo != null) {
+                    new GoodsFormatPopup(mContext, goodsInfo, 1).showPopupWindow();
+                }
                 break;
         }
     }

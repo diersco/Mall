@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cyty.mall.R;
+import com.cyty.mall.activity.ConfirmOrderActivity;
 import com.cyty.mall.adapter.GoodsFormatAdapter;
 import com.cyty.mall.adapter.GoodsFormatTwoAdapter;
 import com.cyty.mall.bean.GoodsInfo;
@@ -52,13 +53,15 @@ public class GoodsFormatPopup extends BasePopupWindow {
     private GoodsFormatTwoAdapter mGoodsFormatTwoAdapter;
     private List<GoodsInfo.SpecListBean> specListBeanList = new ArrayList<>();
     private List<GoodsInfo.SpecListBean.SpecTwoListBean> specTwoListList = new ArrayList<>();
+    //选择的购买数量
     private int buyNum = 1;
     // 判断是立即购买还是加入购物车或收藏  1 立即购买 2 加入购物车 3 收藏
     private int type;
     private int totalStock;
     //商品规格id
     private String formatId;
-
+    //规格编号字符串
+    private String ids;
     public GoodsFormatPopup(Context context, GoodsInfo goodsInfo, int type) {
         super(context);
         this.mContext = context;
@@ -142,7 +145,9 @@ public class GoodsFormatPopup extends BasePopupWindow {
             @Override
             public void onClick(View view) {
                 if (type == 1) {
-
+                    ids = formatId + "|" + buyNum;
+                    ConfirmOrderActivity.startActivity(mContext, ids);
+                    dismiss();
                 } else if (type == 2) {
 
                 } else if (type == 3) {
@@ -199,4 +204,6 @@ public class GoodsFormatPopup extends BasePopupWindow {
     public void onDestroy() {
         super.onDestroy();
     }
+
+
 }
