@@ -169,7 +169,6 @@ public class LoginActivity extends BaseActivity {
                         if (result) {
                             //请求成功后，保存token
                             MkUtils.encode(MKParameter.TOKEN, data.msg);
-                            MkUtils.encode(MKParameter.USER_ID, data.data.getId()+"");
                             MainActivity.startActivity(mContext);
                         } else {
                             ToastUtils.show(message);
@@ -247,16 +246,28 @@ public class LoginActivity extends BaseActivity {
         final View inflate = LayoutInflater.from(mContext).inflate(R.layout.dialog_protocol, null);
         TextView tv_title = (TextView) inflate.findViewById(R.id.tv_title);
         TextView tv_content = (TextView) inflate.findViewById(R.id.tv_content);
-        SpannableString spanString = new SpannableString("《服务协议》和《隐私政策》");
-        spanString.setSpan(new ForegroundColorSpan(Color.parseColor("#1d74b6")), 0, 12, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        spanString.setSpan(new ClickableSpan() {
+        SpannableString spanUserString = new SpannableString("《用户协议》");
+        SpannableString spanPrivacyString = new SpannableString("《隐私政策》");
+        spanUserString.setSpan(new ForegroundColorSpan(Color.parseColor("#1d74b6")), 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spanUserString.setSpan(new ClickableSpan() {
+            @Override
+            public void onClick(View view) {
+                CommonActivity.startActivity(mContext, 2);
+                //点击的响应事件
+            }
+        }, 0, spanUserString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spanPrivacyString.setSpan(new ForegroundColorSpan(Color.parseColor("#1d74b6")), 0, 6, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spanPrivacyString.setSpan(new ClickableSpan() {
             @Override
             public void onClick(View view) {
                 //点击的响应事件
+                CommonActivity.startActivity(mContext, 3);
             }
-        }, 0, spanString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        tv_content.setText("服务协议和隐私政策请你务必审慎阅读、充分理解“服务协议”和“隐私政策”各条款，包括但不限于：为了向你提供即时通讯、内容推送等服务，需要收集你的设备信息、操作日志等个人信息。你可阅读");
-        tv_content.append(spanString);
+        }, 0, spanPrivacyString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tv_content.setText("用户协议和隐私政策请你务必审慎阅读、充分理解“用户协议”和“隐私政策”各条款，包括但不限于：为了向你提供即时通讯、内容推送等服务，需要收集你的设备信息、操作日志等个人信息。你可阅读");
+        tv_content.append(spanUserString);
+        tv_content.append("和");
+        tv_content.append(spanPrivacyString);
         tv_content.append("了解详细信息。如你同意，请点击“同意”开始接受我们的服务。");
         tv_content.setMovementMethod(LinkMovementMethod.getInstance());//开始响应点击事件
         final Dialog dialog = new AlertDialog

@@ -125,4 +125,5 @@ dependencies {
     implementation 'com.bigkoo:alertview:1.0.3'
     //tabLayout
     implementation 'io.github.h07000223:flycoTabLayout:3.0.0'
+    implementation (name: 'alipaysdk-15.8.06.211122170115', ext: 'aar')
 }

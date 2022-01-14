@@ -20,7 +20,10 @@ import com.cyty.mall.R;
 import com.cyty.mall.adapter.AddressListAdapter;
 import com.cyty.mall.base.BaseActivity;
 import com.cyty.mall.bean.AddressInfo;
+import com.cyty.mall.contants.Constant;
+import com.cyty.mall.event.GetAddressEvent;
 import com.cyty.mall.event.RefreshAddressListEvent;
+import com.cyty.mall.event.RefreshConfirmOrderAddressEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
@@ -31,6 +34,7 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
@@ -69,6 +73,10 @@ public class AddressManagementActivity extends BaseActivity {
     private List<AddressInfo> addressList = new ArrayList<>();
     private AddressListAdapter mAdapter;
 
+
+    // 从哪里跳进来的  1 我的页面  2 确认订单页面
+    private int type;
+
     @Override
     protected void onNetReload(View v) {
 
@@ -82,6 +90,7 @@ public class AddressManagementActivity extends BaseActivity {
     @Override
     protected void initView() {
         isUseEventBus(true);
+        type = getIntent().getIntExtra(Constant.INTENT_TYPE, 0);
     }
 
     @Override
@@ -122,10 +131,16 @@ public class AddressManagementActivity extends BaseActivity {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                 AddressInfo addressInfo = addressList.get(position);
-                AddAddressActivity.startActivity(mContext, addressInfo, 2);
+                // 如果是我的页面进入，点击item 跳转修改页面  确认订单页面则返回点击的数据
+                if (type == 1) {
+                    AddAddressActivity.startActivity(mContext, addressInfo, 2);
+                } else {
+                    EventBus.getDefault().post(new GetAddressEvent(addressInfo));
+                    finish();
+                }
             }
         });
-        mAdapter.addChildClickViewIds(R.id.tv_if_default,  R.id.tv_delete);
+        mAdapter.addChildClickViewIds(R.id.tv_if_default, R.id.tv_delete);
         mAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
             @Override
             public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
@@ -135,6 +150,9 @@ public class AddressManagementActivity extends BaseActivity {
                         reviseDefaultsAddress(2, addressInfo.getId());
                     } else {
                         reviseDefaultsAddress(1, addressInfo.getId());
+                    }
+                    if (type == 2) {
+                        EventBus.getDefault().post(new RefreshConfirmOrderAddressEvent());
                     }
 
                 } else if (view.getId() == R.id.tv_delete) {//删除
@@ -148,17 +166,21 @@ public class AddressManagementActivity extends BaseActivity {
                         }
                     });
                     alertView.show();
-
+                    if (type == 2) {
+                        EventBus.getDefault().post(new RefreshConfirmOrderAddressEvent());
+                    }
+                } else if (view.getId() == R.id.iv_edit) {
+                    AddAddressActivity.startActivity(mContext, addressInfo, 2);
                 }
-
 
             }
         });
         getAddressList();
     }
 
-    public static void startActivity(Context mContext) {
+    public static void startActivity(Context mContext, int type) {
         Intent mIntent = new Intent(mContext, AddressManagementActivity.class);
+        mIntent.putExtra(Constant.INTENT_TYPE, type);
         mContext.startActivity(mIntent);
     }
 
@@ -232,6 +254,7 @@ public class AddressManagementActivity extends BaseActivity {
                         if (result) {
                             getAddressList();
                         } else {
+                            ToastUtils.show(message);
                         }
                     }
                 });

@@ -15,4 +15,5 @@ public interface Constant {
     String INTENT_DATA = "intent_data";
     String INTENT_TYPE = "intent_type";
     String INTENT_ID = "intent_id";
+    String INTENT_PRICE = "intent_price";
 }

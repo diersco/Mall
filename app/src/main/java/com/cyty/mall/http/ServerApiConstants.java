@@ -107,4 +107,12 @@ public class ServerApiConstants {
      * 确认订单信息
      */
     public static final String URL_ORDER_CONFIRM_ORDER = BASE_URL + "/api/order/confirmOrder";
+    /**
+     * 计算金额
+     */
+    public static final String URL_CALCULATED_AMOUNT = BASE_URL + "/api/order/calculatedAmount";
+    /**
+     * 创建订单
+     */
+    public static final String URL_CREATE_ORDER = BASE_URL + "/api/order/createOrder";
 }

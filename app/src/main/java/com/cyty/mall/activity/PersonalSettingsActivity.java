@@ -9,8 +9,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.cyty.mall.R;
 import com.cyty.mall.base.BaseActivity;
+import com.cyty.mall.util.DataCleanManager;
 import com.jaeger.library.StatusBarUtil;
 
 import butterknife.BindView;
@@ -30,6 +33,8 @@ public class PersonalSettingsActivity extends BaseActivity {
     Toolbar toolbar;
     @BindView(R.id.tv_quit)
     TextView tvQuit;
+    @BindView(R.id.tv_cache_size)
+    TextView tvCacheSize;
 
     @Override
     protected void onNetReload(View v) {
@@ -58,7 +63,11 @@ public class PersonalSettingsActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-
+        try {
+            tvCacheSize.setText(DataCleanManager.getTotalCacheSize(mContext));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -74,16 +83,35 @@ public class PersonalSettingsActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.layout_personal_info, R.id.tv_clear_cache, R.id.tv_privacy_agreement, R.id.tv_mine_about_us})
+    @OnClick({R.id.layout_personal_info, R.id.tv_user_agreement, R.id.tv_privacy_agreement, R.id.tv_mine_about_us, R.id.layout_clear_cache})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout_personal_info:
                 break;
-            case R.id.tv_clear_cache:
+            case R.id.tv_user_agreement:
+                CommonActivity.startActivity(mContext,2);
                 break;
             case R.id.tv_privacy_agreement:
+                CommonActivity.startActivity(mContext,3);
                 break;
             case R.id.tv_mine_about_us:
+                CommonActivity.startActivity(mContext,1);
+                break;
+            case R.id.layout_clear_cache:
+                AlertView alertView = new AlertView("提示", "确定清除缓存～", null, null, new String[]{"取消", "确定"}, this, AlertView.Style.Alert, new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        if (position == 1) {
+                            DataCleanManager.clearAllCache(mContext);
+                            try {
+                                tvCacheSize.setText(DataCleanManager.getTotalCacheSize(mContext));
+                            } catch (Exception e) {
+                                tvCacheSize.setText("0k");
+                            }
+                        }
+                    }
+                });
+                alertView.show();
                 break;
         }
     }

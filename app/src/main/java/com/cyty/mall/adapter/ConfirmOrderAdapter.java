@@ -22,6 +22,7 @@ public class ConfirmOrderAdapter extends BaseQuickAdapter<ConfirmOrderInfo.ListB
     protected void convert(@NotNull BaseViewHolder baseViewHolder, ConfirmOrderInfo.ListBean listBean) {
         baseViewHolder.setText(R.id.tv_goods_name, listBean.getGoodsTitle())
                 .setText(R.id.tv_goods_format, listBean.getSpec())
+                .setText(R.id.tv_buy_num, "x"+listBean.getQuantity())
                 .setText(R.id.tv_goods_price, "￥" + listBean.getPrice());
         ImageView ivCover = baseViewHolder.getView(R.id.iv_cover);
         GlideUtil.with(getContext()).displayImage(listBean.getThumbnail(), ivCover);

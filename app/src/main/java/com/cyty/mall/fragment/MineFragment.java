@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.cyty.mall.R;
 import com.cyty.mall.activity.AddressManagementActivity;
 import com.cyty.mall.activity.CollectionActivity;
+import com.cyty.mall.activity.CommonActivity;
 import com.cyty.mall.activity.CouponActivity;
 import com.cyty.mall.activity.NotificationListActivity;
 import com.cyty.mall.activity.PersonalSettingsActivity;
@@ -173,7 +174,7 @@ public class MineFragment extends BaseFragment {
             case R.id.tv_mine_member_permissions:
                 break;
             case R.id.tv_mine_address_management:
-                AddressManagementActivity.startActivity(mActivity);
+                AddressManagementActivity.startActivity(mActivity, 1);
                 break;
             case R.id.tv_mine_notification:
                 NotificationListActivity.startActivity(mActivity, userID);
@@ -181,6 +182,7 @@ public class MineFragment extends BaseFragment {
             case R.id.tv_mine_contact_customer_service:
                 break;
             case R.id.tv_mine_about_us:
+                CommonActivity.startActivity(mActivity, 1);
                 break;
         }
     }

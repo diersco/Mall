@@ -1,6 +1,7 @@
 package com.cyty.mall.http;
 
 import com.cyty.mall.bean.AddressInfo;
+import com.cyty.mall.bean.ArticleInfo;
 import com.cyty.mall.bean.ClassIfPageBannerInfo;
 import com.cyty.mall.bean.ClassificationCommodity;
 import com.cyty.mall.bean.CollectionInfo;
@@ -28,6 +29,13 @@ public class HttpResponse {
 //    @POST("/stateless/getClassifPageData")
 //    Observable<StatusCode<Object>> getClassifPageData(
 //            @Body RequestBean requestBean);
+
+    /**
+     * 获取文章
+     */
+    public class getArticle extends HttpResponse {
+        public ArticleInfo data;
+    }
 
     /**
      * 获取分类页数据——banner——分类
@@ -77,6 +85,7 @@ public class HttpResponse {
     public class reviseDefaultsAddress extends HttpResponse {
         public AddressInfo data;
     }
+
     /**
      * 获取默认地址
      */
@@ -158,6 +167,20 @@ public class HttpResponse {
      * 确认订单
      */
     public class confirmOrderResponse extends HttpResponse {
+        public ConfirmOrderInfo data;
+    }
+
+    /**
+     * 计算金额
+     */
+    public class calculatedAmountResponse extends HttpResponse {
+        public ConfirmOrderInfo data;
+    }
+
+    /**
+     * 创建订单
+     */
+    public class createOrderResponse extends HttpResponse {
         public ConfirmOrderInfo data;
     }
 }

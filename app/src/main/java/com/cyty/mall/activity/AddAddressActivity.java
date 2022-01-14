@@ -18,6 +18,7 @@ import com.cyty.mall.base.BaseActivity;
 import com.cyty.mall.bean.AddressInfo;
 import com.cyty.mall.contants.Constant;
 import com.cyty.mall.event.RefreshAddressListEvent;
+import com.cyty.mall.event.RefreshConfirmOrderAddressEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
@@ -210,6 +211,7 @@ public class AddAddressActivity extends BaseActivity {
                             } else {
                                 ToastUtils.show("修改地址成功！");
                             }
+                            EventBus.getDefault().post(new RefreshConfirmOrderAddressEvent());
                             finish();
                         } else {
                             if (type == 1) {

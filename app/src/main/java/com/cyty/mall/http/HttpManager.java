@@ -42,14 +42,14 @@ public class HttpManager {
      * @param id       分类id 1=关于我们,2=用户协议,3=隐私政策,4=签到说明,5=积分说明
      * @param callback callback
      */
-    public void getArticle(int id, HttpEngine.HttpResponseResultCallback<HttpResponse.ClassIfPageBannerResponse> callback) {
+    public void getArticle(int id, HttpEngine.HttpResponseResultCallback<HttpResponse.getArticle> callback) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
         Request request = new Request.Builder().url(ServerApiConstants.URL_GET_ARTICLE)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.ClassIfPageBannerResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.getArticle.class, callback);
     }
 
     /**
@@ -193,9 +193,8 @@ public class HttpManager {
 
     /**
      * 获取默认地址
-     *
      */
-    public void getDefaultsAddress( HttpEngine.HttpResponseResultCallback<HttpResponse. getDefaultsAddress> callback) {
+    public void getDefaultsAddress(HttpEngine.HttpResponseResultCallback<HttpResponse.getDefaultsAddress> callback) {
 
         JsonObject jsonObject = new JsonObject();
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
@@ -402,6 +401,47 @@ public class HttpManager {
                 .post(requestBody)
                 .build();
         mHttpEngine.request(request, HttpResponse.confirmOrderResponse.class, callback);
+    }
+
+    /**
+     * 计算金额
+     *
+     * @param id  优惠券编号
+     * @param ids 总金额
+     */
+    public void calculatedAmount(int id, String ids, HttpEngine.HttpResponseResultCallback<HttpResponse.calculatedAmountResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id);
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_IDS, ids);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_CALCULATED_AMOUNT)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.calculatedAmountResponse.class, callback);
+    }
+
+
+    /**
+     * 创建订单
+     *
+     * @param addressId    地址id
+     * @param shoppingCart 是否是购物车 1是 2 不是
+     * @param paymentType  支付方式 1微信 2支付宝
+     * @param callback
+     */
+    public void createOrder(int addressId,String goodsInfo, int shoppingCart, int paymentType, HttpEngine.HttpResponseResultCallback<HttpResponse.createOrderResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("addressId", addressId);
+        jsonObject.addProperty("goodsInfo", goodsInfo);
+        jsonObject.addProperty("shoppingCart", shoppingCart);
+        jsonObject.addProperty("paymentType", paymentType);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_CREATE_ORDER)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.createOrderResponse.class, callback);
     }
 
     public void cancelRequest(String cancelUrl) {
