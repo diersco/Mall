@@ -11,6 +11,7 @@ import com.cyty.mall.activity.CollectionActivity;
 import com.cyty.mall.activity.CommonActivity;
 import com.cyty.mall.activity.CouponActivity;
 import com.cyty.mall.activity.NotificationListActivity;
+import com.cyty.mall.activity.OrderActivity;
 import com.cyty.mall.activity.PersonalSettingsActivity;
 import com.cyty.mall.activity.SignInActivity;
 import com.cyty.mall.base.BaseFragment;
@@ -162,12 +163,16 @@ public class MineFragment extends BaseFragment {
             case R.id.tv_share:
                 break;
             case R.id.tv_mine_pending_payment:
+                OrderActivity.startActivity(mActivity,1);
                 break;
             case R.id.tv_mine_to_be_delivered:
+                OrderActivity.startActivity(mActivity,2);
                 break;
             case R.id.tv_mine_to_be_received:
+                OrderActivity.startActivity(mActivity,3);
                 break;
             case R.id.tv_mine_receipt:
+                OrderActivity.startActivity(mActivity,4);
                 break;
             case R.id.tv_mine_refund:
                 break;

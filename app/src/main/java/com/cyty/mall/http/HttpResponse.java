@@ -2,6 +2,7 @@ package com.cyty.mall.http;
 
 import com.cyty.mall.bean.AddressInfo;
 import com.cyty.mall.bean.ArticleInfo;
+import com.cyty.mall.bean.CartGoodsInfo;
 import com.cyty.mall.bean.ClassIfPageBannerInfo;
 import com.cyty.mall.bean.ClassificationCommodity;
 import com.cyty.mall.bean.CollectionInfo;
@@ -182,5 +183,18 @@ public class HttpResponse {
      */
     public class createOrderResponse extends HttpResponse {
         public ConfirmOrderInfo data;
+    }
+
+    /**
+     * 加入购物车
+     */
+    public class addShoppingCart extends HttpResponse {
+        public ConfirmOrderInfo data;
+    }
+    /**
+     * 购物车列表
+     */
+    public class selectShoppingCartList extends HttpResponse {
+        public List<CartGoodsInfo> rows;
     }
 }

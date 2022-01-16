@@ -115,4 +115,12 @@ public class ServerApiConstants {
      * 创建订单
      */
     public static final String URL_CREATE_ORDER = BASE_URL + "/api/order/createOrder";
+    /**
+     * 加入购物车
+     */
+    public static final String URL_ADD_SHOPPING_CART = BASE_URL + "/api/cart/addShoppingCart";
+    /**
+     * 购物车列表
+     */
+    public static final String URL_SHOPPING_LIST = BASE_URL + "/api/cart/selectShoppingCartList";
 }

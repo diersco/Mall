@@ -62,6 +62,7 @@ public class GoodsFormatPopup extends BasePopupWindow {
     private String formatId;
     //规格编号字符串
     private String ids;
+
     public GoodsFormatPopup(Context context, GoodsInfo goodsInfo, int type) {
         super(context);
         this.mContext = context;
@@ -149,7 +150,7 @@ public class GoodsFormatPopup extends BasePopupWindow {
                     ConfirmOrderActivity.startActivity(mContext, ids);
                     dismiss();
                 } else if (type == 2) {
-
+                    addShoppingCart();
                 } else if (type == 3) {
                     collections();
                     dismiss();
@@ -193,6 +194,23 @@ public class GoodsFormatPopup extends BasePopupWindow {
                     public void onResponse(boolean result, String message, HttpResponse.collectionResponse data) {
                         if (result) {
                             ToastUtils.show("收藏成功！");
+                        } else {
+                            ToastUtils.show(message);
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 加入购物车
+     */
+    private void addShoppingCart() {
+        HttpManager.getInstance().addShoppingCart(formatId, buyNum + "",
+                new HttpEngine.HttpResponseResultCallback<HttpResponse.addShoppingCart>() {
+                    @Override
+                    public void onResponse(boolean result, String message, HttpResponse.addShoppingCart data) {
+                        if (result) {
+                            ToastUtils.show("加入成功！");
                         } else {
                             ToastUtils.show(message);
                         }

@@ -430,7 +430,7 @@ public class HttpManager {
      * @param paymentType  支付方式 1微信 2支付宝
      * @param callback
      */
-    public void createOrder(int addressId,String goodsInfo, int shoppingCart, int paymentType, HttpEngine.HttpResponseResultCallback<HttpResponse.createOrderResponse> callback) {
+    public void createOrder(int addressId, String goodsInfo, int shoppingCart, int paymentType, HttpEngine.HttpResponseResultCallback<HttpResponse.createOrderResponse> callback) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("addressId", addressId);
         jsonObject.addProperty("goodsInfo", goodsInfo);
@@ -442,6 +442,46 @@ public class HttpManager {
                 .post(requestBody)
                 .build();
         mHttpEngine.request(request, HttpResponse.createOrderResponse.class, callback);
+    }
+
+    /**
+     * 购物车列表
+     *
+//     * @param id        分类id
+     * @param pageIndex 分页
+     * @param pageSize  每页个数
+     * @param callback
+     */
+    public void selectShoppingCartList( int pageIndex, int pageSize, HttpEngine.HttpResponseResultListCallback<HttpResponse.selectShoppingCartList> callback) {
+
+        JsonObject jsonObject = new JsonObject();
+//        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_INDEX, pageIndex + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_SIZE, pageSize + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_SHOPPING_LIST)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.selectShoppingCartList.class, callback);
+    }
+    /**
+     * 加入购物车
+     *
+     * @param id       规格id
+     * @param pageNum  商品数量
+     * @param callback
+     */
+    public void addShoppingCart(String id, String pageNum, HttpEngine.HttpResponseResultCallback<HttpResponse.addShoppingCart> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", id);
+        jsonObject.addProperty("pageNum", pageNum);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_ADD_SHOPPING_CART)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.addShoppingCart.class, callback);
     }
 
     public void cancelRequest(String cancelUrl) {

@@ -40,7 +40,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="q">
-        <activity android:name=".activity.CommonActivity"></activity>
+        <activity android:name=".activity.OrderActivity"></activity>
+        <activity android:name=".activity.CommonActivity" />
         <activity android:name=".activity.GoodsCouponActivity" />
         <activity android:name=".activity.CollectionActivity" />
         <activity android:name=".activity.CouponActivity" />

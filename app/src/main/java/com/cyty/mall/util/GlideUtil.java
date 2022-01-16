@@ -298,7 +298,9 @@ public final class GlideUtil {
          * @param imageView ImageView
          */
         public void displayImage(final String uri, final ImageView imageView) {
-            displayImage(uri, imageView, null);
+            RequestOptions myOptions = new RequestOptions()
+                    .centerCrop();
+            displayImage(uri, imageView, myOptions);
         }
 
         /**
