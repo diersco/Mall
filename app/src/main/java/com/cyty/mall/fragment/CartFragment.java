@@ -97,7 +97,7 @@ public class CartFragment extends BaseFragment {
     }
 
     /**
-     * 获取收藏列表
+     * 获取购物车列表
      */
     private void selectShoppingCartList() {
         HttpManager.getInstance().selectShoppingCartList(pageIndex, pageSize,

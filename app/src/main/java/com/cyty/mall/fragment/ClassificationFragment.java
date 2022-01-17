@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -116,10 +117,6 @@ public class ClassificationFragment extends BaseFragment {
         banner.setAdapter(imageBannerAdapter).addBannerLifecycleObserver(this)//添加生命周期观察者
                 .isAutoLoop(true)
                 .setIndicator(new CircleIndicator(mActivity));
-        List<String> imgUrls = new ArrayList<>();
-        for (int i = 0; i < classIfPageBannerList.size(); i++) {
-            imgUrls.add(classIfPageBannerList.get(i).getResourceLink());
-        }
         banner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(Object data, int position) {

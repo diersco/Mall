@@ -123,4 +123,12 @@ public class ServerApiConstants {
      * 购物车列表
      */
     public static final String URL_SHOPPING_LIST = BASE_URL + "/api/cart/selectShoppingCartList";
+    /**
+     * 我的积分变动流水列表
+     */
+    public static final String URL_SELECT_MALL_FLOW_LIST = BASE_URL + "/api/integral/selectMallFlowtList";
+    /**
+     * 获取积分商城
+     */
+    public static final String URL_GET_INTEGRAL_GOODS_LIST = BASE_URL + "/stateless/getIntegralGoodsList";
 }

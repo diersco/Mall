@@ -8,9 +8,9 @@
     android:paddingBottom="@dimen/dp_12">
 
     <ImageView
+        android:id="@+id/iv_cover"
         android:layout_width="@dimen/dp_94"
-        android:layout_height="@dimen/dp_77"
-        android:src="@color/default_font_gray_999" />
+        android:layout_height="@dimen/dp_77" />
 
 
     <LinearLayout
@@ -20,6 +20,7 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -31,6 +32,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tv_is_freight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_2"
@@ -51,6 +53,7 @@
 
 
             <TextView
+                android:id="@+id/tv_score"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -60,9 +63,10 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tv_stock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="200分"
+                android:text="库存20+"
                 android:textColor="@color/default_font_gray_999"
                 android:textSize="@dimen/sp_12" />
         </LinearLayout>

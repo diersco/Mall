@@ -3,16 +3,23 @@ package com.cyty.mall.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.KeyEventDispatcher;
 
+import com.cyty.mall.MainActivity;
 import com.cyty.mall.R;
+import com.cyty.mall.adapter.GoodsBannerAdapter;
+import com.cyty.mall.adapter.ImageBannerAdapter;
 import com.cyty.mall.base.BaseActivity;
 import com.cyty.mall.bean.GoodsInfo;
 import com.cyty.mall.contants.Constant;
@@ -21,7 +28,16 @@ import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
 import com.cyty.mall.util.StringUtils;
 import com.cyty.mall.view.GoodsFormatPopup;
+import com.jaeger.library.StatusBarUtil;
 import com.youth.banner.Banner;
+import com.youth.banner.config.BannerConfig;
+import com.youth.banner.config.IndicatorConfig;
+import com.youth.banner.indicator.CircleIndicator;
+import com.youth.banner.listener.OnBannerListener;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -52,7 +68,8 @@ public class GoodsDetailActivity extends BaseActivity {
     private int goodsId;
 
     private GoodsInfo goodsInfo;
-
+    private List<String> imgList = new ArrayList<>();
+    private GoodsBannerAdapter goodsBannerAdapter;
     @Override
     protected void onNetReload(View v) {
 
@@ -99,6 +116,11 @@ public class GoodsDetailActivity extends BaseActivity {
      */
     @SuppressLint("SetTextI18n")
     private void showData(GoodsInfo goodsInfo) {
+        if(!goodsInfo.getAtlas().isEmpty()) {
+            String[] split = goodsInfo.getAtlas().split(",");
+            imgList = Arrays.asList(split);
+            initBanner();
+        }
         if (goodsInfo.getPrice() >= 0) tvGoodsPrice.setText("￥" + goodsInfo.getPrice());
         if (!goodsInfo.getDetails().isEmpty()) tvGoodsName.setText(goodsInfo.getTitle());
         if (goodsInfo.getSalesVolume() >= 0) tvSales.setText("销量：" + goodsInfo.getSalesVolume());
@@ -124,7 +146,21 @@ public class GoodsDetailActivity extends BaseActivity {
     protected void initToolBar() {
 
     }
+    /**
+     * 加载banner
+     */
+    private void initBanner() {
+        goodsBannerAdapter = new GoodsBannerAdapter(imgList, mContext);
+        bannerClass.setAdapter(goodsBannerAdapter).addBannerLifecycleObserver(this)//添加生命周期观察者
+                .isAutoLoop(true)
+                .setIndicator(new CircleIndicator(mContext));
+        bannerClass.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(Object data, int position) {
 
+            }
+        });
+    }
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
         WebSettings settings = mWebView.getSettings();
@@ -172,5 +208,10 @@ public class GoodsDetailActivity extends BaseActivity {
                 }
                 break;
         }
+    }
+    @Override
+    protected void setStatusBar() {
+        setLightStatusBarForM(this, true);
+        StatusBarUtil.setTransparent(this);
     }
 }

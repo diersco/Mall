@@ -10,9 +10,11 @@ import com.cyty.mall.activity.AddressManagementActivity;
 import com.cyty.mall.activity.CollectionActivity;
 import com.cyty.mall.activity.CommonActivity;
 import com.cyty.mall.activity.CouponActivity;
+import com.cyty.mall.activity.MyScoresActivity;
 import com.cyty.mall.activity.NotificationListActivity;
 import com.cyty.mall.activity.OrderActivity;
 import com.cyty.mall.activity.PersonalSettingsActivity;
+import com.cyty.mall.activity.SelectAftermarketTypeActivity;
 import com.cyty.mall.activity.SignInActivity;
 import com.cyty.mall.base.BaseFragment;
 import com.cyty.mall.bean.UserInfo;
@@ -150,6 +152,7 @@ public class MineFragment extends BaseFragment {
                 PersonalSettingsActivity.startActivity(mActivity);
                 break;
             case R.id.layout_my_scores:
+                MyScoresActivity.startActivity(mActivity);
                 break;
             case R.id.layout_coupon:
                 CouponActivity.startActivity(mActivity);
@@ -175,6 +178,7 @@ public class MineFragment extends BaseFragment {
                 OrderActivity.startActivity(mActivity,4);
                 break;
             case R.id.tv_mine_refund:
+                SelectAftermarketTypeActivity.startActivity(mActivity);
                 break;
             case R.id.tv_mine_member_permissions:
                 break;

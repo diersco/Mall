@@ -446,13 +446,14 @@ public class HttpManager {
 
     /**
      * 购物车列表
+     * <p>
+     * //     * @param id        分类id
      *
-//     * @param id        分类id
      * @param pageIndex 分页
      * @param pageSize  每页个数
      * @param callback
      */
-    public void selectShoppingCartList( int pageIndex, int pageSize, HttpEngine.HttpResponseResultListCallback<HttpResponse.selectShoppingCartList> callback) {
+    public void selectShoppingCartList(int pageIndex, int pageSize, HttpEngine.HttpResponseResultListCallback<HttpResponse.selectShoppingCartList> callback) {
 
         JsonObject jsonObject = new JsonObject();
 //        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
@@ -465,6 +466,7 @@ public class HttpManager {
                 .build();
         mHttpEngine.request(request, HttpResponse.selectShoppingCartList.class, callback);
     }
+
     /**
      * 加入购物车
      *
@@ -482,6 +484,48 @@ public class HttpManager {
                 .post(requestBody)
                 .build();
         mHttpEngine.request(request, HttpResponse.addShoppingCart.class, callback);
+    }
+
+    /**
+     * 我的积分变动流水列表
+     *
+     * @param pageIndex 分页
+     * @param pageSize  每页个数
+     * @param callback
+     */
+    public void selectMallFlowList(int pageIndex, int pageSize, HttpEngine.HttpResponseResultListCallback<HttpResponse.selectMallFlowList> callback) {
+
+        JsonObject jsonObject = new JsonObject();
+//        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_INDEX, pageIndex + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_SIZE, pageSize + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_SELECT_MALL_FLOW_LIST)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.selectMallFlowList.class, callback);
+    }
+
+    /**
+     * 积分商城
+     *
+     * @param pageIndex 分页
+     * @param pageSize  每页个数
+     * @param callback
+     */
+    public void getIntegralGoodsList(int pageIndex, int pageSize, HttpEngine.HttpResponseResultListCallback<HttpResponse.getIntegralGoodsList> callback) {
+
+        JsonObject jsonObject = new JsonObject();
+//        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_INDEX, pageIndex + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_SIZE, pageSize + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_GET_INTEGRAL_GOODS_LIST)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.getIntegralGoodsList.class, callback);
     }
 
     public void cancelRequest(String cancelUrl) {

@@ -5,9 +5,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cyty.mall.R;
@@ -17,23 +17,23 @@ import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
 import com.hjq.toast.ToastUtils;
 import com.jaeger.library.StatusBarUtil;
-import com.youth.banner.Banner;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
- * 积分商城
+ * 我的积分页面
  */
-public class PointsMallActivity extends BaseActivity {
+public class MyScoresActivity extends BaseActivity {
 
 
+    @BindView(R.id.img_unite_return)
+    ImageView imgUniteReturn;
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.banner)
-    Banner banner;
+    @BindView(R.id.tv_to_exchange)
+    TextView tvToExchange;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
     private int pageIndex = 1;
@@ -48,9 +48,14 @@ public class PointsMallActivity extends BaseActivity {
 
     }
 
+    public static void startActivity(Context mContext) {
+        Intent mIntent = new Intent(mContext, MyScoresActivity.class);
+        mContext.startActivity(mIntent);
+    }
+
     @Override
     protected int bindLayout() {
-        return R.layout.activity_points_mall;
+        return R.layout.activity_my_scores;
     }
 
     @Override
@@ -58,34 +63,23 @@ public class PointsMallActivity extends BaseActivity {
 
     }
 
-    public static void startActivity(Context mContext) {
-        Intent mIntent = new Intent(mContext, PointsMallActivity.class);
-        mContext.startActivity(mIntent);
+    @Override
+    protected void initData() {
+        selectMallFlowList();
     }
 
     @Override
     protected void initToolBar() {
-        // 设置toolbar
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
-        }
-        tvTitle.setText("积分商城");
-    }
 
-    @Override
-    protected void initData() {
-        getIntegralGoodsList();
     }
     /**
-     * 积分商城
+     * 我的积分变动流水列表
      */
-    private void getIntegralGoodsList() {
-        HttpManager.getInstance().getIntegralGoodsList(pageIndex, pageSize,
-                new HttpEngine.HttpResponseResultListCallback<HttpResponse.getIntegralGoodsList>() {
+    private void selectMallFlowList() {
+        HttpManager.getInstance().selectMallFlowList(pageIndex, pageSize,
+                new HttpEngine.HttpResponseResultListCallback<HttpResponse.selectMallFlowList>() {
                     @Override
-                    public void onResponse(boolean result, int totalNum, String message, HttpResponse.getIntegralGoodsList data) {
+                    public void onResponse(boolean result, int totalNum, String message, HttpResponse.selectMallFlowList data) {
                         if (state != STATE_MORE) {
 //                            cartGoodsInfoList.clear();
                         }
@@ -114,10 +108,21 @@ public class PointsMallActivity extends BaseActivity {
                 });
 
     }
-    @Override
-    protected void setStatusBar() {
-        setLightStatusBarForM(this, true);
-        StatusBarUtil.setColor(this, Color.WHITE, 0);
+
+    @OnClick(R.id.img_unite_return)
+    public void onViewClicked() {
+        finish();
     }
 
+    @Override
+    protected void setStatusBar() {
+        setLightStatusBarForM(this, false);
+        StatusBarUtil.setTransparent(this);
+    }
+
+
+    @OnClick(R.id.tv_to_exchange)
+    public void onExchangeViewClicked() {
+        PointsMallActivity.startActivity(mContext);
+    }
 }
