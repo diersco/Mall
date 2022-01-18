@@ -116,9 +116,9 @@ public class CommonActivity extends BaseActivity {
      */
     private void getArticle() {
         HttpManager.getInstance().getArticle(type,
-                new HttpEngine.HttpResponseResultCallback<HttpResponse.getArticle>() {
+                new HttpEngine.HttpResponseResultCallback<HttpResponse.getArticleResponse>() {
                     @Override
-                    public void onResponse(boolean result, String message, HttpResponse.getArticle data) {
+                    public void onResponse(boolean result, String message, HttpResponse.getArticleResponse data) {
                         if (result) {
                             mArticleInfo = data.data;
                             if (!TextUtils.isEmpty(mArticleInfo.getArticleContent())) {

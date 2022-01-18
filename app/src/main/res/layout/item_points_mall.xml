@@ -63,10 +63,10 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tv_stock"
+                android:id="@+id/tv_sales_volume"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="库存20+"
+                android:text="销量20+"
                 android:textColor="@color/default_font_gray_999"
                 android:textSize="@dimen/sp_12" />
         </LinearLayout>

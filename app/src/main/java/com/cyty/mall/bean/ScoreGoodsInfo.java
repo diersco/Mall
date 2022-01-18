@@ -3,7 +3,7 @@ package com.cyty.mall.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class ScoreInfo implements Parcelable {
+public class ScoreGoodsInfo implements Parcelable {
 
     /**
      * thumbnail : https://app-malll.oss-cn-chengdu.aliyuncs.com/upload/202112311538568161529.png
@@ -21,7 +21,7 @@ public class ScoreInfo implements Parcelable {
     private int id;
     private String title;
 
-    protected ScoreInfo(Parcel in) {
+    protected ScoreGoodsInfo(Parcel in) {
         thumbnail = in.readString();
         salesVolume = in.readInt();
         goodsId = in.readInt();
@@ -30,15 +30,15 @@ public class ScoreInfo implements Parcelable {
         title = in.readString();
     }
 
-    public static final Creator<ScoreInfo> CREATOR = new Creator<ScoreInfo>() {
+    public static final Creator<ScoreGoodsInfo> CREATOR = new Creator<ScoreGoodsInfo>() {
         @Override
-        public ScoreInfo createFromParcel(Parcel in) {
-            return new ScoreInfo(in);
+        public ScoreGoodsInfo createFromParcel(Parcel in) {
+            return new ScoreGoodsInfo(in);
         }
 
         @Override
-        public ScoreInfo[] newArray(int size) {
-            return new ScoreInfo[size];
+        public ScoreGoodsInfo[] newArray(int size) {
+            return new ScoreGoodsInfo[size];
         }
     };
 

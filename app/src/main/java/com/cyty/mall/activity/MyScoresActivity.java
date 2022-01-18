@@ -2,8 +2,6 @@ package com.cyty.mall.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,9 +15,9 @@ import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
 import com.hjq.toast.ToastUtils;
 import com.jaeger.library.StatusBarUtil;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -36,6 +34,8 @@ public class MyScoresActivity extends BaseActivity {
     TextView tvToExchange;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout refreshLayout;
     private int pageIndex = 1;
     private final int pageSize = 10;
     private int total;
@@ -43,9 +43,11 @@ public class MyScoresActivity extends BaseActivity {
     private static final int STATE_REFRESH = 1;
     private static final int STATE_MORE = 2;
     private int state = STATE_NORMAL;       //正常情况
+
     @Override
     protected void onNetReload(View v) {
-
+        showLoading();
+        selectMallFlowList();
     }
 
     public static void startActivity(Context mContext) {
@@ -65,6 +67,7 @@ public class MyScoresActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        setLoadSir(refreshLayout);
         selectMallFlowList();
     }
 
@@ -72,14 +75,15 @@ public class MyScoresActivity extends BaseActivity {
     protected void initToolBar() {
 
     }
+
     /**
      * 我的积分变动流水列表
      */
     private void selectMallFlowList() {
         HttpManager.getInstance().selectMallFlowList(pageIndex, pageSize,
-                new HttpEngine.HttpResponseResultListCallback<HttpResponse.selectMallFlowList>() {
+                new HttpEngine.HttpResponseResultListCallback<HttpResponse.selectMallFlowListResponse>() {
                     @Override
-                    public void onResponse(boolean result, int totalNum, String message, HttpResponse.selectMallFlowList data) {
+                    public void onResponse(boolean result, int totalNum, String message, HttpResponse.selectMallFlowListResponse data) {
                         if (state != STATE_MORE) {
 //                            cartGoodsInfoList.clear();
                         }

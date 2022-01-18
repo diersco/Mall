@@ -6,7 +6,7 @@ package com.cyty.mall.contants;
  * @描述
  */
 public interface Constant {
-
+    String WEI_XIN_APP_ID = "wx6495a900821f9933";
     /**
      * 手机号正则
      */

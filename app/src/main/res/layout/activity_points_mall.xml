@@ -12,13 +12,29 @@
         android:id="@+id/banner"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_192" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_2"
-        android:clipToPadding="false"
-        android:paddingBottom="@dimen/dp_40"
-        tools:listitem="@layout/item_points_mall" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/include">
+
+        <com.scwang.smart.refresh.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_2"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/dp_40"
+            tools:listitem="@layout/item_points_mall" />
+
+        <com.scwang.smart.refresh.footer.ClassicsFooter
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
 </LinearLayout>

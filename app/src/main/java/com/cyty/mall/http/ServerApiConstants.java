@@ -11,6 +11,10 @@ public class ServerApiConstants {
      */
     public static final String BASE_URL = "http://47.108.236.123:9528";
     /**
+     * 获取首页数据
+     */
+    public static final String URL_GET_HOME_PAGE_DATA = BASE_URL + "/stateless/getHomePageData";
+    /**
      * 分类页数据——banner——分类
      **/
     public static final String URL_GET_BANNER = BASE_URL + "/stateless/getClassifPageData";
@@ -47,10 +51,7 @@ public class ServerApiConstants {
      */
     public static final String URL_GET_DEFAULT_ADDRESS = BASE_URL + "/basic/selectDefaultMallSeting";
 
-    /**
-     * 获取首页数据
-     */
-    public static final String URL_GET_HOME_PAGE_DATA = BASE_URL + "/stateless/getHomePageData";
+
     /**
      * 根据商品编号获取购买人列表（分页）
      */
@@ -116,6 +117,10 @@ public class ServerApiConstants {
      */
     public static final String URL_CREATE_ORDER = BASE_URL + "/api/order/createOrder";
     /**
+     * 支付订单
+     */
+    public static final String URL_ORDER_PAY = BASE_URL + "/api/order/paymentOrder/pay";
+    /**
      * 加入购物车
      */
     public static final String URL_ADD_SHOPPING_CART = BASE_URL + "/api/cart/addShoppingCart";
@@ -131,4 +136,12 @@ public class ServerApiConstants {
      * 获取积分商城
      */
     public static final String URL_GET_INTEGRAL_GOODS_LIST = BASE_URL + "/stateless/getIntegralGoodsList";
+    /**
+     * 签到
+     */
+    public static final String URL_SIGN_IN = BASE_URL + "/api/integral/signIn";
+    /**
+     * 签到记录数据
+     */
+    public static final String URL_SIGN_IN_RECORD = BASE_URL + "/api/integral/signInRecord";
 }

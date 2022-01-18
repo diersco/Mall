@@ -26,6 +26,11 @@
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
+    <queries>
+        <package android:name="com.eg.android.AlipayGphone" /> <!-- 支付宝 -->
+        <package android:name="hk.alipay.wallet" /> <!-- AlipayHK -->
+    </queries>
+
     <application
         android:name=".AppApplication"
         android:allowBackup="true"
@@ -40,7 +45,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="q">
-        <activity android:name=".activity.MyScoresActivity"></activity>
+        <activity android:name=".activity.H5PayActivity"></activity>
+        <activity android:name=".activity.MyScoresActivity" />
         <activity android:name=".activity.SelectAftermarketTypeActivity" />
         <activity android:name=".activity.OrderActivity" />
         <activity android:name=".activity.CommonActivity" />
@@ -98,6 +104,12 @@
         <meta-data
             android:name="android.max_aspect"
             android:value="2.4" />
+
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

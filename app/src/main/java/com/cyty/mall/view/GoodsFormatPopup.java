@@ -206,9 +206,9 @@ public class GoodsFormatPopup extends BasePopupWindow {
      */
     private void addShoppingCart() {
         HttpManager.getInstance().addShoppingCart(formatId, buyNum + "",
-                new HttpEngine.HttpResponseResultCallback<HttpResponse.addShoppingCart>() {
+                new HttpEngine.HttpResponseResultCallback<HttpResponse.addShoppingCartResponse>() {
                     @Override
-                    public void onResponse(boolean result, String message, HttpResponse.addShoppingCart data) {
+                    public void onResponse(boolean result, String message, HttpResponse.addShoppingCartResponse data) {
                         if (result) {
                             ToastUtils.show("加入成功！");
                         } else {

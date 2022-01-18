@@ -59,7 +59,8 @@ public class GoodsCouponActivity extends BaseActivity {
 
     @Override
     protected void onNetReload(View v) {
-
+        showLoading();
+        confirmOrder();
     }
 
     @Override
@@ -93,6 +94,7 @@ public class GoodsCouponActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        setLoadSir(refreshLayout);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {

@@ -4,7 +4,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,18 +21,22 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alipay.sdk.app.PayTask;
 import com.cyty.mall.R;
 import com.cyty.mall.adapter.ConfirmOrderAdapter;
 import com.cyty.mall.base.BaseActivity;
 import com.cyty.mall.bean.AddressInfo;
 import com.cyty.mall.bean.ConfirmOrderInfo;
+import com.cyty.mall.bean.SignInfo;
 import com.cyty.mall.contants.Constant;
 import com.cyty.mall.event.GetAddressEvent;
 import com.cyty.mall.event.RefreshConfirmOrderAddressEvent;
+import com.cyty.mall.event.WeChartPayEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
 import com.cyty.mall.util.DigitUtil;
+import com.cyty.mall.util.WXPayUtils;
 import com.hjq.toast.ToastUtils;
 import com.jaeger.library.StatusBarUtil;
 
@@ -35,6 +45,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -184,9 +195,9 @@ public class ConfirmOrderActivity extends BaseActivity {
      */
     private void getDefaultsAddress() {
         HttpManager.getInstance().getDefaultsAddress(
-                new HttpEngine.HttpResponseResultCallback<HttpResponse.getDefaultsAddress>() {
+                new HttpEngine.HttpResponseResultCallback<HttpResponse.getDefaultsAddressResponse>() {
                     @Override
-                    public void onResponse(boolean result, String message, HttpResponse.getDefaultsAddress data) {
+                    public void onResponse(boolean result, String message, HttpResponse.getDefaultsAddressResponse data) {
                         if (result) {
                             mAddressInfo = data.data;
                             addressId = mAddressInfo.getId();
@@ -208,20 +219,144 @@ public class ConfirmOrderActivity extends BaseActivity {
      * 创建订单
      */
     private void createOrder() {
-        HttpManager.getInstance().createOrder(addressId,totalPrice, shoppingCart, paymentType,
+        HttpManager.getInstance().createOrder(addressId, ids, shoppingCart, paymentType,
                 new HttpEngine.HttpResponseResultCallback<HttpResponse.createOrderResponse>() {
                     @Override
                     public void onResponse(boolean result, String message, HttpResponse.createOrderResponse data) {
                         if (result) {
+                            String sign = data.data;
+                            if (paymentType == 2) {
+                                orderPay(sign);
+                            } else {
+                                WXOrderPay(sign);
+                            }
 
                         } else {
-
+                            ToastUtils.show(message);
 
                         }
                     }
                 });
     }
 
+    /**
+     * 支付宝支付订单
+     */
+    private void orderPay(String ids) {
+        HttpManager.getInstance().orderPay(ids, paymentType + "",
+                new HttpEngine.HttpResponseResultCallback<HttpResponse.OrderPayResponse>() {
+                    @Override
+                    public void onResponse(boolean result, String message, HttpResponse.OrderPayResponse data) {
+                        if (result) {
+                            String sign = data.data;
+                            payForAli(sign);
+                        } else {
+                            ToastUtils.show(message);
+
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 微信支付订单
+     */
+    private void WXOrderPay(String ids) {
+        HttpManager.getInstance().WXOrderPay(ids, paymentType + "",
+                new HttpEngine.HttpResponseResultCallback<HttpResponse.WXOrderPayResponse>() {
+                    @Override
+                    public void onResponse(boolean result, String message, HttpResponse.WXOrderPayResponse data) {
+                        if (result) {
+                            SignInfo signInfo = data.data;
+                            WXPayUtils.WXPayBuilder builder = new WXPayUtils.WXPayBuilder();
+                            builder.setAppId(signInfo.getAppid())
+                                    .setPartnerId(signInfo.getPartnerid())
+                                    .setPrepayId(signInfo.getPrepayid())
+                                    .setPackageValue("Sign=WXPay")
+                                    .setNonceStr(signInfo.getNoncestr())
+                                    .setTimeStamp(signInfo.getTimestamp())
+                                    .setSign(signInfo.getSign())
+                                    .build().toWXPayNotSign(ConfirmOrderActivity.this);
+                        } else {
+                            ToastUtils.show(message);
+
+                        }
+                    }
+                });
+    }
+
+    private void payForAli(final String orderinfo) {
+        Runnable payRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                PayTask alipay = new PayTask(ConfirmOrderActivity.this);
+                Map<String, String> result = alipay.payV2(orderinfo, true);
+                Message msg = new Message();
+                msg.what = 101;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        };
+        // 必须异步调用
+        Thread payThread = new Thread(payRunnable);
+        payThread.start();
+    }
+
+    @SuppressLint("HandlerLeak")
+    Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            Map<String, String> result = ((Map<String, String>) msg.obj);
+            String requestcode = result.get("resultStatus");
+            Log.e("测试支付宝回调", requestcode);
+            if (!TextUtils.isEmpty(requestcode)) {
+                try {
+                    switch (Integer.parseInt(requestcode)) {
+                        case 9000:
+//                            isCanclePay = false;
+                            new Thread() {
+                                @Override
+                                public void run() {
+                                    super.run();
+                                    try {
+                                        Thread.sleep(200);//
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    finish();
+//                                    CoursePaySuccessActivity.startActivity(mContext, orderId);
+                                    ToastUtils.show("支付成功");
+                                }
+
+                            }.start();
+                            break;
+                        case 6001:
+                            ToastUtils.show("取消支付");
+                            break;
+                        default:
+//                            isCanclePay = false;
+                            ToastUtils.show("支付宝支付失败");
+                            break;
+                    }
+
+                } catch (Exception e) {
+                }
+            }
+        }
+    };
+
+    /**
+     * 将 H5 网页版支付转换成支付宝 App 支付的示例
+     */
+    public void h5Pay(View v) {
+        WebView.setWebContentsDebuggingEnabled(true);
+        Intent intent = new Intent(this, H5PayActivity.class);
+        Bundle extras = new Bundle();
+        String url = "https://m.taobao.com";
+        extras.putString("url", url);
+        intent.putExtras(extras);
+        startActivity(intent);
+    }
 
     private void initAddress() {
         layoutAddress.setVisibility(View.VISIBLE);
@@ -246,13 +381,13 @@ public class ConfirmOrderActivity extends BaseActivity {
                 break;
             case R.id.layout_ali_pay:
                 paymentType = 2;
-                ivAliSelect.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_pay_selected));
-                ivWxSelect.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_address_unselected));
+                ivAliSelect.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_pay_selected));
+                ivWxSelect.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_address_unselected));
                 break;
             case R.id.layout_wx_pay:
                 paymentType = 1;
-                ivAliSelect.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_address_unselected));
-                ivWxSelect.setImageDrawable(ContextCompat.getDrawable(mContext,R.drawable.ic_pay_selected));
+                ivAliSelect.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_address_unselected));
+                ivWxSelect.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_pay_selected));
                 break;
             case R.id.tv_buy_now:
                 createOrder();
@@ -287,5 +422,35 @@ public class ConfirmOrderActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshConfirmOrderAddressEvent(RefreshConfirmOrderAddressEvent event) {
         getDefaultsAddress();
+    }
+
+
+    private long time;
+
+    /**
+     * 微信支付结果
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void weiXinPayResult(WeChartPayEvent event) {
+
+
+        if (System.currentTimeMillis() - time < 1000) {
+            return;
+        }
+
+        time = System.currentTimeMillis();
+
+        int errCode = event.getErrCode();
+        if (errCode == 0) {
+//            CoursePaySuccessActivity.startActivity(mContext, orderId);
+            finish();
+//            EventBus.getDefault().post(new UpdateOrderListEvent());
+        } else if (errCode == -2) {
+            //用户取消
+            ToastUtils.show("取消支付");
+        } else if (errCode == -1) {
+            //支付失败
+            ToastUtils.show("支付失败");
+        }
     }
 }

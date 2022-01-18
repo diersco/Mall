@@ -24,6 +24,9 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 
+/**
+ * 订单
+ */
 public class OrderActivity extends BaseActivity {
 
 

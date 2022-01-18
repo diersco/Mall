@@ -101,9 +101,9 @@ public class CartFragment extends BaseFragment {
      */
     private void selectShoppingCartList() {
         HttpManager.getInstance().selectShoppingCartList(pageIndex, pageSize,
-                new HttpEngine.HttpResponseResultListCallback<HttpResponse.selectShoppingCartList>() {
+                new HttpEngine.HttpResponseResultListCallback<HttpResponse.selectShoppingCartListResponse>() {
                     @Override
-                    public void onResponse(boolean result, int totalNum, String message, HttpResponse.selectShoppingCartList data) {
+                    public void onResponse(boolean result, int totalNum, String message, HttpResponse.selectShoppingCartListResponse data) {
                         if (state != STATE_MORE) {
                             cartGoodsInfoList.clear();
                         }

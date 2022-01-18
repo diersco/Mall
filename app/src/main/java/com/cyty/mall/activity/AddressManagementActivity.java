@@ -79,7 +79,8 @@ public class AddressManagementActivity extends BaseActivity {
 
     @Override
     protected void onNetReload(View v) {
-
+        showLoading();
+        getAddressList();
     }
 
     @Override
@@ -105,7 +106,8 @@ public class AddressManagementActivity extends BaseActivity {
     }
 
     @Override
-    protected void initData() {
+    protected void initData() {     setLoadSir(refreshLayout);
+
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
@@ -248,9 +250,9 @@ public class AddressManagementActivity extends BaseActivity {
      */
     private void reviseDefaultsAddress(int defaults, int id) {
         HttpManager.getInstance().reviseDefaultsAddress(id, defaults,
-                new HttpEngine.HttpResponseResultCallback<HttpResponse.reviseDefaultsAddress>() {
+                new HttpEngine.HttpResponseResultCallback<HttpResponse.reviseDefaultsAddressResponse>() {
                     @Override
-                    public void onResponse(boolean result, String message, HttpResponse.reviseDefaultsAddress data) {
+                    public void onResponse(boolean result, String message, HttpResponse.reviseDefaultsAddressResponse data) {
                         if (result) {
                             getAddressList();
                         } else {
@@ -265,9 +267,9 @@ public class AddressManagementActivity extends BaseActivity {
      */
     private void deleteAddress(int id) {
         HttpManager.getInstance().deleteAddress(id,
-                new HttpEngine.HttpResponseResultCallback<HttpResponse.deleteAddress>() {
+                new HttpEngine.HttpResponseResultCallback<HttpResponse.deleteAddressResponse>() {
                     @Override
-                    public void onResponse(boolean result, String message, HttpResponse.deleteAddress data) {
+                    public void onResponse(boolean result, String message, HttpResponse.deleteAddressResponse data) {
                         if (result) {
                             ToastUtils.show("删除成功！");
                             getAddressList();

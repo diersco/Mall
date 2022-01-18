@@ -68,7 +68,8 @@ public class NotificationListActivity extends BaseActivity {
 
     @Override
     protected void onNetReload(View v) {
-
+        showLoading();
+        getNewList();
     }
 
     @Override
@@ -100,6 +101,7 @@ public class NotificationListActivity extends BaseActivity {
     @Override
     protected void initData() {
         isUseEventBus(true);
+        setLoadSir(refreshLayout);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
