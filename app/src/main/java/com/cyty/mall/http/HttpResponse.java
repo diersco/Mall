@@ -12,6 +12,8 @@ import com.cyty.mall.bean.GoodsInfo;
 import com.cyty.mall.bean.GoodsListInfo;
 import com.cyty.mall.bean.HomeDataInfo;
 import com.cyty.mall.bean.NewsInfo;
+import com.cyty.mall.bean.OrderDetailInfo;
+import com.cyty.mall.bean.OrderListInfo;
 import com.cyty.mall.bean.ScoreGoodsInfo;
 import com.cyty.mall.bean.SignInInfo;
 import com.cyty.mall.bean.SignInfo;
@@ -203,6 +205,20 @@ public class HttpResponse {
      */
     public static class WXOrderPayResponse extends HttpResponse {
         public SignInfo data;
+    }
+
+    /**
+     * 订单列表
+     */
+    public static class selectMallPaymentOrderListResponse extends HttpResponse {
+        public List<OrderListInfo> rows;
+    }
+
+    /**
+     * 订单详情
+     */
+    public static class selectMallOrderDetailsByIdResponse extends HttpResponse {
+        public OrderDetailInfo data;
     }
 
     /**

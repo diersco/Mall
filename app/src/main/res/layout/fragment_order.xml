@@ -19,9 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
-            android:paddingTop="@dimen/dp_12"
-            android:paddingBottom="@dimen/dp_40"
-            tools:listitem="@layout/item_coupon" />
+            android:paddingBottom="@dimen/dp_60"
+            tools:listitem="@layout/item_order" />
 
         <com.scwang.smart.refresh.footer.ClassicsFooter
             android:layout_width="match_parent"

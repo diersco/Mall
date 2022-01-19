@@ -493,6 +493,40 @@ public class HttpManager {
     }
 
     /**
+     * 订单列表
+     *
+     * @param id        订单状态（0全部 1待支付 2待发货 3待收货 4已完成 5已取消）
+     * @param pageIndex 分页
+     * @param pageSize  每页个数
+     * @param callback
+     */
+    public void selectMallPaymentOrderList(int id, int pageIndex, int pageSize, HttpEngine.HttpResponseResultListCallback<HttpResponse.selectMallPaymentOrderListResponse> callback) {
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_INDEX, pageIndex + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_SIZE, pageSize + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_SELECT_ORDER_LIST)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.selectMallPaymentOrderListResponse.class, callback);
+    }
+    /**
+     * 订单详情
+     */
+    public void selectMallOrderDetailsById(int id, HttpEngine.HttpResponseResultCallback<HttpResponse.selectMallOrderDetailsByIdResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id+"");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_SELECT_ORDER_DETAILS)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.selectMallOrderDetailsByIdResponse.class, callback);
+    }
+    /**
      * 购物车列表
      *
      * @param pageIndex 分页

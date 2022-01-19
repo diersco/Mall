@@ -19,14 +19,14 @@ import java.util.List;
  * @创建时间 2022/1/19 10:29
  * @描述
  */
-public class FrontImageAdapter extends BaseQuickAdapter<HomeDataInfo.BigPictureListBean, BaseViewHolder> {
-    public FrontImageAdapter( @Nullable List<HomeDataInfo.BigPictureListBean> data) {
+public class FrontImageAdapter extends BaseQuickAdapter<HomeDataInfo.PosterListBean, BaseViewHolder> {
+    public FrontImageAdapter( @Nullable List<HomeDataInfo.PosterListBean> data) {
         super(R.layout.item_fornt_img, data);
     }
 
     @Override
-    protected void convert(@NotNull BaseViewHolder baseViewHolder, HomeDataInfo.BigPictureListBean bigPictureListBean) {
+    protected void convert(@NotNull BaseViewHolder baseViewHolder, HomeDataInfo.PosterListBean posterListBean) {
         ImageView ivCover = baseViewHolder.getView(R.id.iv_cover);
-        GlideUtil.with(getContext()).displayImage(bigPictureListBean.getResourceLink(), ivCover);
+        GlideUtil.with(getContext()).displayImage(posterListBean.getResourceLink(), ivCover);
     }
 }

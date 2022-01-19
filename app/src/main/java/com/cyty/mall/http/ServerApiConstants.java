@@ -121,6 +121,14 @@ public class ServerApiConstants {
      */
     public static final String URL_ORDER_PAY = BASE_URL + "/api/order/paymentOrder/pay";
     /**
+     * 订单列表
+     */
+    public static final String URL_SELECT_ORDER_LIST = BASE_URL + "/api/order/selectMallPaymentOrderList";
+    /**
+     * 订单详情
+     */
+    public static final String URL_SELECT_ORDER_DETAILS = BASE_URL + "/api/order/selectMallOrderDetailsById";
+    /**
      * 加入购物车
      */
     public static final String URL_ADD_SHOPPING_CART = BASE_URL + "/api/cart/addShoppingCart";

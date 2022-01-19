@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cyty.mall.R;
+import com.cyty.mall.activity.GoodsDetailActivity;
 import com.cyty.mall.adapter.FrontBannerAdapter;
 import com.cyty.mall.adapter.FrontImageAdapter;
 import com.cyty.mall.base.BaseFragment;
@@ -63,10 +64,6 @@ public class FrontPageFragment extends BaseFragment {
 
     @Override
     protected void initData() {
-        frontImageAdapter = new FrontImageAdapter(pictureListBeanList);
-        recyclerview.setLayoutManager(new LinearLayoutManager(mActivity));
-        recyclerview.setItemAnimator(new DefaultItemAnimator());
-        recyclerview.setAdapter(frontImageAdapter);
         getHomePageData();
     }
 
@@ -83,8 +80,8 @@ public class FrontPageFragment extends BaseFragment {
                             posterListBeanList = data.data.getPosterList();
                             videoBean = data.data.getVideo();
                             initBanner();
-                            frontImageAdapter.notifyDataSetChanged();
-                            videoPlayer.setUp(videoBean.getResourceLink(), true, "");
+                            initBigImg();
+                            initVideo();
                         } else {
                             ToastUtils.show(message);
                         }
@@ -96,16 +93,34 @@ public class FrontPageFragment extends BaseFragment {
      * 加载banner
      */
     private void initBanner() {
-        mAdapter = new FrontBannerAdapter(posterListBeanList, mActivity);
+        mAdapter = new FrontBannerAdapter(pictureListBeanList, mActivity);
         banner.setAdapter(mAdapter).addBannerLifecycleObserver(this)//添加生命周期观察者
                 .isAutoLoop(true)
                 .setIndicator(new CircleIndicator(mActivity));
         banner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(Object data, int position) {
-
+                GoodsDetailActivity.startActivity(mActivity, pictureListBeanList.get(position).getGoodsId());
             }
         });
+    }
+
+    /**
+     * 加载最下面的大图
+     */
+    private void initBigImg() {
+        frontImageAdapter = new FrontImageAdapter(posterListBeanList);
+        recyclerview.setLayoutManager(new LinearLayoutManager(mActivity));
+        recyclerview.setItemAnimator(new DefaultItemAnimator());
+        recyclerview.setAdapter(frontImageAdapter);
+
+    }
+
+    /**
+     * 加载视频
+     */
+    private void initVideo() {
+        videoPlayer.setUp(videoBean.getResourceLink(), true, "1111111");
     }
 
     @Override
@@ -116,4 +131,5 @@ public class FrontPageFragment extends BaseFragment {
         videoPlayer.setVideoAllCallBack(null);
         GSYVideoManager.releaseAllVideos();
     }
+
 }

@@ -13,10 +13,10 @@ import com.youth.banner.adapter.BannerAdapter;
 
 import java.util.List;
 
-public class FrontBannerAdapter extends BannerAdapter<HomeDataInfo.PosterListBean, FrontBannerAdapter.BannerViewHolder> {
+public class FrontBannerAdapter extends BannerAdapter<HomeDataInfo.BigPictureListBean, FrontBannerAdapter.BannerViewHolder> {
     private Context context;
 
-    public FrontBannerAdapter(List<HomeDataInfo.PosterListBean> datas, Context context) {
+    public FrontBannerAdapter(List<HomeDataInfo.BigPictureListBean> datas, Context context) {
         //设置数据，也可以调用banner提供的方法,或者自己在adapter中实现
         super(datas);
         this.context = context;
@@ -35,7 +35,7 @@ public class FrontBannerAdapter extends BannerAdapter<HomeDataInfo.PosterListBea
     }
 
     @Override
-    public void onBindView(FrontBannerAdapter.BannerViewHolder holder, HomeDataInfo.PosterListBean data, int position, int size) {
+    public void onBindView(FrontBannerAdapter.BannerViewHolder holder, HomeDataInfo.BigPictureListBean data, int position, int size) {
         Glide.with(context).load(data.getResourceLink()).into(holder.imageView);
     }
 

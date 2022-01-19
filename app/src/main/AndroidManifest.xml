@@ -45,7 +45,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="q">
-        <activity android:name=".activity.H5PayActivity"></activity>
+        <activity android:name=".activity.OrderDetailActivity"></activity>
+        <activity android:name=".activity.H5PayActivity" />
         <activity android:name=".activity.MyScoresActivity" />
         <activity android:name=".activity.SelectAftermarketTypeActivity" />
         <activity android:name=".activity.OrderActivity" />
