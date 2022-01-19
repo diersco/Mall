@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.cyty.mall"
@@ -24,11 +24,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
     android.applicationVariants.all { variant ->
         variant.outputs.all {
             //def date = new Date().format("yyyyMMdd" , TimeZone.getTimeZone("Asia/Shanghai"))
@@ -39,6 +39,11 @@ android {
             if (variant.buildType.name.equals('release')) {
                 outputFileName = "mall_${date}_${versionName}.apk"
             }
+        }
+    }
+    configurations.all {
+        resolutionStrategy {
+            force 'androidx.core:core:1.6.0'
         }
     }
 }
@@ -131,7 +136,7 @@ dependencies {
     implementation 'io.github.h07000223:flycoTabLayout:3.0.0'
     //微信支付
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android:6.8.0'
-    //视频播放
-    implementation 'com.github.CarGuo.GSYVideoPlayer:GSYVideoPlayer:v8.1.8-release-jitpack'
+    //完整版引入
+    implementation 'com.shuyu:GSYVideoPlayer:7.1.4'
     implementation (name: 'alipaysdk-15.8.06.211122170115', ext: 'aar')
 }
