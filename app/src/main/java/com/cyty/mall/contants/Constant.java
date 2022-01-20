@@ -7,6 +7,8 @@ package com.cyty.mall.contants;
  */
 public interface Constant {
     String WEI_XIN_APP_ID = "wx6495a900821f9933";
+    //号码认证
+    String WEI_UMENG_APP_ID = "FRlF/r3qKmA4xKPbNWq98RZXK4crpci6IMGT4RcXAaNvQcSdGeGIV7jF4iewzhWuL8AaRJEw7ovStaA0qMSGIfHix/J8AxboUIBoGfehrUO9g0RNLUFU3XYpJAEymmPg/sXZEdkH1UbLtmZeEynjF2UHQzNmeOn/tHaWzoBFCMx5gv5BDCRS7HLn0aCIoPFT58kYvDJfiXPseu8C9+hFg9qFTRaNbmDUOmG4ad7wjkvYC3Mm2XtmN5Y7Ng7e+cEq/7N3Jf1gUIBfeGkvqYN7/XdngypEzEKJy6VHLBOdD+rBzQcxDIDt6w==";
     /**
      * 手机号正则
      */

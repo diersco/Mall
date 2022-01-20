@@ -85,7 +85,7 @@
 
 
             <TextView
-                android:id="@+id/tv_line_gary"
+                android:id="@+id/tv_buy_again"
                 android:layout_width="@dimen/dp_67"
                 android:layout_height="@dimen/dp_26"
                 android:layout_marginStart="@dimen/dp_12"
@@ -96,7 +96,7 @@
                 android:textSize="@dimen/sp_12" />
 
             <TextView
-                android:id="@+id/tv_line_purple"
+                android:id="@+id/tv_after_sales"
                 android:layout_width="@dimen/dp_67"
                 android:layout_height="@dimen/dp_26"
                 android:layout_marginStart="@dimen/dp_12"
@@ -107,7 +107,7 @@
                 android:textSize="@dimen/sp_12" />
 
             <TextView
-                android:id="@+id/tv_round_purple"
+                android:id="@+id/tv_evaluate"
                 android:layout_width="@dimen/dp_67"
                 android:layout_height="@dimen/dp_26"
                 android:layout_marginStart="@dimen/dp_12"

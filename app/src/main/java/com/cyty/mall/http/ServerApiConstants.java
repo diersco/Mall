@@ -152,4 +152,8 @@ public class ServerApiConstants {
      * 签到记录数据
      */
     public static final String URL_SIGN_IN_RECORD = BASE_URL + "/api/integral/signInRecord";
+    /**
+     * 售后列表
+     */
+    public static final String URL_AFTER_MARKET_LIST = BASE_URL + "/api/order/getMallAftermarketList";
 }

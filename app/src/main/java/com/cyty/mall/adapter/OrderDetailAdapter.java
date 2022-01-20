@@ -6,7 +6,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.cyty.mall.R;
 import com.cyty.mall.bean.OrderDetailInfo;
-import com.cyty.mall.bean.OrderListInfo;
 import com.cyty.mall.util.GlideUtil;
 
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +22,7 @@ public class OrderDetailAdapter extends BaseQuickAdapter<OrderDetailInfo.OrderDe
 
 
     public OrderDetailAdapter(@Nullable List<OrderDetailInfo.OrderDetailsListBean> data) {
-        super(R.layout.item_order_second, data);
+        super(R.layout.item_order_detail, data);
     }
 
     @Override
@@ -32,7 +31,13 @@ public class OrderDetailAdapter extends BaseQuickAdapter<OrderDetailInfo.OrderDe
                 .setText(R.id.tv_price, "￥" + orderDetailsListBean.getPrice())
                 .setText(R.id.tv_num, "x" + orderDetailsListBean.getQuantity())
                 .setText(R.id.tv_format, "规格：" + orderDetailsListBean.getSpec());
+        ImageView tvBuyAgain = baseViewHolder.getView(R.id.tv_buy_again);
+        ImageView tvAfterSales = baseViewHolder.getView(R.id.tv_after_sales);
+        ImageView tvEvaluate = baseViewHolder.getView(R.id.tv_evaluate);
         ImageView ivCover = baseViewHolder.getView(R.id.iv_cover);
         GlideUtil.with(getContext()).displayImage(orderDetailsListBean.getThumbnail(), ivCover);
+        switch (orderDetailsListBean.getAfterSale()){
+
+        }
     }
 }

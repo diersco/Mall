@@ -25,6 +25,9 @@
         <external-cache-path
             name="name"
             path="path" />
+        <external-files-path
+            name="umeng_cache"
+            path="umeng_cache/" />
     </paths>
 
 </resources>

@@ -7,11 +7,14 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.cyty.mall.R;
 import com.cyty.mall.adapter.OrderDetailAdapter;
 import com.cyty.mall.base.BaseActivity;
@@ -136,6 +139,20 @@ public class OrderDetailActivity extends BaseActivity {
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setAdapter(mAdapter);
+        mAdapter.addChildClickViewIds(R.id.tv_buy_again, R.id.tv_after_sales, R.id.tv_evaluate);
+        mAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+                OrderDetailInfo.OrderDetailsListBean orderDetailsListBean = orderDetailsListBeanList.get(position);
+                if (view.getId() == R.id.tv_buy_again) {
+                    GoodsDetailActivity.startActivity(mContext, orderDetailsListBean.getId());
+                } else if (view.getId() == R.id.tv_after_sales) {
+
+                } else if (view.getId() == R.id.tv_evaluate) {
+
+                }
+            }
+        });
     }
 
     private void initAddress() {
@@ -146,6 +163,7 @@ public class OrderDetailActivity extends BaseActivity {
         if (!addressInfo.getDetailedAddress().isEmpty())
             tvAddress.setText(addressInfo.getDetailedAddress());
     }
+
     @Override
     protected void setStatusBar() {
         setLightStatusBarForM(this, true);
