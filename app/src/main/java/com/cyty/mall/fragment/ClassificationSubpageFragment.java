@@ -65,7 +65,11 @@ public class ClassificationSubpageFragment extends BaseFragment {
         return fragment;
     }
 
-
+    @Override
+    protected void onNetReload(View v) {
+        showLoading();
+        getGoodsList();
+    }
     @Override
     protected void initView() {
         super.initView();
@@ -74,6 +78,7 @@ public class ClassificationSubpageFragment extends BaseFragment {
     @Override
     protected void initData() {
         super.initData();
+        setLoadSir(refreshLayout);
         if (getArguments() != null) {
             typeId = getArguments().getInt(TYPE_ID, 0);
         }
@@ -121,10 +126,7 @@ public class ClassificationSubpageFragment extends BaseFragment {
         return R.layout.fragment_classification_subpage;
     }
 
-    @Override
-    protected void onNetReload(View v) {
 
-    }
 
     /**
      * 获取分类数据

@@ -97,7 +97,10 @@ public class OrderActivity extends BaseActivity {
         mAdapter = new CommPagerAdapter(getSupportFragmentManager(), mFragments, mTitles);
         viewPager.setOffscreenPageLimit(6);
         viewPager.setAdapter(mAdapter);
+
         slideTab.setViewPager(viewPager, mTitles);//tab和ViewPager进行关联
+        slideTab.onPageSelected(type);
+        viewPager.setCurrentItem(type);
     }
 
     @Override

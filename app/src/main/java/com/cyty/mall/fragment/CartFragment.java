@@ -8,15 +8,18 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.cyty.mall.R;
 import com.cyty.mall.adapter.AddressListAdapter;
 import com.cyty.mall.adapter.ShoppingCartAdapter;
 import com.cyty.mall.base.BaseFragment;
 import com.cyty.mall.bean.CartGoodsInfo;
 import com.cyty.mall.bean.GoodsInfo;
+import com.cyty.mall.contants.MKParameter;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
+import com.cyty.mall.util.MkUtils;
 import com.hjq.toast.ToastUtils;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
@@ -93,7 +96,10 @@ public class CartFragment extends BaseFragment {
         recyclerview.setLayoutManager(new LinearLayoutManager(mActivity));
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setAdapter(mAdapter);
-        selectShoppingCartList();
+        if (!StringUtils.isEmpty(MkUtils.decodeString(MKParameter.TOKEN))){
+            selectShoppingCartList();
+        }
+
     }
 
     /**

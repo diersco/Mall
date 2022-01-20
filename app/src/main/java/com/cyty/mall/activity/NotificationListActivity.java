@@ -126,7 +126,6 @@ public class NotificationListActivity extends BaseActivity {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-                EventBus.getDefault().post(new RefreshNewsListEvent());
                 NewsInfo newsInfo = newsInfoList.get(position);
                 newsInfo.setNewsRead(2);
                 mAdapter.notifyDataSetChanged();

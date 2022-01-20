@@ -145,11 +145,15 @@ public class OrderDetailActivity extends BaseActivity {
             public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
                 OrderDetailInfo.OrderDetailsListBean orderDetailsListBean = orderDetailsListBeanList.get(position);
                 if (view.getId() == R.id.tv_buy_again) {
-                    GoodsDetailActivity.startActivity(mContext, orderDetailsListBean.getId());
+                    GoodsDetailActivity.startActivity(mContext, orderDetailsListBean.getGoodsId());
                 } else if (view.getId() == R.id.tv_after_sales) {
-
+                    if (orderDetailsListBean.getAfterSale() == 1) {
+                        //跳转申请售后
+                    }
                 } else if (view.getId() == R.id.tv_evaluate) {
-
+                    if (orderDetailsListBean.getEvaluateStatus() == 2 || orderDetailsListBean.getEvaluateStatus() == 3) {
+                        //评价页面
+                    }
                 }
             }
         });

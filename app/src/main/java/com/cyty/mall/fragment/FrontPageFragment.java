@@ -81,7 +81,7 @@ public class FrontPageFragment extends BaseFragment {
                             videoBean = data.data.getVideo();
                             initBanner();
                             initBigImg();
-                            initVideo();
+//                            initVideo();
                         } else {
                             ToastUtils.show(message);
                         }
@@ -126,10 +126,10 @@ public class FrontPageFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        videoPlayer.release();
-        //释放所有
-        videoPlayer.setVideoAllCallBack(null);
-        GSYVideoManager.releaseAllVideos();
+//        videoPlayer.release();
+//        //释放所有
+//        videoPlayer.setVideoAllCallBack(null);
+//        GSYVideoManager.releaseAllVideos();
     }
 
 }

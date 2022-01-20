@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.cyty.mall.R;
 import com.cyty.mall.activity.AddressManagementActivity;
 import com.cyty.mall.activity.CollectionActivity;
@@ -18,12 +19,17 @@ import com.cyty.mall.activity.SelectAftermarketTypeActivity;
 import com.cyty.mall.activity.SignInActivity;
 import com.cyty.mall.base.BaseFragment;
 import com.cyty.mall.bean.UserInfo;
+import com.cyty.mall.contants.MKParameter;
 import com.cyty.mall.event.RefreshNewsListEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
 import com.cyty.mall.util.GlideUtil;
+import com.cyty.mall.util.MkUtils;
 import com.hjq.toast.ToastUtils;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -38,8 +44,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MineFragment extends BaseFragment {
 
 
-    @BindView(R.id.status_bar)
-    View statusBarView;
     @BindView(R.id.tv_nickname)
     TextView tvNickname;
     @BindView(R.id.img_avatar)
@@ -58,9 +62,12 @@ public class MineFragment extends BaseFragment {
     TextView tvCouponNum;
     @BindView(R.id.tv_message)
     TextView tvMessage;
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout refreshLayout;
 
     private int messageNum;
     private int userID;
+    private int myIntegral;
 
     @Override
     protected int onCreateFragmentView() {
@@ -81,8 +88,18 @@ public class MineFragment extends BaseFragment {
     @Override
     protected void initData() {
         super.initData();
-        getUserInfo();
-        selectReadNews();
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                getUserInfo();
+                selectReadNews();
+                refreshLayout.finishRefresh();
+            }
+        });
+        if (!StringUtils.isEmpty(MkUtils.decodeString(MKParameter.TOKEN))) {
+            getUserInfo();
+            selectReadNews();
+        }
     }
 
 
@@ -116,7 +133,10 @@ public class MineFragment extends BaseFragment {
         if (userInfo.getCouponsNum() >= 0) tvCouponNum.setText(userInfo.getCouponsNum() + "");
         if (userInfo.getCollectionNum() >= 0)
             tvCollectNum.setText(userInfo.getCollectionNum() + "");
-        if (userInfo.getIntegral() >= 0) tvMyScoresNum.setText(userInfo.getIntegral() + "");
+        if (userInfo.getIntegral() >= 0) {
+            myIntegral = userInfo.getIntegral();
+            tvMyScoresNum.setText(userInfo.getIntegral() + "");
+        }
         if (!TextUtils.isEmpty(userInfo.getHeadPortrait()))
             GlideUtil.with(mActivity).displayImage(userInfo.getHeadPortrait(), imgAvatar);
     }
@@ -152,7 +172,7 @@ public class MineFragment extends BaseFragment {
                 PersonalSettingsActivity.startActivity(mActivity);
                 break;
             case R.id.layout_my_scores:
-                MyScoresActivity.startActivity(mActivity);
+                MyScoresActivity.startActivity(mActivity, myIntegral + "");
                 break;
             case R.id.layout_coupon:
                 CouponActivity.startActivity(mActivity);
@@ -166,16 +186,16 @@ public class MineFragment extends BaseFragment {
             case R.id.tv_share:
                 break;
             case R.id.tv_mine_pending_payment:
-                OrderActivity.startActivity(mActivity,1);
+                OrderActivity.startActivity(mActivity, 1);
                 break;
             case R.id.tv_mine_to_be_delivered:
-                OrderActivity.startActivity(mActivity,2);
+                OrderActivity.startActivity(mActivity, 2);
                 break;
             case R.id.tv_mine_to_be_received:
-                OrderActivity.startActivity(mActivity,3);
+                OrderActivity.startActivity(mActivity, 3);
                 break;
             case R.id.tv_mine_receipt:
-                OrderActivity.startActivity(mActivity,4);
+                OrderActivity.startActivity(mActivity, 4);
                 break;
             case R.id.tv_mine_refund:
                 SelectAftermarketTypeActivity.startActivity(mActivity);

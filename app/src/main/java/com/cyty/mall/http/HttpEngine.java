@@ -1,7 +1,11 @@
 package com.cyty.mall.http;
 
+import android.content.Context;
+
 import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.ThreadUtils;
+import com.cyty.mall.activity.LoginActivity;
+import com.cyty.mall.base.ActivityCollector;
 import com.cyty.mall.event.ExitLoginSuccess;
 import com.google.gson.Gson;
 
@@ -52,7 +56,7 @@ public class HttpEngine {
     });
 
     public <T extends HttpResponse> void request(Request request, final Class<T> responseClass,
-                                                 final HttpResponseResultCallback<T> callback) {
+                                                 final HttpResponseResultCallback<T> callback,Context mContext) {
         Call call = okHttpClient.newCall(request);
 
         map.put(request.url().toString(), call);
@@ -89,7 +93,10 @@ public class HttpEngine {
 
                     boolean isTrue = false;
                     if (resp.code == 200) isTrue = true;
-
+                    if (resp.code == 400){
+                        ActivityCollector.finishAll();
+                        LoginActivity.startActivity(mContext);
+                    }
 
                     if (callback != null) {
                         final String finalErrorMessage = message;
@@ -110,7 +117,7 @@ public class HttpEngine {
     }
 
     public <T extends HttpResponse> void request(Request request, final Class<T> responseClass,
-                                                 final HttpResponseResultListCallback<T> callback) {
+                                                 final HttpResponseResultListCallback<T> callback, Context mContext) {
         Call call = okHttpClient.newCall(request);
 
         map.put(request.url().toString(), call);

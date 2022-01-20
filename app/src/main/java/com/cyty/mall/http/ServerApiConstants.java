@@ -156,4 +156,11 @@ public class ServerApiConstants {
      * 售后列表
      */
     public static final String URL_AFTER_MARKET_LIST = BASE_URL + "/api/order/getMallAftermarketList";
+    /**
+     * 获取首页秒杀
+     */
+    public static final String URL_SELECT_SEC_KILL = BASE_URL + "/stateless/getSeckillGoodsList";    /**
+     * 获取秒杀排期商品
+     */
+    public static final String URL_SELECT_SCHEDULING = BASE_URL + "/api/seckillOrder/selectSchedulingList";
 }

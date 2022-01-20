@@ -15,6 +15,7 @@ import com.cyty.mall.util.MkUtils;
 import com.hjq.toast.ToastUtils;
 import com.kingja.loadsir.core.LoadSir;
 import com.tencent.mmkv.MMKV;
+import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 
 import timber.log.Timber;
@@ -54,11 +55,10 @@ public class AppApplication extends Application {
                 .addCallback(new CustomCallback())
                 .setDefaultCallback(LoadingCallback.class)//设置默认状态页
                 .commit();
-// 假设您的自定义FileProvider authorities值为：com.tencent.sample2.fileprovider，
-// 参考如下样例代码(位于官方Demo工程 App.java中)。
 
+//        UMConfigure.init(this,appkey,channel,UMConfigure.DEVICE_TYPE_PHONE,"");
         PlatformConfig.setWeixin("wxdc1e388c3822c80b", "3baf1193c85774b3fd9d18447d76cab0");
-        PlatformConfig.setWXFileProvider("com.tencent.sample2.fileprovider");
+        PlatformConfig.setWXFileProvider("androidx.core.content.FileProvider");
         ToastUtils.init(this);
     }
 }

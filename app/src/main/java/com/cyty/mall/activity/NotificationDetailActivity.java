@@ -11,10 +11,13 @@ import com.cyty.mall.R;
 import com.cyty.mall.base.BaseActivity;
 import com.cyty.mall.bean.NewsInfo;
 import com.cyty.mall.contants.Constant;
+import com.cyty.mall.event.RefreshNewsListEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
 import com.hjq.toast.ToastUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 
@@ -83,6 +86,7 @@ public class NotificationDetailActivity extends BaseActivity {
                     public void onResponse(boolean result, String message, HttpResponse.getNewsDetailResponse data) {
                         if (result) {
                             newsInfo = data.data;
+                            EventBus.getDefault().post(new RefreshNewsListEvent());
                             intNewsInfo();
                         } else {
                             ToastUtils.show(message);

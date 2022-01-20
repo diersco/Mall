@@ -169,13 +169,15 @@ public class SignInActivity extends BaseActivity {
                 });
     }
 
+
+
     @OnClick({R.id.tv_ask, R.id.tv_score_dynamics})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_ask:
                 break;
             case R.id.tv_score_dynamics:
-                MyScoresActivity.startActivity(mContext);
+                MyScoresActivity.startActivity(mContext,"0");
                 break;
         }
     }

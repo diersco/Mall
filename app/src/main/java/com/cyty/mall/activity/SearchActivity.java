@@ -68,7 +68,7 @@ public class SearchActivity extends BaseActivity {
     @Override
     protected void onNetReload(View v) {
         showLoading();
-        getGoodsList();
+        searchGoods();
     }
 
     @Override
@@ -109,7 +109,7 @@ public class SearchActivity extends BaseActivity {
         }
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setAdapter(mAdapter);
-        getGoodsList();
+        searchGoods();
     }
 
     @Override
@@ -124,10 +124,10 @@ public class SearchActivity extends BaseActivity {
     }
 
     /**
-     * 获取分类数据
+     * 搜索
      */
-    private void getGoodsList() {
-        HttpManager.getInstance().getGoodsList(typeId, pageIndex, pageSize, search,
+    private void searchGoods() {
+        HttpManager.getInstance().searchGoods( pageIndex, pageSize, search,
                 new HttpEngine.HttpResponseResultListCallback<HttpResponse.GoodsListResponse>() {
                     @Override
                     public void onResponse(boolean result, int totalNum, String message, HttpResponse.GoodsListResponse data) {
@@ -186,7 +186,7 @@ public class SearchActivity extends BaseActivity {
     private void loadMoreData() {
         state = STATE_MORE;
         pageIndex = ++pageIndex;
-        getGoodsList();
+        searchGoods();
     }
 
     /**
@@ -195,13 +195,13 @@ public class SearchActivity extends BaseActivity {
     private void refreshData() {
         state = STATE_REFRESH;
         pageIndex = 1;
-        getGoodsList();
+        searchGoods();
     }
 
     @OnClick(R.id.tv_search)
     public void onViewClicked() {
         search = etSearch.getText().toString().trim();
-        getGoodsList();
+        searchGoods();
     }
 
     public static void startActivity(Context mContext) {

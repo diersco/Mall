@@ -1,16 +1,19 @@
 package com.cyty.mall.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 import androidx.core.content.ContextCompat;
@@ -29,6 +32,16 @@ import com.cyty.mall.http.HttpResponse;
 import com.cyty.mall.util.StringUtils;
 import com.cyty.mall.view.GoodsFormatPopup;
 import com.jaeger.library.StatusBarUtil;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.editorpage.ShareActivity;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
 import com.youth.banner.Banner;
 import com.youth.banner.config.BannerConfig;
 import com.youth.banner.config.IndicatorConfig;
@@ -41,6 +54,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 /**
  * 商品详情页面
@@ -64,12 +78,15 @@ public class GoodsDetailActivity extends BaseActivity {
     TextView tvEvaluationNum;
     @BindView(R.id.webView)
     WebView mWebView;
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout refreshLayout;
     //商品编号
     private int goodsId;
 
     private GoodsInfo goodsInfo;
     private List<String> imgList = new ArrayList<>();
     private GoodsBannerAdapter goodsBannerAdapter;
+
     @Override
     protected void onNetReload(View v) {
 
@@ -89,7 +106,13 @@ public class GoodsDetailActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        getGoodsInfo(goodsId);
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                getGoodsInfo(goodsId);
+            }
+        });
+
     }
 
     /**
@@ -116,7 +139,7 @@ public class GoodsDetailActivity extends BaseActivity {
      */
     @SuppressLint("SetTextI18n")
     private void showData(GoodsInfo goodsInfo) {
-        if(!goodsInfo.getAtlas().isEmpty()) {
+        if (!goodsInfo.getAtlas().isEmpty()) {
             String[] split = goodsInfo.getAtlas().split(",");
             imgList = Arrays.asList(split);
             initBanner();
@@ -146,6 +169,7 @@ public class GoodsDetailActivity extends BaseActivity {
     protected void initToolBar() {
 
     }
+
     /**
      * 加载banner
      */
@@ -161,6 +185,7 @@ public class GoodsDetailActivity extends BaseActivity {
             }
         });
     }
+
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
         WebSettings settings = mWebView.getSettings();
@@ -194,6 +219,7 @@ public class GoodsDetailActivity extends BaseActivity {
                 }
                 break;
             case R.id.iv_share:
+                shareWeb(GoodsDetailActivity.this, "http://www.baidu.com", "Hello Word", "Word", SHARE_MEDIA.WEIXIN);
                 break;
             case R.id.tv_shopping_cart:
                 break;
@@ -209,6 +235,90 @@ public class GoodsDetailActivity extends BaseActivity {
                 break;
         }
     }
+
+    /**
+     * 友盟分享
+     * 上下文activity、分享的链接、标题、内容、类型
+     * 若是要分享视频、音乐可看官方文档
+     */
+    public static void shareWeb(final Activity activity, String WebUrl, String title, String description, SHARE_MEDIA
+            platform) {
+        UMImage thumb = new UMImage(activity, R.mipmap.ic_launcher);
+        UMWeb web = new UMWeb(WebUrl);//连接地址(注意链接开头必须包含http)
+        web.setTitle(title);//标题
+        web.setDescription(description);//描述
+        web.setThumb(thumb);//缩略图
+        new ShareAction(activity)
+                //分享的平台
+                .setPlatform(platform)
+                .withMedia(web)
+                .setCallback(new UMShareListener() {
+                    /**
+                     * @descrption 分享开始的回调
+                     * @param share_media 平台类型
+                     */
+                    @Override
+                    public void onStart(SHARE_MEDIA share_media) {
+                        Timber.e("onStart开始分享的平台: " + share_media);
+                    }
+
+                    /**
+                     * @descrption 分享成功的回调
+                     * @param share_media 平台类型
+                     */
+                    @Override
+                    public void onResult(final SHARE_MEDIA share_media) {
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(activity, " 分享成功 ", Toast.LENGTH_SHORT).show();
+                                Timber.e("onStart分享成功的平台: " + share_media);
+                            }
+                        });
+                    }
+
+                    /**
+                     * @descrption 分享失败的回调
+                     * @param share_media 平台类型
+                     * @param throwable 错误原因
+                     */
+                    @Override
+                    public void onError(final SHARE_MEDIA share_media, final Throwable throwable) {
+                        if (throwable != null) {
+                            //失败原因
+                            Timber.e("throw:" + throwable.getMessage());
+                        }
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(activity, share_media + " 分享失败", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+
+                    /**
+                     * @descrption 分享取消的回调
+                     * @param share_media 平台类型
+                     */
+                    @Override
+                    public void onCancel(final SHARE_MEDIA share_media) {
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(activity, " 分享取消 ", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                })
+                .share();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+    }
+
     @Override
     protected void setStatusBar() {
         setLightStatusBarForM(this, true);

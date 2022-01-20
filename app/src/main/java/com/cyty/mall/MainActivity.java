@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.cyty.mall.activity.LoginActivity;
 import com.cyty.mall.adapter.MainNavigationAdapter;
 import com.cyty.mall.base.ActivityCollector;
@@ -94,9 +95,18 @@ public class MainActivity extends BaseActivity {
                     return true;
                 case R.id.navigation_cart:
                     viewpagerMain.setCurrentItem(2);
+                    if (StringUtils.isEmpty(MkUtils.decodeString(MKParameter.TOKEN))){
+                        ActivityCollector.finishAll();
+                        LoginActivity.startActivity(mContext);
+                    }
+
                     item.setIcon(R.drawable.main_tab_cart_selected);
                     return true;
                 case R.id.navigation_mine:
+                    if (StringUtils.isEmpty(MkUtils.decodeString(MKParameter.TOKEN))){
+                        ActivityCollector.finishAll();
+                        LoginActivity.startActivity(mContext);
+                    }
                     viewpagerMain.setCurrentItem(3);
                     item.setIcon(R.drawable.main_tab_mine_selected);
                     return true;

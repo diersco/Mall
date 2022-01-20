@@ -13,6 +13,8 @@ import com.cyty.mall.activity.ConfirmOrderActivity;
 import com.cyty.mall.adapter.GoodsFormatAdapter;
 import com.cyty.mall.adapter.GoodsFormatTwoAdapter;
 import com.cyty.mall.bean.GoodsInfo;
+import com.cyty.mall.event.RefreshNewsListEvent;
+import com.cyty.mall.event.RefreshUniversalListEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
@@ -20,6 +22,8 @@ import com.cyty.mall.util.GlideUtil;
 import com.hjq.toast.ToastUtils;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagFlowLayout;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -193,7 +197,7 @@ public class GoodsFormatPopup extends BasePopupWindow {
                     @Override
                     public void onResponse(boolean result, String message, HttpResponse.collectionResponse data) {
                         if (result) {
-                            ToastUtils.show("收藏成功！");
+                            EventBus.getDefault().post(new RefreshUniversalListEvent());
                         } else {
                             ToastUtils.show(message);
                         }

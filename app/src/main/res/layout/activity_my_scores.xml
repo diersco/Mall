@@ -15,6 +15,7 @@
         <RelativeLayout
             android:id="@+id/layout_title"
             android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/dp_24"
             android:layout_height="@dimen/dp_48">
 
             <ImageView
@@ -48,6 +49,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tv_integral"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -87,7 +89,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/dp_230"
+        android:layout_marginTop="@dimen/dp_255"
         android:background="@drawable/shape_universal_sign_bg">
 
 
@@ -107,7 +109,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_4"
                 tools:listitem="@layout/item_my_scores" />
-
+            <com.scwang.smart.refresh.footer.ClassicsFooter
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
     </LinearLayout>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mall</string>
+    <string name="app_name">由你Uni</string>
 
     <string name="something_is_wrong">请求数据出错</string>
     <string name="fine_no_data">暂时没有数据！</string>
@@ -27,7 +27,7 @@
     <string name="mine_to_be_received">待收货</string>
     <string name="mine_receipt">已完成</string>
     <string name="mine_refund">退款/售后</string>
-    <string name="mine_member_permissions">会员权限</string>
+    <string name="mine_member_permissions">会员权益</string>
     <string name="mine_address_management">地址管理</string>
     <string name="mine_notification">消息通知</string>
     <string name="mine_contact_customer_service">联系客服</string>

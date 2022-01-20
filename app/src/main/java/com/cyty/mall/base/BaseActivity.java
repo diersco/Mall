@@ -22,6 +22,7 @@ import com.cyty.mall.R;
 import com.cyty.mall.callback.EmptyCallback;
 import com.cyty.mall.callback.ErrorCallback;
 import com.cyty.mall.callback.LoadingCallback;
+import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.util.LoadingDialogUtils;
 import com.hjq.toast.ToastUtils;
 import com.jaeger.library.StatusBarUtil;
@@ -68,6 +69,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
         if (isUseEventBus) {
             EventBus.getDefault().register(this);
         }
+        HttpManager.getInstance().init(mContext);
         initToolBar();
         //设置数据
         initData();

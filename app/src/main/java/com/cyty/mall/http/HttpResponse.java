@@ -11,6 +11,8 @@ import com.cyty.mall.bean.CouponInfo;
 import com.cyty.mall.bean.GoodsInfo;
 import com.cyty.mall.bean.GoodsListInfo;
 import com.cyty.mall.bean.HomeDataInfo;
+import com.cyty.mall.bean.HomeSecKillGoodsInfo;
+import com.cyty.mall.bean.MyIntegralInfo;
 import com.cyty.mall.bean.NewsInfo;
 import com.cyty.mall.bean.OrderDetailInfo;
 import com.cyty.mall.bean.OrderListInfo;
@@ -239,7 +241,7 @@ public class HttpResponse {
      * 我的积分变动流水列表
      */
     public static class selectMallFlowListResponse extends HttpResponse {
-        public List<CartGoodsInfo> rows;
+        public List<MyIntegralInfo> rows;
     }
 
     /**
@@ -261,5 +263,19 @@ public class HttpResponse {
      */
     public static class signInRecordResponse extends HttpResponse {
         public SignInInfo data;
+    }
+
+    /**
+     * 获取秒杀排期商品
+     */
+    public static class selectSchedulingListResponse extends HttpResponse {
+        public List<ScoreGoodsInfo> rows;
+    }
+
+    /**
+     * 首页秒杀
+     */
+    public static class getSeckillGoodsListResponse extends HttpResponse {
+        public List<HomeSecKillGoodsInfo.ListBean> rows;
     }
 }

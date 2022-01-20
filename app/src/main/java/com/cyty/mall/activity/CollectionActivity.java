@@ -20,6 +20,8 @@ import com.cyty.mall.adapter.CollectionAdapter;
 import com.cyty.mall.base.BaseActivity;
 import com.cyty.mall.bean.CollectionInfo;
 import com.cyty.mall.contants.Constant;
+import com.cyty.mall.event.RefreshNewsListEvent;
+import com.cyty.mall.event.RefreshUniversalListEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
@@ -29,6 +31,9 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,6 +103,7 @@ public class CollectionActivity extends BaseActivity {
     @Override
     protected void initView() {
         setLoadSir(refreshLayout);
+        isUseEventBus(true);
         id = getIntent().getIntExtra(Constant.INTENT_ID, 0);
     }
 
@@ -127,7 +133,8 @@ public class CollectionActivity extends BaseActivity {
         mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
-
+                CollectionInfo collectionInfo = collectionInfoList.get(position);
+                GoodsDetailActivity.startActivity(mContext, collectionInfo.getGoodsId());
             }
         });
         getCollectionsList();
@@ -214,5 +221,15 @@ public class CollectionActivity extends BaseActivity {
     protected void setStatusBar() {
         setLightStatusBarForM(this, true);
         StatusBarUtil.setColor(this, Color.WHITE, 0);
+    }
+
+    /**
+     * 刷新列表
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshUniversalListEvent(RefreshUniversalListEvent event) {
+        getCollectionsList();
     }
 }

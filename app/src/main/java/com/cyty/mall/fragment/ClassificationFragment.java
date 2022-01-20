@@ -2,20 +2,25 @@ package com.cyty.mall.fragment;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 import com.cyty.mall.R;
 import com.cyty.mall.activity.SearchActivity;
+import com.cyty.mall.adapter.CommPagerAdapter;
+import com.cyty.mall.adapter.HomeSpikeAdapter;
 import com.cyty.mall.adapter.ImageBannerAdapter;
 import com.cyty.mall.base.BaseFragment;
 import com.cyty.mall.bean.ClassIfPageBannerInfo;
 import com.cyty.mall.bean.ClassificationCommodity;
+import com.cyty.mall.bean.HomeSecKillGoodsInfo;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
@@ -27,6 +32,7 @@ import com.youth.banner.listener.OnBannerListener;
 
 import net.lucode.hackware.magicindicator.FragmentContainerHelper;
 import net.lucode.hackware.magicindicator.MagicIndicator;
+import net.lucode.hackware.magicindicator.ViewPagerHelper;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator;
@@ -48,8 +54,6 @@ public class ClassificationFragment extends BaseFragment {
     Banner banner;
     @BindView(R.id.magic_indicator)
     MagicIndicator magicIndicator;
-    @BindView(R.id.fragment_container)
-    FrameLayout fragmentContainer;
     @BindView(R.id.tv_hour)
     TextView tvHour;
     @BindView(R.id.tv_minute)
@@ -58,14 +62,18 @@ public class ClassificationFragment extends BaseFragment {
     TextView tvSecond;
     @BindView(R.id.tv_more)
     TextView tvMore;
+    @BindView(R.id.recyclerview)
+    RecyclerView recyclerview;
+    @BindView(R.id.view_pager)
+    ViewPager viewPager;
 
 
     private ImageBannerAdapter imageBannerAdapter;
     private List<ClassIfPageBannerInfo.ClassifPageBannerListBean> classIfPageBannerList = new ArrayList<>();
-    private static final String[] CHANNELS = new String[]{"水乳", "面霜", "精华", "面膜", "口红"};
-    private List<Fragment> mFragments = new ArrayList<Fragment>();
     private List<ClassificationCommodity> classificationCommodityList = new ArrayList<>();
-    private FragmentContainerHelper mFragmentContainerHelper = new FragmentContainerHelper();
+    private List<HomeSecKillGoodsInfo.ListBean> listBeanList = new ArrayList<>();
+    private HomeSpikeAdapter mAdapter;
+    private ArrayList<Fragment> mFragments = new ArrayList<>();
 
     @Override
     protected int onCreateFragmentView() {
@@ -88,6 +96,7 @@ public class ClassificationFragment extends BaseFragment {
         super.initData();
         getClassificationCommodity();
         getClassifyPage();
+        selectSchedulingList();
     }
 
     /**
@@ -135,10 +144,8 @@ public class ClassificationFragment extends BaseFragment {
                     public void onResponse(boolean result, int total, String message, HttpResponse.ClassificationCommodityResponse data) {
                         if (result) {
                             classificationCommodityList = data.rows;
-                            initFragments();
+                            initTab();
                             initMagicIndicator();
-                            mFragmentContainerHelper.handlePageSelected(0, false);
-                            switchPages(0);
                         } else {
                             ToastUtils.show(message);
                         }
@@ -147,40 +154,44 @@ public class ClassificationFragment extends BaseFragment {
                 });
     }
 
-    private void switchPages(int index) {
-        FragmentManager fragmentManager = getChildFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        Fragment fragment;
-        for (int i = 0, j = mFragments.size(); i < j; i++) {
-            if (i == index) {
-                continue;
-            }
-            fragment = mFragments.get(i);
-            if (fragment.isAdded()) {
-                fragmentTransaction.hide(fragment);
-            }
-        }
-        fragment = mFragments.get(index);
-        if (fragment.isAdded()) {
-            fragmentTransaction.show(fragment);
-        } else {
-            fragmentTransaction.add(R.id.fragment_container, fragment);
-        }
-        fragmentTransaction.commitAllowingStateLoss();
-    }
 
-    private void initFragments() {
+    private void initTab() {
+        mFragments.clear();
         for (int i = 0; i < classificationCommodityList.size(); i++) {
             mFragments.add(ClassificationSubpageFragment.newInstance(classificationCommodityList.get(i).getId()));
+        }
+        ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager(), mFragments);
+        viewPager.setOffscreenPageLimit(classificationCommodityList.size());
+        viewPager.setAdapter(mViewPagerAdapter);
+    }
+
+    // viewpager适配器
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
+        List<Fragment> fragmentList;
+
+        ViewPagerAdapter(FragmentManager fm, List<Fragment> list) {
+            super(fm);
+            this.fragmentList = list;
+        }
+
+        @Override
+        public Fragment getItem(int i) {
+            return fragmentList.get(i);
+        }
+
+        @Override
+        public int getCount() {
+            return fragmentList.size();
         }
     }
 
     private void initMagicIndicator() {
         CommonNavigator commonNavigator = new CommonNavigator(mActivity);
+        commonNavigator.setEnablePivotScroll(true);
         commonNavigator.setAdapter(new CommonNavigatorAdapter() {
             @Override
             public int getCount() {
-                return CHANNELS.length;
+                return classificationCommodityList.size();
             }
 
             @Override
@@ -193,7 +204,7 @@ public class ClassificationFragment extends BaseFragment {
                 final View view = (View) commonPagerTitleView.findViewById(R.id.view);
                 tvRemark.setText(classificationCommodityList.get(index).getSynopsis());
                 tvType.setText(classificationCommodityList.get(index).getTitle());
-                view.setVisibility(index + 1 == CHANNELS.length ? View.GONE : View.VISIBLE);
+                view.setVisibility(index + 1 == classificationCommodityList.size() ? View.GONE : View.VISIBLE);
                 commonPagerTitleView.setOnPagerTitleChangeListener(new CommonPagerTitleView.OnPagerTitleChangeListener() {
                     @Override
                     public void onSelected(int index, int totalCount) {
@@ -221,8 +232,7 @@ public class ClassificationFragment extends BaseFragment {
                 commonPagerTitleView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mFragmentContainerHelper.handlePageSelected(index, false);
-                        switchPages(index);
+                        viewPager.setCurrentItem(index);
                     }
                 });
 
@@ -235,7 +245,32 @@ public class ClassificationFragment extends BaseFragment {
             }
         });
         magicIndicator.setNavigator(commonNavigator);
-        mFragmentContainerHelper.attachMagicIndicator(magicIndicator);
+        ViewPagerHelper.bind(magicIndicator, viewPager);
+    }
+
+    /**
+     * 获取秒杀
+     */
+    private void selectSchedulingList() {
+        HttpManager.getInstance().getSeckillGoodsList(
+                new HttpEngine.HttpResponseResultListCallback<HttpResponse.getSeckillGoodsListResponse>() {
+                    @Override
+                    public void onResponse(boolean result, int totalNum, String message, HttpResponse.getSeckillGoodsListResponse data) {
+                        if (result) {
+                            listBeanList = data.rows;
+                        } else {
+                            ToastUtils.show(message);
+                        }
+                    }
+
+                });
+    }
+
+    private void initAdapter() {
+        mAdapter = new HomeSpikeAdapter(listBeanList);
+        recyclerview.setLayoutManager(new LinearLayoutManager(mActivity));
+        recyclerview.setItemAnimator(new DefaultItemAnimator());
+        recyclerview.setAdapter(mAdapter);
     }
 
     @Override

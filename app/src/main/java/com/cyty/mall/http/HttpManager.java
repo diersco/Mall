@@ -19,6 +19,7 @@ public class HttpManager {
     private static HttpManager mInstance;
     private HttpEngine mHttpEngine = new HttpEngine();
     private String mPackageName;
+    private Context mContext;
 
     public static HttpManager getInstance() {
         if (mInstance == null) {
@@ -33,6 +34,7 @@ public class HttpManager {
 
     public void init(Context context) {
         this.mPackageName = context.getPackageName();
+        this.mContext = context;
     }
 
 
@@ -47,7 +49,7 @@ public class HttpManager {
         Request request = new Request.Builder().url(ServerApiConstants.URL_GET_HOME_PAGE_DATA)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getHomePageDataResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.getHomePageDataResponse.class, callback,mContext);
     }
 
     /**
@@ -63,7 +65,7 @@ public class HttpManager {
         Request request = new Request.Builder().url(ServerApiConstants.URL_GET_ARTICLE)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getArticleResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.getArticleResponse.class, callback,mContext);
     }
 
     /**
@@ -77,7 +79,7 @@ public class HttpManager {
         Request request = new Request.Builder().url(ServerApiConstants.URL_GET_BANNER)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.ClassIfPageBannerResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.ClassIfPageBannerResponse.class, callback,mContext);
     }
 
     /**
@@ -89,7 +91,7 @@ public class HttpManager {
         Request request = new Request.Builder().url(ServerApiConstants.URL_GET_CLASSIFY)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.ClassificationCommodityResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.ClassificationCommodityResponse.class, callback,mContext);
     }
 
 
@@ -113,9 +115,28 @@ public class HttpManager {
         Request request = new Request.Builder().url(ServerApiConstants.URL_GET_GOODS_LIST)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.GoodsListResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.GoodsListResponse.class, callback,mContext);
     }
+    /**
+     * 搜索
+     *
+     * @param pageIndex 分页
+     * @param pageSize  每页个数
+     * @param search    搜索信息
+     * @param callback
+     */
+    public void searchGoods(int pageIndex, int pageSize, String search, HttpEngine.HttpResponseResultListCallback<HttpResponse.GoodsListResponse> callback) {
 
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_INDEX, pageIndex + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_SIZE, pageSize + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_SEARCH, search);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_GET_GOODS_LIST)
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.GoodsListResponse.class, callback,mContext);
+    }
     /**
      * 获取商品详情
      *
@@ -129,7 +150,7 @@ public class HttpManager {
         Request request = new Request.Builder().url(ServerApiConstants.URL_GET_GOODS_INFO)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.GoodsInfoResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.GoodsInfoResponse.class, callback,mContext);
     }
 
     /**
@@ -153,7 +174,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.addressListResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.addressListResponse.class, callback,mContext);
     }
 
     /**
@@ -183,7 +204,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.addOrReviseAddressResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.addOrReviseAddressResponse.class, callback,mContext);
     }
 
     /**
@@ -202,7 +223,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.reviseDefaultsAddressResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.reviseDefaultsAddressResponse.class, callback,mContext);
     }
 
     /**
@@ -216,7 +237,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getDefaultsAddressResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.getDefaultsAddressResponse.class, callback,mContext);
     }
 
     /**
@@ -233,7 +254,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.deleteAddressResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.deleteAddressResponse.class, callback,mContext);
     }
 
     /**
@@ -251,7 +272,7 @@ public class HttpManager {
         Request request = new Request.Builder().url(ServerApiConstants.URL_SEND_SMS_CODE)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.SendSmsCodeResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.SendSmsCodeResponse.class, callback,mContext);
     }
 
 
@@ -272,7 +293,7 @@ public class HttpManager {
         Request request = new Request.Builder().url(ServerApiConstants.URL_SMS_LOGIN)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.SmsLoginResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.SmsLoginResponse.class, callback,mContext);
     }
 
 
@@ -287,7 +308,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getUserInfoResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.getUserInfoResponse.class, callback,mContext);
     }
 
     /**
@@ -300,7 +321,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.selectReadNewsResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.selectReadNewsResponse.class, callback,mContext);
     }
 
     /**
@@ -322,7 +343,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getNewsListResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.getNewsListResponse.class, callback,mContext);
     }
 
 
@@ -337,7 +358,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getNewsDetailResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.getNewsDetailResponse.class, callback,mContext);
     }
 
     /**
@@ -359,7 +380,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getCouponsListResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.getCouponsListResponse.class, callback,mContext);
     }
 
 
@@ -376,7 +397,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.collectionResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.collectionResponse.class, callback,mContext);
     }
 
     /**
@@ -400,7 +421,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getCollectionListResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.getCollectionListResponse.class, callback,mContext);
     }
 
     /**
@@ -414,7 +435,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.confirmOrderResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.confirmOrderResponse.class, callback,mContext);
     }
 
     /**
@@ -432,7 +453,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.calculatedAmountResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.calculatedAmountResponse.class, callback,mContext);
     }
 
 
@@ -455,7 +476,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.createOrderResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.createOrderResponse.class, callback,mContext);
     }
 
     /**
@@ -472,7 +493,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.OrderPayResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.OrderPayResponse.class, callback,mContext);
     }
 
     /**
@@ -489,7 +510,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.WXOrderPayResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.WXOrderPayResponse.class, callback,mContext);
     }
 
     /**
@@ -511,21 +532,23 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.selectMallPaymentOrderListResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.selectMallPaymentOrderListResponse.class, callback,mContext);
     }
+
     /**
      * 订单详情
      */
     public void selectMallOrderDetailsById(int id, HttpEngine.HttpResponseResultCallback<HttpResponse.selectMallOrderDetailsByIdResponse> callback) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id+"");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
         Request request = new Request.Builder().url(ServerApiConstants.URL_SELECT_ORDER_DETAILS)
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.selectMallOrderDetailsByIdResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.selectMallOrderDetailsByIdResponse.class, callback,mContext);
     }
+
     /**
      * 购物车列表
      *
@@ -544,7 +567,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.selectShoppingCartListResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.selectShoppingCartListResponse.class, callback,mContext);
     }
 
     /**
@@ -563,7 +586,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.addShoppingCartResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.addShoppingCartResponse.class, callback,mContext);
     }
 
     /**
@@ -584,7 +607,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.selectMallFlowListResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.selectMallFlowListResponse.class, callback,mContext);
     }
 
     /**
@@ -605,7 +628,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getIntegralGoodsListResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.getIntegralGoodsListResponse.class, callback,mContext);
     }
 
     /**
@@ -621,7 +644,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.signInResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.signInResponse.class, callback,mContext);
     }
 
     /**
@@ -637,7 +660,41 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.signInRecordResponse.class, callback);
+        mHttpEngine.request(request, HttpResponse.signInRecordResponse.class, callback,mContext);
+    }
+
+    /**
+     * 获取首页秒杀
+     *
+     * @param callback
+     */
+    public void getSeckillGoodsList(HttpEngine.HttpResponseResultListCallback<HttpResponse.getSeckillGoodsListResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_SELECT_SEC_KILL)
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.getSeckillGoodsListResponse.class, callback,mContext);
+    }
+
+    /**
+     * 获取秒杀排期商品
+     *
+     * @param pageIndex 分页
+     * @param pageSize  每页个数
+     * @param callback
+     */
+    public void selectSchedulingList(int pageIndex, int pageSize, HttpEngine.HttpResponseResultListCallback<HttpResponse.selectSchedulingListResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("startime", "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_INDEX, pageIndex + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_SIZE, pageSize + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_SELECT_SCHEDULING)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.selectSchedulingListResponse.class, callback,mContext);
     }
 
     public void cancelRequest(String cancelUrl) {
