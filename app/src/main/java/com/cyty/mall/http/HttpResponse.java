@@ -126,6 +126,20 @@ public class HttpResponse {
     }
 
     /**
+     * 微信登录
+     */
+    public static class weChatLoginResponse extends HttpResponse {
+        public UserInfo data;
+    }
+
+    /**
+     * 一键登录
+     */
+    public static class easyLoginResponse extends HttpResponse {
+        public UserInfo data;
+    }
+
+    /**
      * 获取用户信息
      */
     public static class getUserInfoResponse extends HttpResponse {

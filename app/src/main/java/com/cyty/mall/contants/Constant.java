@@ -8,7 +8,7 @@ package com.cyty.mall.contants;
 public interface Constant {
     String WEI_XIN_APP_ID = "wx6495a900821f9933";
     //号码认证
-    String WEI_UMENG_APP_ID = "FRlF/r3qKmA4xKPbNWq98RZXK4crpci6IMGT4RcXAaNvQcSdGeGIV7jF4iewzhWuL8AaRJEw7ovStaA0qMSGIfHix/J8AxboUIBoGfehrUO9g0RNLUFU3XYpJAEymmPg/sXZEdkH1UbLtmZeEynjF2UHQzNmeOn/tHaWzoBFCMx5gv5BDCRS7HLn0aCIoPFT58kYvDJfiXPseu8C9+hFg9qFTRaNbmDUOmG4ad7wjkvYC3Mm2XtmN5Y7Ng7e+cEq/7N3Jf1gUIBfeGkvqYN7/XdngypEzEKJy6VHLBOdD+rBzQcxDIDt6w==";
+    String WEI_UMENG_APP_ID = "pNdrnKRU7UdomFdfj/XUErAfa4NPUZEL6LJkFx/VMlGkYRZhCKWW0vID5hdnTNDJ1GXK80qpWfBJqldGRefLsi8U5TpJW9sYvinoAnyIIdzAyYETH84Q9CuWZgCGSTWnUy7pdb8y2W9cVLPWoduczRXpDXLaIOW+yRXT9V1hWJvoOqm7v7DS/2RRvQHAHvwhYJvKi8uPU/kLb56uUE3ZWZMWaKrlqXgySBe467Q9p8lb9J5yQbVLiRPV7lU7PFKZI0FtMk7bgKDiQ+VLKfeH2mhsirs6Bh2AwqiU7huArQK8Jw0CQy949w==";
     /**
      * 手机号正则
      */
@@ -18,4 +18,42 @@ public interface Constant {
     String INTENT_TYPE = "intent_type";
     String INTENT_ID = "intent_id";
     String INTENT_PRICE = "intent_price";
+    public static final String[] TYPES = {"全屏（竖屏）", "全屏（横屏）", "弹窗（竖屏）",
+            "弹窗（横屏）", "底部弹窗", "自定义View", "自定义View（Xml）"};
+    public enum UI_TYPE {
+        /**
+         * 全屏（竖屏）
+         */
+        FULL_PORT,
+        /**
+         * 全屏（横屏）
+         */
+        FULL_LAND,
+        /**
+         * 弹窗（竖屏）
+         */
+        DIALOG_PORT,
+        /**
+         * "弹窗（横屏）
+         */
+        DIALOG_LAND,
+        /**
+         * 底部弹窗
+         */
+        DIALOG_BOTTOM,
+        /**
+         * 自定义View
+         */
+        CUSTOM_VIEW,
+        /**
+         * 自定义View（Xml）
+         */
+        CUSTOM_XML
+    }
+
+    public static final String THEME_KEY = "theme";
+
+    public static final String LOGIN_TYPE = "login_type";
+    public static final int LOGIN = 1;
+    public static final int LOGIN_DELAY = 2;
 }

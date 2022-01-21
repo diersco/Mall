@@ -5,7 +5,6 @@ import android.content.Context;
 
 import androidx.multidex.MultiDex;
 
-import com.chad.library.BuildConfig;
 import com.cyty.mall.callback.CustomCallback;
 import com.cyty.mall.callback.EmptyCallback;
 import com.cyty.mall.callback.ErrorCallback;
@@ -18,8 +17,6 @@ import com.tencent.mmkv.MMKV;
 import com.umeng.commonsdk.UMConfigure;
 import com.umeng.socialize.PlatformConfig;
 
-import timber.log.Timber;
-import timber.log.Timber.DebugTree;
 /**
  * @创建者 misJackLee
  * @创建时间 2021/12/9 15:59
@@ -32,11 +29,13 @@ public class AppApplication extends Application {
         super.onCreate();
         init();
     }
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(base);
     }
+
     /**
      * 初始化三方库
      */
@@ -55,9 +54,9 @@ public class AppApplication extends Application {
                 .addCallback(new CustomCallback())
                 .setDefaultCallback(LoadingCallback.class)//设置默认状态页
                 .commit();
-
-//        UMConfigure.init(this,appkey,channel,UMConfigure.DEVICE_TYPE_PHONE,"");
-        PlatformConfig.setWeixin("wxdc1e388c3822c80b", "3baf1193c85774b3fd9d18447d76cab0");
+        UMConfigure.setLogEnabled(true);
+        UMConfigure.init(this, "61e918d8e014255fcbf9e37e", "umeng", UMConfigure.DEVICE_TYPE_PHONE, "");
+        PlatformConfig.setWeixin("wx6495a900821f9933", "226efc6f959a6ceaebd861f1e932d4a4");
         PlatformConfig.setWXFileProvider("androidx.core.content.FileProvider");
         ToastUtils.init(this);
     }

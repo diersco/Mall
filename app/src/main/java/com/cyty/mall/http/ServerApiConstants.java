@@ -77,6 +77,14 @@ public class ServerApiConstants {
      */
     public static final String URL_SMS_LOGIN = BASE_URL + "/api/auth/smsLogin";
     /**
+     * 微信登录
+     */
+    public static final String URL_WE_CHAT_LOGIN = BASE_URL + "/api/auth/WeChatLogin";
+    /**
+     * 一键登录
+     */
+    public static final String URL_EASY_LOGIN = BASE_URL + "/api/auth/easyLogin";
+    /**
      * 获取用户信息
      */
     public static final String URL_GET_USER_INFO = BASE_URL + "/basic/getUserInfo";
@@ -159,7 +167,8 @@ public class ServerApiConstants {
     /**
      * 获取首页秒杀
      */
-    public static final String URL_SELECT_SEC_KILL = BASE_URL + "/stateless/getSeckillGoodsList";    /**
+    public static final String URL_SELECT_SEC_KILL = BASE_URL + "/stateless/getSeckillGoodsList";
+    /**
      * 获取秒杀排期商品
      */
     public static final String URL_SELECT_SCHEDULING = BASE_URL + "/api/seckillOrder/selectSchedulingList";

@@ -4,10 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -15,14 +12,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.ColorInt;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.KeyEventDispatcher;
 
-import com.cyty.mall.MainActivity;
 import com.cyty.mall.R;
 import com.cyty.mall.adapter.GoodsBannerAdapter;
-import com.cyty.mall.adapter.ImageBannerAdapter;
 import com.cyty.mall.base.BaseActivity;
 import com.cyty.mall.bean.GoodsInfo;
 import com.cyty.mall.contants.Constant;
@@ -39,12 +32,9 @@ import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.editorpage.ShareActivity;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 import com.youth.banner.Banner;
-import com.youth.banner.config.BannerConfig;
-import com.youth.banner.config.IndicatorConfig;
 import com.youth.banner.indicator.CircleIndicator;
 import com.youth.banner.listener.OnBannerListener;
 
@@ -110,9 +100,10 @@ public class GoodsDetailActivity extends BaseActivity {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 getGoodsInfo(goodsId);
+                refreshLayout.finishRefresh();
             }
         });
-
+        getGoodsInfo(goodsId);
     }
 
     /**
@@ -219,7 +210,7 @@ public class GoodsDetailActivity extends BaseActivity {
                 }
                 break;
             case R.id.iv_share:
-                shareWeb(GoodsDetailActivity.this, "http://www.baidu.com", "Hello Word", "Word", SHARE_MEDIA.WEIXIN);
+                shareWeb(GoodsDetailActivity.this, "https://appmall.ciyuantiaoyue.com/h5/index.html?goodsId="+goodsInfo.getGoodsId(), goodsInfo.getTitle(), goodsInfo.getDetails(), SHARE_MEDIA.WEIXIN);
                 break;
             case R.id.tv_shopping_cart:
                 break;

@@ -14,16 +14,19 @@ import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cyty.mall.MainActivity;
 import com.cyty.mall.R;
 import com.cyty.mall.base.BaseActivity;
+import com.cyty.mall.contants.Constant;
 import com.cyty.mall.contants.MKParameter;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
@@ -31,7 +34,16 @@ import com.cyty.mall.http.HttpResponse;
 import com.cyty.mall.util.AppUtils;
 import com.cyty.mall.util.MkUtils;
 import com.hjq.toast.ToastUtils;
-import com.jaeger.library.StatusBarUtil;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.umverify.UMResultCode;
+import com.umeng.umverify.UMVerifyHelper;
+import com.umeng.umverify.listener.UMPreLoginResultListener;
+import com.umeng.umverify.listener.UMTokenResultListener;
+import com.umeng.umverify.model.UMTokenRet;
+
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -61,10 +73,16 @@ public class LoginActivity extends BaseActivity {
     private boolean startThread = true;
     //是否点击协议
     private boolean isCheck = false;
+    private String token;
     /**
      * 倒计时最大时间
      */
     private final static int MAX_TIME = 60;
+    private UMTokenResultListener mCheckListener;
+    private UMTokenResultListener mTokenResultListener;
+    private boolean sdkAvailable = true;
+    private Constant.UI_TYPE mUIType;
+    private UMVerifyHelper mPhoneNumberAuthHelper;
 
     @Override
     protected void onNetReload(View v) {
@@ -78,7 +96,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-
+        sdkInit();
     }
 
     @Override
@@ -142,6 +160,24 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick(R.id.img_login_wx)
     public void onImgLoginWxClicked() {
+        if (!isCheck) {
+            ToastUtils.show("您必须同意/勾选-用户用户协议和隐私政策，才可进行登录。");
+            return;
+        }
+        UMShareAPI.get(LoginActivity.this).getPlatformInfo(LoginActivity.this, SHARE_MEDIA.WEIXIN, authListener);
+    }
+
+    @OnClick(R.id.img_login_one_click)
+    public void onImgLoginOneClickClicked() {
+        if (!isCheck) {
+            ToastUtils.show("您必须同意/勾选-用户用户协议和隐私政策，才可进行登录。");
+            return;
+        }
+        if (sdkAvailable) {
+            getLoginToken(5000);
+        } else {
+            ToastUtils.show("一键登录失败，请用其他方式登录！");
+        }
     }
 
     @OnClick(R.id.layout_policy_protocol)
@@ -170,6 +206,7 @@ public class LoginActivity extends BaseActivity {
                             //请求成功后，保存token
                             MkUtils.encode(MKParameter.TOKEN, data.msg);
                             MainActivity.startActivity(mContext);
+                            finish();
                         } else {
                             ToastUtils.show(message);
                         }
@@ -295,15 +332,176 @@ public class LoginActivity extends BaseActivity {
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        startThread = false;
+    UMAuthListener authListener = new UMAuthListener() {
+        /**
+         * @desc 授权开始的回调
+         * @param platform 平台名称
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+
+        }
+
+        /**
+         * @desc 授权成功的回调
+         * @param platform 平台名称
+         * @param action 行为序号，开发者用不上
+         * @param data 用户资料返回
+         */
+        @Override
+        public void onComplete(SHARE_MEDIA platform, int action, Map<String, String> data) {
+            String uid = data.get("uid");
+            String name = data.get("name");
+            String iconUrl = data.get("iconurl");
+            weChatLogin(iconUrl, uid, name);
+        }
+
+        /**
+         * @desc 授权失败的回调
+         * @param platform 平台名称
+         * @param action 行为序号，开发者用不上
+         * @param t 错误原因
+         */
+        @Override
+        public void onError(SHARE_MEDIA platform, int action, Throwable t) {
+
+            Toast.makeText(mContext, "失败：" + t.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
+        /**
+         * @desc 授权取消的回调
+         * @param platform 平台名称
+         * @param action 行为序号，开发者用不上
+         */
+        @Override
+        public void onCancel(SHARE_MEDIA platform, int action) {
+            Toast.makeText(mContext, "取消了", Toast.LENGTH_LONG).show();
+        }
+    };
+
+    /**
+     * 微信登录
+     */
+    private void weChatLogin(String headPortrait, String unionId, String weChatNickname) {
+        HttpManager.getInstance().weChatLogin(headPortrait, unionId, weChatNickname,
+                new HttpEngine.HttpResponseResultCallback<HttpResponse.weChatLoginResponse>() {
+                    @Override
+                    public void onResponse(boolean result, String message, HttpResponse.weChatLoginResponse data) {
+                        if (result) {
+                            //请求成功后，保存token
+                            MkUtils.encode(MKParameter.TOKEN, data.msg);
+                            MainActivity.startActivity(mContext);
+                            finish();
+                        } else {
+                            ToastUtils.show(message);
+                        }
+                    }
+                });
     }
 
-    @Override
-    protected void setStatusBar() {
-
-        StatusBarUtil.setTransparent(this);
+    /**
+     * 一键登录
+     */
+    private void easyLogin(String token) {
+        HttpManager.getInstance().easyLogin(token,
+                new HttpEngine.HttpResponseResultCallback<HttpResponse.easyLoginResponse>() {
+                    @Override
+                    public void onResponse(boolean result, String message, HttpResponse.easyLoginResponse data) {
+                        if (result) {
+                            //请求成功后，保存token
+                            MkUtils.encode(MKParameter.TOKEN, data.msg);
+                            MainActivity.startActivity(mContext);
+                            finish();
+                        } else {
+                            ToastUtils.show(message);
+                        }
+                    }
+                });
     }
+    public void sdkInit() {
+        mCheckListener = new UMTokenResultListener() {
+            @Override
+            public void onTokenSuccess(String s) {
+                try {
+                    Log.i(TAG, "checkEnvAvailable：" + s);
+                    UMTokenRet pTokenRet = UMTokenRet.fromJson(s);
+                    if (UMResultCode.CODE_ERROR_ENV_CHECK_SUCCESS.equals(pTokenRet.getCode())) {
+                        accelerateLoginPage(5000);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onTokenFailed(String s) {
+                sdkAvailable = false;
+            }
+        };
+        mPhoneNumberAuthHelper = UMVerifyHelper.getInstance(this, mCheckListener);
+        mPhoneNumberAuthHelper.setAuthSDKInfo(Constant.WEI_UMENG_APP_ID);
+        mPhoneNumberAuthHelper.checkEnvAvailable(UMVerifyHelper.SERVICE_TYPE_LOGIN);
+    }
+
+    /**
+     * 在不是一进app就需要登录的场景 建议调用此接口 加速拉起一键登录页面
+     * 等到用户点击登录的时候 授权页可以秒拉
+     * 预取号的成功与否不影响一键登录功能，所以不需要等待预取号的返回。
+     *
+     * @param timeout
+     */
+    public void accelerateLoginPage(int timeout) {
+        mPhoneNumberAuthHelper.accelerateLoginPage(timeout, new UMPreLoginResultListener() {
+            @Override
+            public void onTokenSuccess(String s) {
+                Log.e(TAG, "预取号成功: " + s);
+            }
+
+            @Override
+            public void onTokenFailed(String s, String s1) {
+                Log.e(TAG, "预取号失败：" + ", " + s1);
+            }
+        });
+    }
+
+    /**
+     * 拉起授权页
+     *
+     * @param timeout 超时时间
+     */
+    public void getLoginToken(int timeout) {
+        mTokenResultListener = new UMTokenResultListener() {
+            @Override
+            public void onTokenSuccess(String s) {
+                UMTokenRet tokenRet = null;
+                try {
+                    tokenRet = UMTokenRet.fromJson(s);
+                    if (UMResultCode.CODE_START_AUTHPAGE_SUCCESS.equals(tokenRet.getCode())) {
+                        Log.i(TAG, "唤起授权页成功：" + s);
+                    }
+
+                    if (UMResultCode.CODE_GET_TOKEN_SUCCESS.equals(tokenRet.getCode())) {
+//                        Log.i(TAG, "获取token成功：" + s);
+                        token = tokenRet.getToken();
+                        Log.i(TAG, "获取token成功：" + token);
+                        easyLogin(token);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            @Override
+            public void onTokenFailed(String s) {
+                ToastUtils.show("一键登录失败");
+                mPhoneNumberAuthHelper.quitLoginPage();
+
+            }
+        };
+        mPhoneNumberAuthHelper.setAuthListener(mTokenResultListener);
+        mPhoneNumberAuthHelper.getLoginToken(this, timeout);
+    }
+
 }

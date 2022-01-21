@@ -2,6 +2,7 @@ package com.cyty.mall.http;
 
 import android.content.Context;
 
+import com.cyty.mall.contants.Constant;
 import com.cyty.mall.contants.MKParameter;
 import com.cyty.mall.util.MkUtils;
 import com.google.gson.JsonObject;
@@ -294,6 +295,41 @@ public class HttpManager {
                 .post(requestBody)
                 .build();
         mHttpEngine.request(request, HttpResponse.SmsLoginResponse.class, callback,mContext);
+    }
+    /**
+     * 微信登录
+     *
+     * @param callback
+     */
+    public void weChatLogin(String headPortrait, String unionId,String weChatNickname, HttpEngine.HttpResponseResultCallback<HttpResponse.weChatLoginResponse> callback) {
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("headPortrait", headPortrait);
+        jsonObject.addProperty("unionId", unionId);
+        jsonObject.addProperty("wechatNickname", weChatNickname);
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_WE_CHAT_LOGIN)
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.weChatLoginResponse.class, callback,mContext);
+    }
+    /**
+     * 一键登录
+     *
+
+     * @param callback
+     */
+    public void easyLogin(String token, HttpEngine.HttpResponseResultCallback<HttpResponse.easyLoginResponse> callback) {
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, "2");
+        jsonObject.addProperty("search", token);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_EASY_LOGIN)
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.easyLoginResponse.class, callback,mContext);
     }
 
 
