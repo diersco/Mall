@@ -11,6 +11,10 @@ public class ServerApiConstants {
      */
     public static final String BASE_URL = "http://47.108.236.123:9528";
     /**
+     * 上传图片
+     */
+    public static final String URL_OSS_UPLOAD = BASE_URL + "/ossUploads";
+    /**
      * 获取首页数据
      */
     public static final String URL_GET_HOME_PAGE_DATA = BASE_URL + "/stateless/getHomePageData";
@@ -35,6 +39,10 @@ public class ServerApiConstants {
      */
     public static final String URL_GET_GOODS_INFO = BASE_URL + "/stateless/getGoodsInfoById";
     /**
+     * 商品评价
+     */
+    public static final String URL_GET_APPRAISE_LIST = BASE_URL + "/stateless/getAppraiseList";
+    /**
      * 查询地址列表
      */
     public static final String URL_GET_ADDRESS_LIST = BASE_URL + "/basic/selectMallAddressesList";
@@ -50,8 +58,6 @@ public class ServerApiConstants {
      * 获取默认地址
      */
     public static final String URL_GET_DEFAULT_ADDRESS = BASE_URL + "/basic/selectDefaultMallSeting";
-
-
     /**
      * 根据商品编号获取购买人列表（分页）
      */
@@ -64,10 +70,6 @@ public class ServerApiConstants {
      * 获取常见问题列表
      */
     public static final String URL_GET_PROBLEM_LIST = BASE_URL + "/stateless/getProblemlist";
-    /**
-     * 查询分类页秒杀商品
-     */
-    public static final String URL_GET_SECKILL_Goods_LIST = BASE_URL + "/stateless/getSeckillGoodsList";
     /**
      * 发送验证码
      */
@@ -137,6 +139,14 @@ public class ServerApiConstants {
      */
     public static final String URL_SELECT_ORDER_DETAILS = BASE_URL + "/api/order/selectMallOrderDetailsById";
     /**
+     * 物流信息
+     */
+    public static final String URL_QUERY_LOGISTICS = BASE_URL + "/api/order/queryLogistics";
+    /**
+     * 确认收货
+     */
+    public static final String URL_CONFIRM_RECEIPTS = BASE_URL + "/api/order/confirmReceipts";
+    /**
      * 加入购物车
      */
     public static final String URL_ADD_SHOPPING_CART = BASE_URL + "/api/cart/addShoppingCart";
@@ -152,6 +162,18 @@ public class ServerApiConstants {
      * 获取积分商城
      */
     public static final String URL_GET_INTEGRAL_GOODS_LIST = BASE_URL + "/stateless/getIntegralGoodsList";
+    /**
+     * 获取积分详情
+     */
+    public static final String URL_GET_INTEGRAL_GOODS_INFO = BASE_URL + "/stateless/getIntegralGoodsInfoById";
+    /**
+     * 立即兑换
+     */
+    public static final String URL_GET_INTEGRAL_EXCHANGE_COMMODITY = BASE_URL + "/api/integral/pointsExchangeCommodity";
+    /**
+     * 兑换列表
+     */
+    public static final String URL_GET_INTEGRAL_EXCHANGE_LIST = BASE_URL + "/api/integral/selectMallExchangetList";
     /**
      * 签到
      */
@@ -169,7 +191,37 @@ public class ServerApiConstants {
      */
     public static final String URL_SELECT_SEC_KILL = BASE_URL + "/stateless/getSeckillGoodsList";
     /**
+     * 获取秒杀排期
+     */
+    public static final String URL_SELECT_SEC_KILL_LIST = BASE_URL + "/api/seckillOrder/selectSeckillList";
+    /**
      * 获取秒杀排期商品
      */
     public static final String URL_SELECT_SCHEDULING = BASE_URL + "/api/seckillOrder/selectSchedulingList";
+    /**
+     * 根据商品ID获取秒杀商品详情
+     */
+    public static final String URL_GET_SECKILL_GOODS_INFO = BASE_URL + "/api/seckillOrder/getSeckillGoodsInfoById";
+    /**
+     * 创建秒杀订单
+     */
+    public static final String URL_SEC_KILL_CREATE_ORDER = BASE_URL + "/api/seckillOrder/createOrder";
+    /**
+     * 确认秒杀订单
+     */
+    public static final String URL_SEC_KILL_CONFIRM_ORDER = BASE_URL + "/api/seckillOrder/confirmOrder";
+    /**
+     * 确认秒杀计算金额
+     */
+    public static final String URL_SEC_KILL_CALCULATED_AMOUNT = BASE_URL + "/api/seckillOrder/calculatedAmount";
+    /**
+     * 会员权益
+     */
+    public static final String URL_MALL_MEMBER = BASE_URL + "/basic/selectMallMember";
+    /**
+     * 售后
+     */
+    public static final String URL_ORDER_AFTER_SALE = BASE_URL + "/api/order/afterSale";
+
+
 }

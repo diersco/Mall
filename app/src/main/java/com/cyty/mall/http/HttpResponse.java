@@ -1,6 +1,7 @@
 package com.cyty.mall.http;
 
 import com.cyty.mall.bean.AddressInfo;
+import com.cyty.mall.bean.AppraiseInfo;
 import com.cyty.mall.bean.ArticleInfo;
 import com.cyty.mall.bean.CartGoodsInfo;
 import com.cyty.mall.bean.ClassIfPageBannerInfo;
@@ -12,13 +13,19 @@ import com.cyty.mall.bean.GoodsInfo;
 import com.cyty.mall.bean.GoodsListInfo;
 import com.cyty.mall.bean.HomeDataInfo;
 import com.cyty.mall.bean.HomeSecKillGoodsInfo;
+import com.cyty.mall.bean.IntegralOrderInfo;
+import com.cyty.mall.bean.MemberBenefitsInfo;
 import com.cyty.mall.bean.MyIntegralInfo;
 import com.cyty.mall.bean.NewsInfo;
+import com.cyty.mall.bean.OrderAmountInfo;
 import com.cyty.mall.bean.OrderDetailInfo;
 import com.cyty.mall.bean.OrderListInfo;
+import com.cyty.mall.bean.OrderUserInfo;
+import com.cyty.mall.bean.ProblemInfo;
 import com.cyty.mall.bean.ScoreGoodsInfo;
 import com.cyty.mall.bean.SignInInfo;
 import com.cyty.mall.bean.SignInfo;
+import com.cyty.mall.bean.SkillTypeInfo;
 import com.cyty.mall.bean.UserInfo;
 
 import java.util.List;
@@ -32,7 +39,15 @@ public class HttpResponse {
     public String msg;
     public int code;
     public int total;
+    public String customerService;
 
+
+    /**
+     * 上传图片
+     */
+    public static class uploadImgResponse extends HttpResponse {
+        public HomeDataInfo data;
+    }
 
     /**
      * 获取首页
@@ -199,7 +214,7 @@ public class HttpResponse {
      * 计算金额
      */
     public static class calculatedAmountResponse extends HttpResponse {
-        public ConfirmOrderInfo data;
+        public OrderAmountInfo data;
     }
 
     /**
@@ -290,6 +305,76 @@ public class HttpResponse {
      * 首页秒杀
      */
     public static class getSeckillGoodsListResponse extends HttpResponse {
-        public List<HomeSecKillGoodsInfo.ListBean> rows;
+        public HomeSecKillGoodsInfo data;
+    }
+
+    /**
+     * 购买人数
+     */
+    public static class getOrderUserListResponse extends HttpResponse {
+        public List<OrderUserInfo> rows;
+    }
+
+    /**
+     * 商品评价
+     */
+    public static class getAppraiseListResponse extends HttpResponse {
+        public List<AppraiseInfo> rows;
+    }
+
+    /**
+     * 常见问题
+     */
+    public static class getProblemListResponse extends HttpResponse {
+        public List<ProblemInfo> data;
+    }
+
+    /**
+     * 物流信息
+     */
+    public static class queryLogisticsResponse extends HttpResponse {
+        public String data;
+    }
+
+    /**
+     * 积分详情信息
+     */
+    public static class getIntegralGoodsInfoByIdResponse extends HttpResponse {
+        public GoodsInfo data;
+    }
+
+    /**
+     * 立即兑换
+     */
+    public static class pointsExchangeCommodityResponse extends HttpResponse {
+        public String data;
+    }
+
+    /**
+     * 兑换列表
+     */
+    public static class selectMallExchangeListResponse extends HttpResponse {
+        public List<IntegralOrderInfo> rows;
+    }
+
+    /**
+     * 会员权益
+     */
+    public static class selectMallMemberResponse extends HttpResponse {
+        public MemberBenefitsInfo data;
+    }
+
+    /**
+     * 售后
+     */
+    public static class afterSaleResponse extends HttpResponse {
+        public MemberBenefitsInfo data;
+    }
+
+    /**
+     * 秒杀排期
+     */
+    public static class selectSeckillListResponse extends HttpResponse {
+        public List<SkillTypeInfo> data;
     }
 }

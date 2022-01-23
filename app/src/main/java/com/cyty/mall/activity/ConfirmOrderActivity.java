@@ -29,6 +29,7 @@ import com.cyty.mall.bean.AddressInfo;
 import com.cyty.mall.bean.ConfirmOrderInfo;
 import com.cyty.mall.bean.SignInfo;
 import com.cyty.mall.contants.Constant;
+import com.cyty.mall.event.DiscountEvent;
 import com.cyty.mall.event.GetAddressEvent;
 import com.cyty.mall.event.RefreshConfirmOrderAddressEvent;
 import com.cyty.mall.event.WeChartPayEvent;
@@ -373,7 +374,7 @@ public class ConfirmOrderActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout_coupon:
-                GoodsCouponActivity.startActivity(mContext, ids, totalPrice);
+                GoodsCouponActivity.startActivity(mContext, ids, totalPrice, 1);
                 break;
             case R.id.tv_no_address:
             case R.id.layout_address:
@@ -452,5 +453,17 @@ public class ConfirmOrderActivity extends BaseActivity {
             //支付失败
             ToastUtils.show("支付失败");
         }
+    }
+
+    /**
+     * @param event
+     */
+    @SuppressLint("SetTextI18n")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void discountEvent(DiscountEvent event) {
+        double price = Double.parseDouble(mConfirmOrderInfo.getTotalPrice()) - event.getDiscount();
+        tvTotalGoodsPrice.setText("￥" + price);
+        tvCoupon.setText("-￥" + event.getDiscount());
+
     }
 }

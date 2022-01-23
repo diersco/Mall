@@ -1,5 +1,7 @@
 package com.cyty.mall.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 
 import com.cyty.mall.R;
@@ -35,6 +37,10 @@ public class OrderCommentActivity extends BaseActivity {
 //            getSupportActionBar().setDisplayShowTitleEnabled(false);
 //        }
 //        tvTitle.setText("个人设置");
+    }
+    public static void startActivity(Context mContext) {
+        Intent mIntent = new Intent(mContext, OrderCommentActivity.class);
+        mContext.startActivity(mIntent);
     }
     @Override
     protected void initData() {

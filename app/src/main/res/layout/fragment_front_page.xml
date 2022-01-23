@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:banner="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     tools:context=".fragment.FrontPageFragment">
 
@@ -28,13 +29,18 @@
                 <com.youth.banner.Banner
                     android:id="@+id/banner"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    banner:banner_indicator_selected_width="@dimen/dp_20"
+                    banner:banner_indicator_normal_width="@dimen/dp_20"
+                    banner:banner_indicator_marginBottom="@dimen/dp_20"
+                    banner:banner_indicator_normal_color="@color/default_font_gray_333"
+                    banner:banner_indicator_selected_color="@color/white" />
             </RelativeLayout>
 
-            <com.cyty.mall.view.EmptyControlVideo
+            <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
                 android:id="@+id/video_player"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_203" />
+                android:layout_height="@dimen/dp_210" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerview"

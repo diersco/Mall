@@ -8,11 +8,14 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.cyty.mall.MainActivity;
 import com.cyty.mall.R;
-import com.cyty.mall.adapter.CollectionAdapter;
 import com.cyty.mall.adapter.CouponAdapter;
 import com.cyty.mall.base.BaseFragment;
 import com.cyty.mall.bean.CouponInfo;
+import com.cyty.mall.event.MainJumpEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
@@ -21,6 +24,8 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,10 +105,20 @@ public class CouponFragment extends BaseFragment {
                 }
             }
         });
-        mAdapter = new CouponAdapter(couponInfoList);
+        mAdapter = new CouponAdapter(couponInfoList, type);
         recyclerview.setLayoutManager(new LinearLayoutManager(mActivity));
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setAdapter(mAdapter);
+        mAdapter.addChildClickViewIds(R.id.tv_use_type);
+        mAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+                if (view.getId() == R.id.tv_use_type) {
+                    MainActivity.startActivity(mActivity);
+                    EventBus.getDefault().post(new MainJumpEvent(1));
+                }
+            }
+        });
         getCouponsList();
     }
 

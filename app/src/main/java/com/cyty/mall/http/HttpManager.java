@@ -2,12 +2,15 @@ package com.cyty.mall.http;
 
 import android.content.Context;
 
-import com.cyty.mall.contants.Constant;
 import com.cyty.mall.contants.MKParameter;
 import com.cyty.mall.util.MkUtils;
 import com.google.gson.JsonObject;
 
+import java.io.File;
+import java.util.List;
+
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
@@ -44,13 +47,36 @@ public class HttpManager {
      *
      * @param callback callback
      */
+    public void uploadImg(List<String> mImgUrls, HttpEngine.HttpResponseResultCallback<HttpResponse.uploadImgResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        // mImgUrls为存放图片的url集合
+        MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
+        for (int i = 0; i < mImgUrls.size(); i++) {
+            File f = new File(mImgUrls.get(i));
+            if (f != null) {
+                builder.addFormDataPart("img", f.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), f));
+            }
+        }
+        MultipartBody requestBody = builder.build();
+        Request request = new Request.Builder().url(ServerApiConstants.URL_OSS_UPLOAD)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.uploadImgResponse.class, callback, mContext);
+    }
+
+    /**
+     * 获取首页数据
+     *
+     * @param callback callback
+     */
     public void getHomePageData(HttpEngine.HttpResponseResultCallback<HttpResponse.getHomePageDataResponse> callback) {
         JsonObject jsonObject = new JsonObject();
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
         Request request = new Request.Builder().url(ServerApiConstants.URL_GET_HOME_PAGE_DATA)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getHomePageDataResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.getHomePageDataResponse.class, callback, mContext);
     }
 
     /**
@@ -66,7 +92,7 @@ public class HttpManager {
         Request request = new Request.Builder().url(ServerApiConstants.URL_GET_ARTICLE)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getArticleResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.getArticleResponse.class, callback, mContext);
     }
 
     /**
@@ -74,13 +100,14 @@ public class HttpManager {
      *
      * @param callback callback
      */
-    public void getBanner(HttpEngine.HttpResponseResultCallback<HttpResponse.ClassIfPageBannerResponse> callback) {
+    public void getBanner(int id, HttpEngine.HttpResponseResultCallback<HttpResponse.ClassIfPageBannerResponse> callback) {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
         Request request = new Request.Builder().url(ServerApiConstants.URL_GET_BANNER)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.ClassIfPageBannerResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.ClassIfPageBannerResponse.class, callback, mContext);
     }
 
     /**
@@ -92,7 +119,7 @@ public class HttpManager {
         Request request = new Request.Builder().url(ServerApiConstants.URL_GET_CLASSIFY)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.ClassificationCommodityResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.ClassificationCommodityResponse.class, callback, mContext);
     }
 
 
@@ -116,8 +143,9 @@ public class HttpManager {
         Request request = new Request.Builder().url(ServerApiConstants.URL_GET_GOODS_LIST)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.GoodsListResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.GoodsListResponse.class, callback, mContext);
     }
+
     /**
      * 搜索
      *
@@ -136,8 +164,9 @@ public class HttpManager {
         Request request = new Request.Builder().url(ServerApiConstants.URL_GET_GOODS_LIST)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.GoodsListResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.GoodsListResponse.class, callback, mContext);
     }
+
     /**
      * 获取商品详情
      *
@@ -151,7 +180,40 @@ public class HttpManager {
         Request request = new Request.Builder().url(ServerApiConstants.URL_GET_GOODS_INFO)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.GoodsInfoResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.GoodsInfoResponse.class, callback, mContext);
+    }
+
+    /**
+     * 获取秒杀商品详情
+     *
+     * @param id
+     * @param callback
+     */
+    public void getSeckillGoodsInfoById(int id, HttpEngine.HttpResponseResultCallback<HttpResponse.GoodsInfoResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_GET_SECKILL_GOODS_INFO)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.GoodsInfoResponse.class, callback, mContext);
+    }
+
+    /**
+     * 获取积分详情
+     *
+     * @param id
+     * @param callback
+     */
+    public void getIntegralGoodsInfoById(int id, HttpEngine.HttpResponseResultCallback<HttpResponse.getIntegralGoodsInfoByIdResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_GET_INTEGRAL_GOODS_INFO)
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.getIntegralGoodsInfoByIdResponse.class, callback, mContext);
     }
 
     /**
@@ -175,7 +237,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.addressListResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.addressListResponse.class, callback, mContext);
     }
 
     /**
@@ -205,7 +267,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.addOrReviseAddressResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.addOrReviseAddressResponse.class, callback, mContext);
     }
 
     /**
@@ -224,7 +286,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.reviseDefaultsAddressResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.reviseDefaultsAddressResponse.class, callback, mContext);
     }
 
     /**
@@ -238,7 +300,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getDefaultsAddressResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.getDefaultsAddressResponse.class, callback, mContext);
     }
 
     /**
@@ -255,7 +317,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.deleteAddressResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.deleteAddressResponse.class, callback, mContext);
     }
 
     /**
@@ -273,7 +335,7 @@ public class HttpManager {
         Request request = new Request.Builder().url(ServerApiConstants.URL_SEND_SMS_CODE)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.SendSmsCodeResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.SendSmsCodeResponse.class, callback, mContext);
     }
 
 
@@ -294,14 +356,15 @@ public class HttpManager {
         Request request = new Request.Builder().url(ServerApiConstants.URL_SMS_LOGIN)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.SmsLoginResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.SmsLoginResponse.class, callback, mContext);
     }
+
     /**
      * 微信登录
      *
      * @param callback
      */
-    public void weChatLogin(String headPortrait, String unionId,String weChatNickname, HttpEngine.HttpResponseResultCallback<HttpResponse.weChatLoginResponse> callback) {
+    public void weChatLogin(String headPortrait, String unionId, String weChatNickname, HttpEngine.HttpResponseResultCallback<HttpResponse.weChatLoginResponse> callback) {
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("headPortrait", headPortrait);
@@ -312,12 +375,12 @@ public class HttpManager {
         Request request = new Request.Builder().url(ServerApiConstants.URL_WE_CHAT_LOGIN)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.weChatLoginResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.weChatLoginResponse.class, callback, mContext);
     }
+
     /**
      * 一键登录
      *
-
      * @param callback
      */
     public void easyLogin(String token, HttpEngine.HttpResponseResultCallback<HttpResponse.easyLoginResponse> callback) {
@@ -329,7 +392,7 @@ public class HttpManager {
         Request request = new Request.Builder().url(ServerApiConstants.URL_EASY_LOGIN)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.easyLoginResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.easyLoginResponse.class, callback, mContext);
     }
 
 
@@ -344,7 +407,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getUserInfoResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.getUserInfoResponse.class, callback, mContext);
     }
 
     /**
@@ -357,7 +420,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.selectReadNewsResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.selectReadNewsResponse.class, callback, mContext);
     }
 
     /**
@@ -379,7 +442,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getNewsListResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.getNewsListResponse.class, callback, mContext);
     }
 
 
@@ -394,7 +457,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getNewsDetailResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.getNewsDetailResponse.class, callback, mContext);
     }
 
     /**
@@ -416,7 +479,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getCouponsListResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.getCouponsListResponse.class, callback, mContext);
     }
 
 
@@ -433,7 +496,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.collectionResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.collectionResponse.class, callback, mContext);
     }
 
     /**
@@ -457,7 +520,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getCollectionListResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.getCollectionListResponse.class, callback, mContext);
     }
 
     /**
@@ -471,7 +534,21 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.confirmOrderResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.confirmOrderResponse.class, callback, mContext);
+    }
+
+    /**
+     * 确认订单
+     */
+    public void seckillConfirmOrder(String ids, HttpEngine.HttpResponseResultCallback<HttpResponse.confirmOrderResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_IDS, ids);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_SEC_KILL_CREATE_ORDER)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.confirmOrderResponse.class, callback, mContext);
     }
 
     /**
@@ -489,9 +566,25 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.calculatedAmountResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.calculatedAmountResponse.class, callback, mContext);
     }
-
+    /**
+     * 秒杀计算金额
+     *
+     * @param id  优惠券编号
+     * @param ids 总金额
+     */
+    public void seckillCalculatedAmount(int id, String ids, HttpEngine.HttpResponseResultCallback<HttpResponse.calculatedAmountResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id);
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_IDS, ids);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_SEC_KILL_CALCULATED_AMOUNT)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.calculatedAmountResponse.class, callback, mContext);
+    }
 
     /**
      * 创建订单
@@ -512,7 +605,29 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.createOrderResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.createOrderResponse.class, callback, mContext);
+    }
+
+    /**
+     * 创建秒杀订单
+     *
+     * @param addressId    地址id
+     * @param shoppingCart 是否是购物车 1是 2 不是
+     * @param paymentType  支付方式 1微信 2支付宝
+     * @param callback
+     */
+    public void seckillCreateOrder(int addressId, String goodsInfo, int shoppingCart, int paymentType, HttpEngine.HttpResponseResultCallback<HttpResponse.createOrderResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("addressId", addressId);
+        jsonObject.addProperty("goodsInfo", goodsInfo);
+        jsonObject.addProperty("shoppingCart", shoppingCart);
+        jsonObject.addProperty("paymentType", paymentType);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_SEC_KILL_CONFIRM_ORDER)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.createOrderResponse.class, callback, mContext);
     }
 
     /**
@@ -529,7 +644,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.OrderPayResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.OrderPayResponse.class, callback, mContext);
     }
 
     /**
@@ -546,7 +661,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.WXOrderPayResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.WXOrderPayResponse.class, callback, mContext);
     }
 
     /**
@@ -568,7 +683,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.selectMallPaymentOrderListResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.selectMallPaymentOrderListResponse.class, callback, mContext);
     }
 
     /**
@@ -582,7 +697,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.selectMallOrderDetailsByIdResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.selectMallOrderDetailsByIdResponse.class, callback, mContext);
     }
 
     /**
@@ -603,7 +718,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.selectShoppingCartListResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.selectShoppingCartListResponse.class, callback, mContext);
     }
 
     /**
@@ -622,7 +737,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.addShoppingCartResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.addShoppingCartResponse.class, callback, mContext);
     }
 
     /**
@@ -643,7 +758,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.selectMallFlowListResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.selectMallFlowListResponse.class, callback, mContext);
     }
 
     /**
@@ -664,7 +779,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getIntegralGoodsListResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.getIntegralGoodsListResponse.class, callback, mContext);
     }
 
     /**
@@ -680,7 +795,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.signInResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.signInResponse.class, callback, mContext);
     }
 
     /**
@@ -696,7 +811,7 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.signInRecordResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.signInRecordResponse.class, callback, mContext);
     }
 
     /**
@@ -710,7 +825,7 @@ public class HttpManager {
         Request request = new Request.Builder().url(ServerApiConstants.URL_SELECT_SEC_KILL)
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.getSeckillGoodsListResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.getSeckillGoodsListResponse.class, callback, mContext);
     }
 
     /**
@@ -720,9 +835,9 @@ public class HttpManager {
      * @param pageSize  每页个数
      * @param callback
      */
-    public void selectSchedulingList(int pageIndex, int pageSize, HttpEngine.HttpResponseResultListCallback<HttpResponse.selectSchedulingListResponse> callback) {
+    public void selectSchedulingList(String starTime, int pageIndex, int pageSize, HttpEngine.HttpResponseResultListCallback<HttpResponse.selectSchedulingListResponse> callback) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("startime", "");
+        jsonObject.addProperty("search", starTime);
         jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_INDEX, pageIndex + "");
         jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_SIZE, pageSize + "");
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
@@ -730,7 +845,160 @@ public class HttpManager {
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
-        mHttpEngine.request(request, HttpResponse.selectSchedulingListResponse.class, callback,mContext);
+        mHttpEngine.request(request, HttpResponse.selectSchedulingListResponse.class, callback, mContext);
+    }
+
+    /**
+     * 购买人数
+     *
+     * @param pageIndex 分页
+     * @param pageSize  每页个数
+     * @param callback
+     */
+    public void getOrderUserList(int id, int pageIndex, int pageSize, HttpEngine.HttpResponseResultListCallback<HttpResponse.getOrderUserListResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_INDEX, pageIndex + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_SIZE, pageSize + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_GET_ORDER_USER_LIST)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.getOrderUserListResponse.class, callback, mContext);
+    }
+
+    /**
+     * 商品评价
+     *
+     * @param pageIndex 分页
+     * @param pageSize  每页个数
+     * @param callback
+     */
+    public void getAppraiseList(int id, int pageIndex, int pageSize, HttpEngine.HttpResponseResultListCallback<HttpResponse.getAppraiseListResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_INDEX, pageIndex + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_PAGE_SIZE, pageSize + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_GET_APPRAISE_LIST)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.getAppraiseListResponse.class, callback, mContext);
+    }
+
+    /**
+     * 常见问题
+     *
+     * @param callback
+     */
+    public void getProblemList(HttpEngine.HttpResponseResultListCallback<HttpResponse.getProblemListResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_GET_PROBLEM_LIST)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.getProblemListResponse.class, callback, mContext);
+    }
+
+    /**
+     * 签到记录
+     *
+     * @param callback
+     */
+    public void queryLogistics(int orderID, HttpEngine.HttpResponseResultCallback<HttpResponse.queryLogisticsResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, orderID + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_QUERY_LOGISTICS)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.queryLogisticsResponse.class, callback, mContext);
+    }
+
+    /**
+     * 立即兑换
+     *
+     * @param callback
+     */
+    public void pointsExchangeCommodity(String addressId, String specId, HttpEngine.HttpResponseResultCallback<HttpResponse.pointsExchangeCommodityResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("addressId", addressId);
+        jsonObject.addProperty("specId", specId);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_GET_INTEGRAL_EXCHANGE_COMMODITY)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.pointsExchangeCommodityResponse.class, callback, mContext);
+    }
+
+
+    /**
+     * 兑换列表
+     *
+     * @param callback
+     */
+    public void selectMallExchangeList(HttpEngine.HttpResponseResultListCallback<HttpResponse.selectMallExchangeListResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_GET_INTEGRAL_EXCHANGE_LIST)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.selectMallExchangeListResponse.class, callback, mContext);
+    }
+
+    /**
+     * 会员权益
+     *
+     * @param callback
+     */
+    public void selectMallMember(HttpEngine.HttpResponseResultCallback<HttpResponse.selectMallMemberResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_MALL_MEMBER)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.selectMallMemberResponse.class, callback, mContext);
+    }
+
+    /**
+     * 售后
+     *
+     * @param callback
+     */
+    public void afterSale(String appeal, String appealPicture, String orderDetailsId, String salesType, HttpEngine.HttpResponseResultCallback<HttpResponse.afterSaleResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("appeal", appeal);
+        jsonObject.addProperty("appealPicture", appealPicture);
+        jsonObject.addProperty("orderDetailsId", orderDetailsId);
+        jsonObject.addProperty("salesType", salesType);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_MALL_MEMBER)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.afterSaleResponse.class, callback, mContext);
+    }
+
+    /**
+     * 秒杀排期
+     *
+     * @param callback
+     */
+    public void selectSeckillLis(HttpEngine.HttpResponseResultListCallback<HttpResponse.selectSeckillListResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_SELECT_SEC_KILL_LIST)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.selectSeckillListResponse.class, callback, mContext);
     }
 
     public void cancelRequest(String cancelUrl) {

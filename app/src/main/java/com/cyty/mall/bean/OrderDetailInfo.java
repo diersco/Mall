@@ -241,7 +241,7 @@ public class OrderDetailInfo implements Parcelable {
         }
     }
 
-    public static class OrderDetailsListBean {
+    public static class OrderDetailsListBean implements Parcelable{
         /**
          * id : 7
          * goodsId : 1
@@ -271,6 +271,56 @@ public class OrderDetailInfo implements Parcelable {
         private int refund;
         private int afterSale;
         private int deletes;
+
+        protected OrderDetailsListBean(Parcel in) {
+            id = in.readInt();
+            goodsId = in.readInt();
+            goodsTitle = in.readString();
+            thumbnail = in.readString();
+            specId = in.readInt();
+            spec = in.readString();
+            price = in.readString();
+            freight = in.readString();
+            quantity = in.readInt();
+            evaluateStatus = in.readInt();
+            refund = in.readInt();
+            afterSale = in.readInt();
+            deletes = in.readInt();
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(id);
+            dest.writeInt(goodsId);
+            dest.writeString(goodsTitle);
+            dest.writeString(thumbnail);
+            dest.writeInt(specId);
+            dest.writeString(spec);
+            dest.writeString(price);
+            dest.writeString(freight);
+            dest.writeInt(quantity);
+            dest.writeInt(evaluateStatus);
+            dest.writeInt(refund);
+            dest.writeInt(afterSale);
+            dest.writeInt(deletes);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        public static final Creator<OrderDetailsListBean> CREATOR = new Creator<OrderDetailsListBean>() {
+            @Override
+            public OrderDetailsListBean createFromParcel(Parcel in) {
+                return new OrderDetailsListBean(in);
+            }
+
+            @Override
+            public OrderDetailsListBean[] newArray(int size) {
+                return new OrderDetailsListBean[size];
+            }
+        };
 
         public int getId() {
             return id;

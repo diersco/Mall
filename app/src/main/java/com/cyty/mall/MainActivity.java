@@ -18,6 +18,7 @@ import com.cyty.mall.base.ActivityCollector;
 import com.cyty.mall.base.BaseActivity;
 import com.cyty.mall.contants.MKParameter;
 import com.cyty.mall.event.ExitLoginSuccess;
+import com.cyty.mall.event.MainJumpEvent;
 import com.cyty.mall.util.MkUtils;
 import com.cyty.mall.view.ForbidScrollViewpager;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
@@ -29,7 +30,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
-import kotlin.TuplesKt;
 
 /**
  * 主main
@@ -67,15 +67,16 @@ public class MainActivity extends BaseActivity {
         MenuItem item1 = navigation.getMenu().findItem(R.id.navigation_front);
         item1.setIcon(R.drawable.main_tab_front_page_selected);
     }
+
     @Override
     protected void initToolBar() {
 
     }
+
     @Override
     protected void initData() {
 
     }
-
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -95,7 +96,7 @@ public class MainActivity extends BaseActivity {
                     return true;
                 case R.id.navigation_cart:
                     viewpagerMain.setCurrentItem(2);
-                    if (StringUtils.isEmpty(MkUtils.decodeString(MKParameter.TOKEN))){
+                    if (StringUtils.isEmpty(MkUtils.decodeString(MKParameter.TOKEN))) {
                         ActivityCollector.finishAll();
                         LoginActivity.startActivity(mContext);
                     }
@@ -103,7 +104,7 @@ public class MainActivity extends BaseActivity {
                     item.setIcon(R.drawable.main_tab_cart_selected);
                     return true;
                 case R.id.navigation_mine:
-                    if (StringUtils.isEmpty(MkUtils.decodeString(MKParameter.TOKEN))){
+                    if (StringUtils.isEmpty(MkUtils.decodeString(MKParameter.TOKEN))) {
                         ActivityCollector.finishAll();
                         LoginActivity.startActivity(mContext);
                     }
@@ -162,6 +163,7 @@ public class MainActivity extends BaseActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
     /**
      * 重新登录
      */
@@ -174,9 +176,21 @@ public class MainActivity extends BaseActivity {
         ActivityCollector.finishAll();
 
     }
+
     @Override
     protected void setStatusBar() {
 //        StatusBarUtil.setTransparent(this);
         StatusBarUtil.setTranslucentForImageViewInFragment(this, null);
+    }
+
+    /**
+     * 跳转
+     */
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void jump(MainJumpEvent event) {
+        int position = event.getPosition();
+        viewpagerMain.setCurrentItem(position);
+        navigation.setSelectedItemId(navigation.getMenu().getItem(position).getItemId());
     }
 }

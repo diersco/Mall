@@ -6,14 +6,16 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cyty.mall.R;
 import com.cyty.mall.activity.ConfirmOrderActivity;
+import com.cyty.mall.activity.IntegralConfirmOrderActivity;
+import com.cyty.mall.activity.SeckillConfirmOrderActivity;
 import com.cyty.mall.adapter.GoodsFormatAdapter;
 import com.cyty.mall.adapter.GoodsFormatTwoAdapter;
 import com.cyty.mall.bean.GoodsInfo;
-import com.cyty.mall.event.RefreshNewsListEvent;
 import com.cyty.mall.event.RefreshUniversalListEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
@@ -49,6 +51,7 @@ public class GoodsFormatPopup extends BasePopupWindow {
     TextView tvReduceNum;
     TextView tvBuyNum;
     TextView tvAddNum;
+    LinearLayout layoutNum;
 
 
     private Context mContext;
@@ -59,13 +62,16 @@ public class GoodsFormatPopup extends BasePopupWindow {
     private List<GoodsInfo.SpecListBean.SpecTwoListBean> specTwoListList = new ArrayList<>();
     //选择的购买数量
     private int buyNum = 1;
-    // 判断是立即购买还是加入购物车或收藏  1 立即购买 2 加入购物车 3 收藏
+    // 判断是立即购买还是加入购物车或收藏  1 立即购买 2 加入购物车 3 收藏 4 积分立即兑换 5 秒杀立即购买
     private int type;
     private int totalStock;
     //商品规格id
     private String formatId;
     //规格编号字符串
     private String ids;
+    private GoodsInfo.SpecListBean.SpecTwoListBean listBean;
+    private String title;
+    private String spec;
 
     public GoodsFormatPopup(Context context, GoodsInfo goodsInfo, int type) {
         super(context);
@@ -80,6 +86,7 @@ public class GoodsFormatPopup extends BasePopupWindow {
 
 
     private void initGoodsData(GoodsInfo mGoodsInfo) {
+        layoutNum = findViewById(R.id.layout_num);
         ivCover = findViewById(R.id.iv_cover);
         tvTitle = findViewById(R.id.tv_title);
         tvStock = findViewById(R.id.tv_stock);
@@ -91,9 +98,15 @@ public class GoodsFormatPopup extends BasePopupWindow {
         tlFormatTwo = findViewById(R.id.tl_format_two);
         tvSure = findViewById(R.id.tv_sure);
         specListBeanList = mGoodsInfo.getSpecList();
+        title = mGoodsInfo.getTitle();
         mGoodsFormatAdapter = new GoodsFormatAdapter(mContext, specListBeanList);
         tlFormatOne.setAdapter(mGoodsFormatAdapter);
+        if (type == 4) {
+            layoutNum.setVisibility(View.GONE);
+        }
         specTwoListList = specListBeanList.get(0).getSpecTwoList();
+        listBean = specListBeanList.get(0).getSpecTwoList().get(0);
+        spec = specListBeanList.get(0).getSpecOne() + specListBeanList.get(0).getSpecTwoList().get(0).getSpecTwo();
         initFormatData(specListBeanList.get(0).getSpecTwoList().get(0));
         mGoodsFormatTwoAdapter = new GoodsFormatTwoAdapter(mContext, specTwoListList);
         tlFormatTwo.setAdapter(mGoodsFormatTwoAdapter);
@@ -117,6 +130,7 @@ public class GoodsFormatPopup extends BasePopupWindow {
             @Override
             public boolean onTagClick(View view, int position, FlowLayout parent) {
                 GoodsInfo.SpecListBean.SpecTwoListBean specTwoListBean = specTwoListList.get(position);
+                listBean = specTwoListList.get(position);
                 mGoodsFormatTwoAdapter.setClickPosition(position);
                 initFormatData(specTwoListBean);
                 mGoodsFormatTwoAdapter.notifyDataChanged();
@@ -155,8 +169,17 @@ public class GoodsFormatPopup extends BasePopupWindow {
                     dismiss();
                 } else if (type == 2) {
                     addShoppingCart();
+                    dismiss();
                 } else if (type == 3) {
                     collections();
+                    dismiss();
+                } else if (type == 4) {
+                    String f = formatId;
+                    IntegralConfirmOrderActivity.startActivity(mContext, title, listBean.getThumbnail(), spec, listBean.getIntegral(), formatId);
+                    dismiss();
+                } else if (type == 5) {
+                    ids = formatId + "|" + buyNum;
+                    SeckillConfirmOrderActivity.startActivity(mContext, ids);
                     dismiss();
                 }
             }
@@ -169,9 +192,16 @@ public class GoodsFormatPopup extends BasePopupWindow {
         if (!specTwoListBean.getSpecTwo().isEmpty()) {
             tvTitle.setText(specTwoListBean.getSpecTwo());
         }
-        if (!specTwoListBean.getPrice().isEmpty()) {
-            tvPrice.setText("￥" + specTwoListBean.getPrice());
+        if (type == 4) {
+            if (specTwoListBean.getIntegral() > 0) {
+                tvPrice.setText(specTwoListBean.getIntegral() + "积分");
+            }
+        } else {
+            if (!specTwoListBean.getPrice().isEmpty()) {
+                tvPrice.setText("￥" + specTwoListBean.getPrice());
+            }
         }
+
         if (!specTwoListBean.getStock().isEmpty()) {
             tvStock.setText("库存：" + specTwoListBean.getStock());
             totalStock = Integer.parseInt(specTwoListBean.getStock());
@@ -215,6 +245,7 @@ public class GoodsFormatPopup extends BasePopupWindow {
                     public void onResponse(boolean result, String message, HttpResponse.addShoppingCartResponse data) {
                         if (result) {
                             ToastUtils.show("加入成功！");
+                            EventBus.getDefault().post(new RefreshUniversalListEvent());
                         } else {
                             ToastUtils.show(message);
                         }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/dp_65"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layout_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#333333"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/dp_15"
+        android:paddingTop="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_15"
+        android:gravity="center"
+        android:paddingBottom="@dimen/dp_10">
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10:00"
+            android:textColor="#99ffffff"
+            android:textSize="@dimen/sp_17" />
+
+        <TextView
+            android:id="@+id/tv_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已结束"
+            android:textColor="#99ffffff"
+            android:textSize="@dimen/sp_12" />
+
+
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_3"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"/>
+
+</RelativeLayout>

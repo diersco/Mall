@@ -46,43 +46,108 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="q">
-        <activity android:name=".activity.IntegralGoodsDetailActivity"></activity>
+        <activity android:name=".activity.PersonalInformationActivity"></activity>
+        <activity android:name=".activity.OrderProcessingActivity" />
+        <activity android:name=".activity.MemberBenefitsActivity" />
         <activity
-            android:name="com.cyty.mall.wxapi.WXEntryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity android:name=".activity.OrderDetailActivity" />
-        <activity android:name=".activity.H5PayActivity" />
-        <activity android:name=".activity.MyScoresActivity" />
-        <activity android:name=".activity.SelectAftermarketTypeActivity" />
-        <activity android:name=".activity.OrderActivity" />
-        <activity android:name=".activity.CommonActivity" />
-        <activity android:name=".activity.GoodsCouponActivity" />
-        <activity android:name=".activity.CollectionActivity" />
-        <activity android:name=".activity.CouponActivity" />
-        <activity android:name=".activity.SignInActivity" />
-        <activity android:name=".activity.ConfirmOrderActivity" />
-        <activity android:name=".activity.NotificationDetailActivity" />
-        <activity android:name=".activity.NotificationListActivity" />
-        <activity android:name=".activity.GoodsDetailActivity" />
-        <activity android:name=".activity.PointsMallActivity" />
-        <activity android:name=".activity.AddressManagementActivity" />
-        <activity android:name=".activity.SearchActivity" />
-        <activity android:name=".activity.ProductEvaluationListActivity" />
-        <activity android:name=".activity.AddAddressActivity" />
-        <activity android:name=".activity.ContactCustomerServiceActivity" />
-        <activity android:name=".activity.RefundAndAfterSalesActivity" />
-        <activity android:name=".activity.OrderCommentActivity" />
+            android:name=".activity.SeckillConfirmOrderActivity"
+            android:screenOrientation="portrait" /> <!-- 秒杀创建订单 -->
+        <activity
+            android:name=".activity.IntegralOrderListActivity"
+            android:screenOrientation="portrait" /> <!-- 积分订单列表 -->
+        <activity
+            android:name=".activity.IntegralConfirmOrderActivity"
+            android:screenOrientation="portrait" /> <!-- 积分兑换 -->
+        <activity
+            android:name=".activity.LogisticsInformationActivity"
+            android:screenOrientation="portrait" /> <!-- 物流信息 -->
+        <activity
+            android:name=".activity.FlashSaleActivity"
+            android:screenOrientation="portrait" /> <!-- 即使抢购 -->
+        <activity
+            android:name=".activity.PhotoViewActivity"
+            android:screenOrientation="portrait" /> <!-- 图片展示 -->
+        <activity
+            android:name=".activity.SeckillGoodsDetailActivity"
+            android:screenOrientation="portrait" /> <!-- 秒杀商品详情页面 -->
+        <activity
+            android:name=".activity.IntegralGoodsDetailActivity"
+            android:screenOrientation="portrait" /> <!-- 积分商品详情 -->
+        <activity
+            android:name=".activity.OrderDetailActivity"
+            android:screenOrientation="portrait" /> <!-- 订单详情 -->
+        <activity
+            android:name=".activity.H5PayActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MyScoresActivity"
+            android:screenOrientation="portrait" /> <!-- 我的积分页面 -->
+        <activity
+            android:name=".activity.SelectAftermarketTypeActivity"
+            android:screenOrientation="portrait" /> <!-- 选择售后类型 -->
+        <activity
+            android:name=".activity.OrderActivity"
+            android:screenOrientation="portrait" /> <!-- 订单 -->
+        <activity
+            android:name=".activity.CommonActivity"
+            android:screenOrientation="portrait" /> <!-- webview通用 -->
+        <activity
+            android:name=".activity.GoodsCouponActivity"
+            android:screenOrientation="portrait" /> <!-- 商品优惠卷 -->
+        <activity
+            android:name=".activity.CollectionActivity"
+            android:screenOrientation="portrait" /> <!-- 收藏 -->
+        <activity
+            android:name=".activity.CouponActivity"
+            android:screenOrientation="portrait" /> <!-- 优惠卷 -->
+        <activity
+            android:name=".activity.SignInActivity"
+            android:screenOrientation="portrait" /> <!-- 签到 -->
+        <activity
+            android:name=".activity.ConfirmOrderActivity"
+            android:screenOrientation="portrait" /> <!-- 确认订单 -->
+        <activity
+            android:name=".activity.NotificationDetailActivity"
+            android:screenOrientation="portrait" /> <!-- 消息详情页面 -->
+        <activity
+            android:name=".activity.NotificationListActivity"
+            android:screenOrientation="portrait" /> <!-- 消息列表 -->
+        <activity
+            android:name=".activity.GoodsDetailActivity"
+            android:screenOrientation="portrait" /> <!-- 商品详情 -->
+        <activity
+            android:name=".activity.PointsMallActivity"
+            android:screenOrientation="portrait" /> <!-- 积分商城 -->
+        <activity
+            android:name=".activity.AddressManagementActivity"
+            android:screenOrientation="portrait" /> <!-- 地址管理 -->
+        <activity
+            android:name=".activity.SearchActivity"
+            android:screenOrientation="portrait" /> <!-- 搜索 -->
+        <activity
+            android:name=".activity.ProductEvaluationListActivity"
+            android:screenOrientation="portrait" /> <!-- 商品评价列表 -->
+        <activity
+            android:name=".activity.AddAddressActivity"
+            android:screenOrientation="portrait" /> <!-- 添加地址 -->
+        <activity
+            android:name=".activity.ContactCustomerServiceActivity"
+            android:screenOrientation="portrait" /> <!-- 联系客户 -->
+        <activity
+            android:name=".activity.RefundAndAfterSalesActivity"
+            android:screenOrientation="portrait" /> <!-- 退款与售后页面 -->
+        <activity
+            android:name=".activity.OrderCommentActivity"
+            android:screenOrientation="portrait" /> <!-- 订单评价 -->
         <activity
             android:name=".activity.PaymentSuccessfulActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" /> <!-- 支付成功 -->
         <activity
             android:name=".activity.LoginActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" /> <!-- 登录 -->
         <activity
             android:name=".activity.PersonalSettingsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait" /> <!-- 个人设置 -->
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -118,6 +183,11 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
 
 </manifest>

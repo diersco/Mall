@@ -309,6 +309,18 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
             decor.setSystemUiVisibility(ui);
         }
     }
-
+    /**
+     * 利用反射获取状态栏高度
+     * @return
+     */
+    public int getStatusBarHeight() {
+        int result = 0;
+        //获取状态栏高度的资源id
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
 }
 

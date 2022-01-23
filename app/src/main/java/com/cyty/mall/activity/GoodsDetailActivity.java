@@ -13,17 +13,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cyty.mall.R;
+import com.cyty.mall.adapter.AppraiseAdapter;
 import com.cyty.mall.adapter.GoodsBannerAdapter;
+import com.cyty.mall.adapter.OrderUserAdapter;
 import com.cyty.mall.base.BaseActivity;
+import com.cyty.mall.bean.AppraiseInfo;
 import com.cyty.mall.bean.GoodsInfo;
+import com.cyty.mall.bean.OrderUserInfo;
 import com.cyty.mall.contants.Constant;
+import com.cyty.mall.event.MainJumpEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
 import com.cyty.mall.util.StringUtils;
 import com.cyty.mall.view.GoodsFormatPopup;
+import com.hjq.toast.ToastUtils;
 import com.jaeger.library.StatusBarUtil;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
@@ -36,7 +45,11 @@ import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 import com.youth.banner.Banner;
 import com.youth.banner.indicator.CircleIndicator;
+import com.youth.banner.indicator.RoundLinesIndicator;
 import com.youth.banner.listener.OnBannerListener;
+import com.youth.banner.util.BannerUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,12 +83,24 @@ public class GoodsDetailActivity extends BaseActivity {
     WebView mWebView;
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
+    @BindView(R.id.recyclerview_num)
+    RecyclerView recyclerviewNum;
+    @BindView(R.id.tv_is_evaluation)
+    TextView tvIsEvaluation;
+    @BindView(R.id.recyclerview_evaluation)
+    RecyclerView recyclerviewEvaluation;
+    @BindView(R.id.tv_more_evaluation)
+    TextView tvMoreEvaluation;
     //商品编号
     private int goodsId;
 
     private GoodsInfo goodsInfo;
     private List<String> imgList = new ArrayList<>();
+    private List<OrderUserInfo> orderUserInfoList = new ArrayList<>();
+    private List<AppraiseInfo> appraiseInfoList = new ArrayList<>();
     private GoodsBannerAdapter goodsBannerAdapter;
+    private OrderUserAdapter orderUserAdapter;
+    private AppraiseAdapter appraiseAdapter;
 
     @Override
     protected void onNetReload(View v) {
@@ -89,7 +114,6 @@ public class GoodsDetailActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-//        isUseEventBus(true);
         goodsId = getIntent().getIntExtra(Constant.INTENT_ID, 0);
         initWebView();
     }
@@ -100,10 +124,85 @@ public class GoodsDetailActivity extends BaseActivity {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 getGoodsInfo(goodsId);
+                getOrderUserList();
+                getAppraiseList();
                 refreshLayout.finishRefresh();
             }
         });
         getGoodsInfo(goodsId);
+        getOrderUserList();
+        getAppraiseList();
+    }
+
+    /**
+     * 购买人数
+     */
+    private void getOrderUserList() {
+        HttpManager.getInstance().getOrderUserList(goodsId, 1, 100,
+                new HttpEngine.HttpResponseResultListCallback<HttpResponse.getOrderUserListResponse>() {
+                    @Override
+                    public void onResponse(boolean result, int totalNum, String message, HttpResponse.getOrderUserListResponse data) {
+                        if (result) {
+                            if (data.rows != null) {
+                                orderUserInfoList = data.rows;
+                                initAdapter();
+                            }
+                        } else {
+                            ToastUtils.show(message);
+                        }
+                    }
+
+                });
+    }
+
+    private void initAdapter() {
+        orderUserAdapter = new OrderUserAdapter(orderUserInfoList);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        recyclerviewNum.setLayoutManager(layoutManager);
+        recyclerviewNum.setItemAnimator(new DefaultItemAnimator());
+        recyclerviewNum.setAdapter(orderUserAdapter);
+    }
+
+    /**
+     * 获取商品评价
+     */
+    private void getAppraiseList() {
+        HttpManager.getInstance().getAppraiseList(goodsId, 1, 1,
+                new HttpEngine.HttpResponseResultListCallback<HttpResponse.getAppraiseListResponse>() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onResponse(boolean result, int totalNum, String message, HttpResponse.getAppraiseListResponse data) {
+                        if (result) {
+                            if (data.rows != null) {
+                                appraiseInfoList = data.rows;
+                                if (appraiseInfoList.size() > 0) {
+                                    tvIsEvaluation.setVisibility(View.GONE);
+                                    tvMoreEvaluation.setVisibility(View.VISIBLE);
+                                    tvEvaluationNum.setText("商品评价（" + totalNum + "）");
+                                    recyclerviewEvaluation.setVisibility(View.VISIBLE);
+                                    initAppraiseAdapter();
+                                } else {
+                                    tvMoreEvaluation.setVisibility(View.GONE);
+                                    tvIsEvaluation.setVisibility(View.VISIBLE);
+                                    tvEvaluationNum.setText("商品评价（0）");
+                                    recyclerviewEvaluation.setVisibility(View.GONE);
+
+                                }
+                            }
+                        } else {
+                            ToastUtils.show(message);
+                        }
+                    }
+
+                });
+    }
+
+    private void initAppraiseAdapter() {
+        appraiseAdapter = new AppraiseAdapter(appraiseInfoList);
+        recyclerviewEvaluation.setLayoutManager(new LinearLayoutManager(this));
+        recyclerviewEvaluation.setItemAnimator(new DefaultItemAnimator());
+        recyclerviewEvaluation.setAdapter(appraiseAdapter);
     }
 
     /**
@@ -130,13 +229,13 @@ public class GoodsDetailActivity extends BaseActivity {
      */
     @SuppressLint("SetTextI18n")
     private void showData(GoodsInfo goodsInfo) {
-        if (!goodsInfo.getAtlas().isEmpty()) {
+        if (!StringUtils.isEmpty(goodsInfo.getAtlas())) {
             String[] split = goodsInfo.getAtlas().split(",");
             imgList = Arrays.asList(split);
             initBanner();
         }
         if (goodsInfo.getPrice() >= 0) tvGoodsPrice.setText("￥" + goodsInfo.getPrice());
-        if (!goodsInfo.getDetails().isEmpty()) tvGoodsName.setText(goodsInfo.getTitle());
+        if (!StringUtils.isEmpty(goodsInfo.getDetails())) tvGoodsName.setText(goodsInfo.getTitle());
         if (goodsInfo.getSalesVolume() >= 0) tvSales.setText("销量：" + goodsInfo.getSalesVolume());
         if (goodsInfo.getTotalStock() >= 0) tvInventory.setText("库存：" + goodsInfo.getTotalStock());
         if (goodsInfo.getCollection() == 1) {
@@ -168,7 +267,8 @@ public class GoodsDetailActivity extends BaseActivity {
         goodsBannerAdapter = new GoodsBannerAdapter(imgList, mContext);
         bannerClass.setAdapter(goodsBannerAdapter).addBannerLifecycleObserver(this)//添加生命周期观察者
                 .isAutoLoop(true)
-                .setIndicator(new CircleIndicator(mContext));
+                .setIndicator(new RoundLinesIndicator(mContext));
+        bannerClass.setIndicatorSelectedWidth((int) BannerUtils.dp2px(15));
         bannerClass.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(Object data, int position) {
@@ -210,9 +310,11 @@ public class GoodsDetailActivity extends BaseActivity {
                 }
                 break;
             case R.id.iv_share:
-                shareWeb(GoodsDetailActivity.this, "https://appmall.ciyuantiaoyue.com/h5/index.html?goodsId="+goodsInfo.getGoodsId(), goodsInfo.getTitle(), goodsInfo.getDetails(), SHARE_MEDIA.WEIXIN);
+                shareWeb(GoodsDetailActivity.this, "https://appmall.ciyuantiaoyue.com/h5/index.html?goodsId=" + goodsInfo.getGoodsId(), goodsInfo.getTitle(), goodsInfo.getDetails(), SHARE_MEDIA.WEIXIN);
                 break;
             case R.id.tv_shopping_cart:
+                finish();
+                EventBus.getDefault().post(new MainJumpEvent(2));
                 break;
             case R.id.tv_add_to_cart:
                 if (goodsInfo != null) {
@@ -314,5 +416,12 @@ public class GoodsDetailActivity extends BaseActivity {
     protected void setStatusBar() {
         setLightStatusBarForM(this, true);
         StatusBarUtil.setTransparent(this);
+    }
+
+
+    @OnClick(R.id.tv_more_evaluation)
+    public void onViewClicked() {
+
+        ProductEvaluationListActivity.startActivity(mContext, goodsId);
     }
 }

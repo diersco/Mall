@@ -12,8 +12,10 @@ import androidx.appcompat.widget.Toolbar;
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
 import com.cyty.mall.R;
+import com.cyty.mall.base.ActivityCollector;
 import com.cyty.mall.base.BaseActivity;
 import com.cyty.mall.util.DataCleanManager;
+import com.cyty.mall.util.MkUtils;
 import com.jaeger.library.StatusBarUtil;
 
 import butterknife.BindView;
@@ -83,19 +85,20 @@ public class PersonalSettingsActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.layout_personal_info, R.id.tv_user_agreement, R.id.tv_privacy_agreement, R.id.tv_mine_about_us, R.id.layout_clear_cache})
+    @OnClick({R.id.layout_personal_info, R.id.tv_user_agreement, R.id.tv_privacy_agreement, R.id.tv_mine_about_us, R.id.layout_clear_cache, R.id.tv_quit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout_personal_info:
+                PersonalInformationActivity.startActivity(mContext);
                 break;
             case R.id.tv_user_agreement:
-                CommonActivity.startActivity(mContext,2);
+                CommonActivity.startActivity(mContext, 2);
                 break;
             case R.id.tv_privacy_agreement:
-                CommonActivity.startActivity(mContext,3);
+                CommonActivity.startActivity(mContext, 3);
                 break;
             case R.id.tv_mine_about_us:
-                CommonActivity.startActivity(mContext,1);
+                CommonActivity.startActivity(mContext, 1);
                 break;
             case R.id.layout_clear_cache:
                 AlertView alertView = new AlertView("提示", "确定清除缓存～", null, null, new String[]{"取消", "确定"}, this, AlertView.Style.Alert, new OnItemClickListener() {
@@ -112,6 +115,21 @@ public class PersonalSettingsActivity extends BaseActivity {
                     }
                 });
                 alertView.show();
+                break;
+            case R.id.tv_quit:
+                AlertView alertQuitView = new AlertView("提示", "是否退出登录？", null, null, new String[]{"取消", "确定"}, this, AlertView.Style.Alert, new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(Object o, int position) {
+                        if (position == 1) {
+                            ActivityCollector.finishAll();
+                            MkUtils.clearAll();
+                            LoginActivity.startActivity(mContext);
+                            finish();
+                        }
+                    }
+                });
+                alertQuitView.show();
+
                 break;
         }
     }

@@ -92,7 +92,7 @@ public class MyScoresActivity extends BaseActivity {
     @Override
     protected void initData() {
         setLoadSir(refreshLayout);
-        tvIntegral.setText(myIntegral + "分");
+        tvIntegral.setText(myIntegral+"");
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
@@ -200,8 +200,8 @@ public class MyScoresActivity extends BaseActivity {
 
     @Override
     protected void setStatusBar() {
-        setLightStatusBarForM(this, false);
-        StatusBarUtil.setTranslucentForImageViewInFragment(this, null);
+//        setLightStatusBarForM(this, false);
+        StatusBarUtil.setTransparentForImageView(this, null);
     }
 
 
@@ -210,10 +210,4 @@ public class MyScoresActivity extends BaseActivity {
         PointsMallActivity.startActivity(mContext);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

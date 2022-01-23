@@ -1,6 +1,7 @@
 package com.cyty.mall.fragment;
 
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,12 +16,15 @@ import com.cyty.mall.bean.HomeDataInfo;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
-import com.cyty.mall.view.EmptyControlVideo;
+import com.cyty.mall.util.GlideUtil;
 import com.hjq.toast.ToastUtils;
 import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.youth.banner.Banner;
 import com.youth.banner.indicator.CircleIndicator;
+import com.youth.banner.indicator.RoundLinesIndicator;
 import com.youth.banner.listener.OnBannerListener;
+import com.youth.banner.util.BannerUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +40,7 @@ public class FrontPageFragment extends BaseFragment {
     @BindView(R.id.banner)
     Banner banner;
     @BindView(R.id.video_player)
-    EmptyControlVideo videoPlayer;
+    StandardGSYVideoPlayer videoPlayer;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
 
@@ -65,6 +69,7 @@ public class FrontPageFragment extends BaseFragment {
     @Override
     protected void initData() {
         getHomePageData();
+
     }
 
     /**
@@ -81,12 +86,27 @@ public class FrontPageFragment extends BaseFragment {
                             videoBean = data.data.getVideo();
                             initBanner();
                             initBigImg();
-//                            initVideo();
+                            initVideo();
                         } else {
                             ToastUtils.show(message);
                         }
                     }
                 });
+    }
+
+
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        videoPlayer.onVideoPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        videoPlayer.onVideoResume();
     }
 
     /**
@@ -96,7 +116,8 @@ public class FrontPageFragment extends BaseFragment {
         mAdapter = new FrontBannerAdapter(pictureListBeanList, mActivity);
         banner.setAdapter(mAdapter).addBannerLifecycleObserver(this)//添加生命周期观察者
                 .isAutoLoop(true)
-                .setIndicator(new CircleIndicator(mActivity));
+                .setIndicator(new RoundLinesIndicator(mActivity));
+        banner.setIndicatorSelectedWidth((int) BannerUtils.dp2px(15));
         banner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(Object data, int position) {
@@ -120,16 +141,47 @@ public class FrontPageFragment extends BaseFragment {
      * 加载视频
      */
     private void initVideo() {
-        videoPlayer.setUp(videoBean.getResourceLink(), true, "1111111");
+        //增加title
+        videoPlayer.getTitleTextView().setVisibility(View.GONE);
+        //设置返回键
+        videoPlayer.getBackButton().setVisibility(View.GONE);
+        //全屏按钮
+        videoPlayer.getFullscreenButton().setVisibility(View.GONE);
+        //增加封面
+        ImageView imageView = new ImageView(mActivity);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        GlideUtil.with(mActivity).displayImage(videoBean.getCover(), imageView);
+        videoPlayer.setThumbImageView(imageView);
+        videoPlayer.setUp(videoBean.getResourceLink(), true, "");
+
+
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        videoPlayer.release();
-//        //释放所有
-//        videoPlayer.setVideoAllCallBack(null);
-//        GSYVideoManager.releaseAllVideos();
+        if (videoPlayer != null) {
+            videoPlayer.release();
+            //释放所有
+            videoPlayer.setVideoAllCallBack(null);
+        }
+
+        GSYVideoManager.releaseAllVideos();
     }
 
+    /**
+     * 判断当前fragment 是否可见
+     *
+     * @param isVisibleToUser
+     */
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (videoPlayer == null) return;
+        if (isVisibleToUser) {
+            videoPlayer.onVideoResume();
+        } else {
+            videoPlayer.onVideoPause();
+        }
+    }
 }

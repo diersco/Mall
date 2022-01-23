@@ -10,7 +10,9 @@ import com.cyty.mall.R;
 import com.cyty.mall.activity.AddressManagementActivity;
 import com.cyty.mall.activity.CollectionActivity;
 import com.cyty.mall.activity.CommonActivity;
+import com.cyty.mall.activity.ContactCustomerServiceActivity;
 import com.cyty.mall.activity.CouponActivity;
+import com.cyty.mall.activity.MemberBenefitsActivity;
 import com.cyty.mall.activity.MyScoresActivity;
 import com.cyty.mall.activity.NotificationListActivity;
 import com.cyty.mall.activity.OrderActivity;
@@ -198,9 +200,10 @@ public class MineFragment extends BaseFragment {
                 OrderActivity.startActivity(mActivity, 4);
                 break;
             case R.id.tv_mine_refund:
-                SelectAftermarketTypeActivity.startActivity(mActivity);
+
                 break;
             case R.id.tv_mine_member_permissions:
+                MemberBenefitsActivity.startActivity(mActivity);
                 break;
             case R.id.tv_mine_address_management:
                 AddressManagementActivity.startActivity(mActivity, 1);
@@ -209,6 +212,7 @@ public class MineFragment extends BaseFragment {
                 NotificationListActivity.startActivity(mActivity, userID);
                 break;
             case R.id.tv_mine_contact_customer_service:
+                ContactCustomerServiceActivity.startActivity(mActivity);
                 break;
             case R.id.tv_mine_about_us:
                 CommonActivity.startActivity(mActivity, 1);

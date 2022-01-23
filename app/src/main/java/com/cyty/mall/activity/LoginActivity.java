@@ -1,5 +1,6 @@
 package com.cyty.mall.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -34,6 +35,7 @@ import com.cyty.mall.http.HttpResponse;
 import com.cyty.mall.util.AppUtils;
 import com.cyty.mall.util.MkUtils;
 import com.hjq.toast.ToastUtils;
+import com.jaeger.library.StatusBarUtil;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -81,7 +83,6 @@ public class LoginActivity extends BaseActivity {
     private UMTokenResultListener mCheckListener;
     private UMTokenResultListener mTokenResultListener;
     private boolean sdkAvailable = true;
-    private Constant.UI_TYPE mUIType;
     private UMVerifyHelper mPhoneNumberAuthHelper;
 
     @Override
@@ -206,7 +207,6 @@ public class LoginActivity extends BaseActivity {
                             //请求成功后，保存token
                             MkUtils.encode(MKParameter.TOKEN, data.msg);
                             MainActivity.startActivity(mContext);
-                            finish();
                         } else {
                             ToastUtils.show(message);
                         }
@@ -242,17 +242,14 @@ public class LoginActivity extends BaseActivity {
                     super.run();
                     try {
                         if (startThread) {
-
                             for (int i = MAX_TIME; i >= 0; i--) {
                                 Thread.sleep(1000);
                                 Message msg = new Message();
                                 msg.arg1 = i;
                                 mHandler.sendMessage(msg);
                             }
-
                         }
                     } catch (Exception e) {
-
                     }
                 }
             }.start();
@@ -260,6 +257,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     Handler mHandler = new Handler() {
+        @SuppressLint("HandlerLeak")
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -391,7 +389,6 @@ public class LoginActivity extends BaseActivity {
                             //请求成功后，保存token
                             MkUtils.encode(MKParameter.TOKEN, data.msg);
                             MainActivity.startActivity(mContext);
-                            finish();
                         } else {
                             ToastUtils.show(message);
                         }
@@ -411,7 +408,6 @@ public class LoginActivity extends BaseActivity {
                             //请求成功后，保存token
                             MkUtils.encode(MKParameter.TOKEN, data.msg);
                             MainActivity.startActivity(mContext);
-                            finish();
                         } else {
                             ToastUtils.show(message);
                         }
@@ -464,6 +460,12 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        startThread = false;
+    }
+
     /**
      * 拉起授权页
      *
@@ -503,5 +505,8 @@ public class LoginActivity extends BaseActivity {
         mPhoneNumberAuthHelper.setAuthListener(mTokenResultListener);
         mPhoneNumberAuthHelper.getLoginToken(this, timeout);
     }
-
+    @Override
+    protected void setStatusBar() {
+        StatusBarUtil.setTranslucentForImageViewInFragment(this, null);
+    }
 }

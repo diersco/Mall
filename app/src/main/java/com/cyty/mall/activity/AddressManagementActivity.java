@@ -106,7 +106,8 @@ public class AddressManagementActivity extends BaseActivity {
     }
 
     @Override
-    protected void initData() {     setLoadSir(refreshLayout);
+    protected void initData() {
+        setLoadSir(refreshLayout);
 
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override

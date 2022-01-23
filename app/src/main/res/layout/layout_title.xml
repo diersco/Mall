@@ -28,6 +28,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text=""
+            android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="@dimen/sp_16"
             tools:text="个人设置" />

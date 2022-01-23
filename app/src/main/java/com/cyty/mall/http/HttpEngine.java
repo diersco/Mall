@@ -7,6 +7,7 @@ import com.blankj.utilcode.util.ThreadUtils;
 import com.cyty.mall.activity.LoginActivity;
 import com.cyty.mall.base.ActivityCollector;
 import com.cyty.mall.event.ExitLoginSuccess;
+import com.cyty.mall.util.MkUtils;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.EventBus;
@@ -90,11 +91,13 @@ public class HttpEngine {
                     }
 
                     String message = resp.msg;
+                    String customerService = resp.customerService;
 
                     boolean isTrue = false;
                     if (resp.code == 200) isTrue = true;
-                    if (resp.code == 400){
+                    if (resp.code == 401){
                         ActivityCollector.finishAll();
+                        MkUtils.clearAll();
                         LoginActivity.startActivity(mContext);
                     }
 
@@ -151,10 +154,15 @@ public class HttpEngine {
                     }
 
                     String message = resp.msg;
+                    String customerService = resp.customerService;
                     int totalNum = resp.total;
                     boolean isTrue = false;
                     if (resp.code == 200) isTrue = true;
-                    if (resp.code == 401) EventBus.getDefault().post(new ExitLoginSuccess());
+                    if (resp.code == 401) {
+                        ActivityCollector.finishAll();
+                        MkUtils.clearAll();
+                        LoginActivity.startActivity(mContext);
+                    }
 
                     if (callback != null) {
                         final String finalErrorMessage = message;

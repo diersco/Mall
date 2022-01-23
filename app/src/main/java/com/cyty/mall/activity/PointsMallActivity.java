@@ -3,6 +3,7 @@ package com.cyty.mall.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
@@ -12,10 +13,14 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.cyty.mall.R;
-import com.cyty.mall.adapter.AddressListAdapter;
+import com.cyty.mall.adapter.HomeSpikeAdapter;
+import com.cyty.mall.adapter.ImageBannerAdapter;
 import com.cyty.mall.adapter.PointMallAdapter;
 import com.cyty.mall.base.BaseActivity;
+import com.cyty.mall.bean.ClassIfPageBannerInfo;
 import com.cyty.mall.bean.ScoreGoodsInfo;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
@@ -27,11 +32,15 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.youth.banner.Banner;
+import com.youth.banner.indicator.CircleIndicator;
+import com.youth.banner.listener.OnBannerListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * 积分商城
@@ -60,7 +69,8 @@ public class PointsMallActivity extends BaseActivity {
 
     private PointMallAdapter mAdapter;
     private List<ScoreGoodsInfo> scoreGoodsInfoList = new ArrayList<>();
-
+    private ImageBannerAdapter imageBannerAdapter;
+    private List<ClassIfPageBannerInfo.ClassifPageBannerListBean> classIfPageBannerList = new ArrayList<>();
     @Override
     protected void onNetReload(View v) {
         showLoading();
@@ -117,7 +127,15 @@ public class PointsMallActivity extends BaseActivity {
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                ScoreGoodsInfo scoreGoodsInfo = scoreGoodsInfoList.get(position);
+                IntegralGoodsDetailActivity.startActivity(mContext, scoreGoodsInfo.getGoodsId());
+            }
+        });
         getIntegralGoodsList();
+        getClassifyPage();
     }
 
     /**
@@ -156,6 +174,7 @@ public class PointsMallActivity extends BaseActivity {
                 });
 
     }
+
     /**
      * 展示数据
      */
@@ -171,6 +190,7 @@ public class PointsMallActivity extends BaseActivity {
                 break;
         }
     }
+
     /**
      * 加载更多
      */
@@ -188,11 +208,49 @@ public class PointsMallActivity extends BaseActivity {
         pageIndex = 1;
         getIntegralGoodsList();
     }
+    /**
+     * 获取banner数据
+     */
+    private void getClassifyPage() {
+        HttpManager.getInstance().getBanner(2,
+                new HttpEngine.HttpResponseResultCallback<HttpResponse.ClassIfPageBannerResponse>() {
+                    @Override
+                    public void onResponse(boolean result, String message, HttpResponse.ClassIfPageBannerResponse data) {
+                        if (result) {
+                            classIfPageBannerList = data.data.getClassifPageBannerList();
+//                            ToastUtils.show(classIfPageBannerList.get(0).getResourceLink());
+                            initBanner();
+                        } else {
+                            ToastUtils.show(message);
+                        }
+                    }
+                });
+    }
+    /**
+     * 加载banner
+     */
+    private void initBanner() {
+        imageBannerAdapter = new ImageBannerAdapter(classIfPageBannerList, mContext);
+        banner.setAdapter(imageBannerAdapter).addBannerLifecycleObserver(this)//添加生命周期观察者
+                .isAutoLoop(true)
+                .setIndicator(new CircleIndicator(mContext));
+        banner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(Object data, int position) {
 
+            }
+        });
+    }
     @Override
     protected void setStatusBar() {
         setLightStatusBarForM(this, true);
         StatusBarUtil.setColor(this, Color.WHITE, 0);
     }
 
+
+
+    @OnClick(R.id.tv_right)
+    public void onViewClicked() {
+        IntegralOrderListActivity.startActivity(mContext);
+    }
 }

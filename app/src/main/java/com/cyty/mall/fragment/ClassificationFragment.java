@@ -4,33 +4,41 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.cyty.mall.R;
+import com.cyty.mall.activity.FlashSaleActivity;
+import com.cyty.mall.activity.GoodsDetailActivity;
 import com.cyty.mall.activity.SearchActivity;
-import com.cyty.mall.adapter.CommPagerAdapter;
+import com.cyty.mall.activity.SeckillGoodsDetailActivity;
 import com.cyty.mall.adapter.HomeSpikeAdapter;
 import com.cyty.mall.adapter.ImageBannerAdapter;
 import com.cyty.mall.base.BaseFragment;
 import com.cyty.mall.bean.ClassIfPageBannerInfo;
 import com.cyty.mall.bean.ClassificationCommodity;
+import com.cyty.mall.bean.GoodsListInfo;
 import com.cyty.mall.bean.HomeSecKillGoodsInfo;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
 import com.cyty.mall.http.ServerApiConstants;
+import com.cyty.mall.view.GridSpacingItemDecoration;
 import com.hjq.toast.ToastUtils;
 import com.youth.banner.Banner;
 import com.youth.banner.indicator.CircleIndicator;
+import com.youth.banner.indicator.RoundLinesIndicator;
 import com.youth.banner.listener.OnBannerListener;
+import com.youth.banner.util.BannerUtils;
 
-import net.lucode.hackware.magicindicator.FragmentContainerHelper;
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator;
@@ -103,7 +111,7 @@ public class ClassificationFragment extends BaseFragment {
      * 获取banner数据
      */
     private void getClassifyPage() {
-        HttpManager.getInstance().getBanner(
+        HttpManager.getInstance().getBanner(1,
                 new HttpEngine.HttpResponseResultCallback<HttpResponse.ClassIfPageBannerResponse>() {
                     @Override
                     public void onResponse(boolean result, String message, HttpResponse.ClassIfPageBannerResponse data) {
@@ -125,7 +133,8 @@ public class ClassificationFragment extends BaseFragment {
         imageBannerAdapter = new ImageBannerAdapter(classIfPageBannerList, mActivity);
         banner.setAdapter(imageBannerAdapter).addBannerLifecycleObserver(this)//添加生命周期观察者
                 .isAutoLoop(true)
-                .setIndicator(new CircleIndicator(mActivity));
+                .setIndicator(new RoundLinesIndicator(mActivity));
+        banner.setIndicatorSelectedWidth((int) BannerUtils.dp2px(15));
         banner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(Object data, int position) {
@@ -257,7 +266,8 @@ public class ClassificationFragment extends BaseFragment {
                     @Override
                     public void onResponse(boolean result, int totalNum, String message, HttpResponse.getSeckillGoodsListResponse data) {
                         if (result) {
-                            listBeanList = data.rows;
+                            listBeanList = data.data.getList();
+                            initAdapter();
                         } else {
                             ToastUtils.show(message);
                         }
@@ -268,9 +278,18 @@ public class ClassificationFragment extends BaseFragment {
 
     private void initAdapter() {
         mAdapter = new HomeSpikeAdapter(listBeanList);
-        recyclerview.setLayoutManager(new LinearLayoutManager(mActivity));
+        recyclerview.setLayoutManager(new GridLayoutManager(mActivity, 4));
         recyclerview.setItemAnimator(new DefaultItemAnimator());
+        recyclerview.addItemDecoration(new GridSpacingItemDecoration(2, 20, false));
         recyclerview.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
+                HomeSecKillGoodsInfo.ListBean listBean = listBeanList.get(position);
+                SeckillGoodsDetailActivity.startActivity(mActivity, listBean.getGoodsId());
+
+            }
+        });
     }
 
     @Override
@@ -287,6 +306,7 @@ public class ClassificationFragment extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_more:
+                FlashSaleActivity.startActivity(mActivity);
                 break;
             case R.id.tv_search:
                 SearchActivity.startActivity(mActivity);

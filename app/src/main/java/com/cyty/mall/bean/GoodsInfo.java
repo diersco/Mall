@@ -33,6 +33,7 @@ public class GoodsInfo implements Parcelable {
     private String details;
     private int id;
     private int collection;
+    private int integral;
     private String title;
     private List<SpecListBean> specList;
 
@@ -42,6 +43,7 @@ public class GoodsInfo implements Parcelable {
         atlas = in.readString();
         price = in.readDouble();
         totalStock = in.readInt();
+        integral = in.readInt();
         details = in.readString();
         id = in.readInt();
         collection = in.readInt();
@@ -116,6 +118,14 @@ public class GoodsInfo implements Parcelable {
         this.id = id;
     }
 
+    public int getIntegral() {
+        return integral;
+    }
+
+    public void setIntegral(int id) {
+        this.integral = id;
+    }
+
     public int getCollection() {
         return collection;
     }
@@ -154,6 +164,7 @@ public class GoodsInfo implements Parcelable {
         parcel.writeInt(totalStock);
         parcel.writeString(details);
         parcel.writeInt(id);
+        parcel.writeInt(integral);
         parcel.writeInt(collection);
         parcel.writeString(title);
     }
@@ -191,7 +202,7 @@ public class GoodsInfo implements Parcelable {
                     '}';
         }
 
-        public static class SpecTwoListBean {
+        public static class SpecTwoListBean implements Parcelable{
             /**
              * thumbnail : https://app-malll.oss-cn-chengdu.aliyuncs.com/upload/202112311539247787024.png
              * price : 130.00
@@ -207,6 +218,53 @@ public class GoodsInfo implements Parcelable {
             private String specTwo;
             private String id;
             private String stock;
+            private int integral;
+
+            protected SpecTwoListBean(Parcel in) {
+                thumbnail = in.readString();
+                price = in.readString();
+                defaultDisplay = in.readString();
+                specTwo = in.readString();
+                id = in.readString();
+                stock = in.readString();
+                integral = in.readInt();
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeString(thumbnail);
+                dest.writeString(price);
+                dest.writeString(defaultDisplay);
+                dest.writeString(specTwo);
+                dest.writeString(id);
+                dest.writeString(stock);
+                dest.writeInt(integral);
+            }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            public static final Creator<SpecTwoListBean> CREATOR = new Creator<SpecTwoListBean>() {
+                @Override
+                public SpecTwoListBean createFromParcel(Parcel in) {
+                    return new SpecTwoListBean(in);
+                }
+
+                @Override
+                public SpecTwoListBean[] newArray(int size) {
+                    return new SpecTwoListBean[size];
+                }
+            };
+
+            public int getIntegral() {
+                return integral;
+            }
+
+            public void setIntegral(int integral) {
+                this.integral = integral;
+            }
 
             public String getThumbnail() {
                 return thumbnail;

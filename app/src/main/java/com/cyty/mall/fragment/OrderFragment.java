@@ -12,6 +12,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.cyty.mall.R;
 import com.cyty.mall.activity.GoodsDetailActivity;
+import com.cyty.mall.activity.LogisticsInformationActivity;
 import com.cyty.mall.activity.OrderDetailActivity;
 import com.cyty.mall.adapter.OrderListAdapter;
 import com.cyty.mall.base.BaseFragment;
@@ -116,10 +117,9 @@ public class OrderFragment extends BaseFragment {
                         GoodsDetailActivity.startActivity(mActivity, orderListInfo.getOrderDetailsList().get(0).getGoodsId());
                     } else if (state == 3) {
                         //查看物流
+                        LogisticsInformationActivity.startActivity(mActivity,orderListInfo.getId());
                     }
                 } else if (view.getId() == R.id.tv_round_purple) {
-
-
                     if (state == 1) {
                         //立即支付
                     } else if (state == 2 || state == 4) {

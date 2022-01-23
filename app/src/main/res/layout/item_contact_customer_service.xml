@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/dp_15"
@@ -12,6 +13,7 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/tv_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -21,28 +23,31 @@
 
 
         <TextView
+            android:id="@+id/tv_expand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_entity_arrow_right"
             android:drawablePadding="@dimen/dp_6"
             android:text="展开"
             android:textColor="@color/default_font_gray_999"
-            android:textSize="@dimen/sp_12" />
+            android:textSize="@dimen/sp_12"
+            app:drawableLeftCompat="@drawable/ic_entity_arrow_right" />
     </LinearLayout>
 
 
     <TextView
+        android:id="@+id/tv_message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_12"
         android:text="这是一条可以点开的消息，这是一条可以点开的消息，这是一条可以点开的消息，并且只展示两行；这是点开后的样子…"
         android:textColor="@color/default_font_gray_666"
-        android:textSize="@dimen/sp_12" />
+        android:textSize="@dimen/sp_12"
+        android:visibility="gone" />
 
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_1"
         android:layout_marginTop="@dimen/dp_12"
-        android:background="#D7D7D7"/>
+        android:background="#D7D7D7" />
 </LinearLayout>
