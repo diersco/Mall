@@ -98,16 +98,16 @@ public class MemberBenefitsActivity extends BaseActivity {
         lp.setMargins(0, getStatusBarHeight(), 0, 0);
         toolbar.setLayoutParams(lp);
         RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(layoutContent.getLayoutParams());
-        lps.setMargins(0, getStatusBarHeight() + DensityUtil.dip2px(mContext,320), 0, 0);
+        lps.setMargins(0, getStatusBarHeight() + DensityUtil.dip2px(mContext, 320), 0, 0);
         layoutContent.setLayoutParams(lps);
 
         mSeekBar.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                return false;
+                return true;
             }
         });
-        mSeekBar.setClickable(false);
+
         initWebView();
     }
 

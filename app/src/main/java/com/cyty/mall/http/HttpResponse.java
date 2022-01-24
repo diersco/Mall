@@ -1,6 +1,7 @@
 package com.cyty.mall.http;
 
 import com.cyty.mall.bean.AddressInfo;
+import com.cyty.mall.bean.AfterSalesInfo;
 import com.cyty.mall.bean.AppraiseInfo;
 import com.cyty.mall.bean.ArticleInfo;
 import com.cyty.mall.bean.CartGoodsInfo;
@@ -22,6 +23,7 @@ import com.cyty.mall.bean.OrderDetailInfo;
 import com.cyty.mall.bean.OrderListInfo;
 import com.cyty.mall.bean.OrderUserInfo;
 import com.cyty.mall.bean.ProblemInfo;
+import com.cyty.mall.bean.RefundDetailsInfo;
 import com.cyty.mall.bean.ScoreGoodsInfo;
 import com.cyty.mall.bean.SeckillGoodsInfo;
 import com.cyty.mall.bean.SignInInfo;
@@ -399,5 +401,54 @@ public class HttpResponse {
      */
     public static class addAppraiseResponse extends HttpResponse {
         public MemberBenefitsInfo data;
+    }
+
+    /**
+     * 退款与售后
+     */
+    public static class getMallAftermarketListResponse extends HttpResponse {
+        public List<AfterSalesInfo> rows;
+    }
+
+    /**
+     * 删除售后记录
+     */
+    public static class deleteAfterSaleResponse extends HttpResponse {
+        public String data;
+    }
+
+    /**
+     * 确认收货
+     */
+    public static class confirmReceiptsResponse extends HttpResponse {
+        public String data;
+    }
+
+    /**
+     * 取消售后
+     */
+    public static class cancelAfterSaleResponse extends HttpResponse {
+        public String data;
+    }
+
+    /**
+     * 取消订单
+     */
+    public static class cancelOrderResponse extends HttpResponse {
+        public String data;
+    }
+
+    /**
+     * 填写退货单号
+     */
+    public static class addReturnWaybillResponse extends HttpResponse {
+        public String data;
+    }
+
+    /**
+     * 退款详情
+     */
+    public static class selectAfterSaleByIdResponse extends HttpResponse {
+        public RefundDetailsInfo data;
     }
 }

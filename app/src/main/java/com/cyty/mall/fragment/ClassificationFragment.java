@@ -138,7 +138,7 @@ public class ClassificationFragment extends BaseFragment {
         banner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(Object data, int position) {
-
+                GoodsDetailActivity.startActivity(mActivity,classIfPageBannerList.get(position).getGoodsId());
             }
         });
     }

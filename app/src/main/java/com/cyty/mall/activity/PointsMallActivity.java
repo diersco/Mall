@@ -3,7 +3,6 @@ package com.cyty.mall.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.cyty.mall.R;
-import com.cyty.mall.adapter.HomeSpikeAdapter;
 import com.cyty.mall.adapter.ImageBannerAdapter;
 import com.cyty.mall.adapter.PointMallAdapter;
 import com.cyty.mall.base.BaseActivity;
@@ -39,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -71,6 +68,7 @@ public class PointsMallActivity extends BaseActivity {
     private List<ScoreGoodsInfo> scoreGoodsInfoList = new ArrayList<>();
     private ImageBannerAdapter imageBannerAdapter;
     private List<ClassIfPageBannerInfo.ClassifPageBannerListBean> classIfPageBannerList = new ArrayList<>();
+
     @Override
     protected void onNetReload(View v) {
         showLoading();
@@ -208,6 +206,7 @@ public class PointsMallActivity extends BaseActivity {
         pageIndex = 1;
         getIntegralGoodsList();
     }
+
     /**
      * 获取banner数据
      */
@@ -218,7 +217,6 @@ public class PointsMallActivity extends BaseActivity {
                     public void onResponse(boolean result, String message, HttpResponse.ClassIfPageBannerResponse data) {
                         if (result) {
                             classIfPageBannerList = data.data.getClassifPageBannerList();
-//                            ToastUtils.show(classIfPageBannerList.get(0).getResourceLink());
                             initBanner();
                         } else {
                             ToastUtils.show(message);
@@ -226,6 +224,7 @@ public class PointsMallActivity extends BaseActivity {
                     }
                 });
     }
+
     /**
      * 加载banner
      */
@@ -237,16 +236,16 @@ public class PointsMallActivity extends BaseActivity {
         banner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(Object data, int position) {
-
+                IntegralGoodsDetailActivity.startActivity(mContext, classIfPageBannerList.get(position).getGoodsId());
             }
         });
     }
+
     @Override
     protected void setStatusBar() {
         setLightStatusBarForM(this, true);
         StatusBarUtil.setColor(this, Color.WHITE, 0);
     }
-
 
 
     @OnClick(R.id.tv_right)

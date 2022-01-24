@@ -17,6 +17,7 @@ import com.cyty.mall.activity.MyScoresActivity;
 import com.cyty.mall.activity.NotificationListActivity;
 import com.cyty.mall.activity.OrderActivity;
 import com.cyty.mall.activity.PersonalSettingsActivity;
+import com.cyty.mall.activity.RefundAndAfterSalesActivity;
 import com.cyty.mall.activity.SignInActivity;
 import com.cyty.mall.base.BaseFragment;
 import com.cyty.mall.bean.UserInfo;
@@ -200,7 +201,7 @@ public class MineFragment extends BaseFragment {
                 OrderActivity.startActivity(mActivity, 4);
                 break;
             case R.id.tv_mine_refund:
-
+                RefundAndAfterSalesActivity.startActivity(mActivity);
                 break;
             case R.id.tv_mine_member_permissions:
                 MemberBenefitsActivity.startActivity(mActivity);

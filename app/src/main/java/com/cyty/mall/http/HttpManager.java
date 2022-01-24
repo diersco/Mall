@@ -726,6 +726,20 @@ public class HttpManager {
     }
 
     /**
+     * 退款详情
+     */
+    public void selectAfterSaleById(String id, HttpEngine.HttpResponseResultCallback<HttpResponse.selectAfterSaleByIdResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_ORDER_SELECTED_AFTER_SALE)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.selectAfterSaleByIdResponse.class, callback, mContext);
+    }
+
+    /**
      * 购物车列表
      *
      * @param pageIndex 分页
@@ -1027,6 +1041,21 @@ public class HttpManager {
     }
 
     /**
+     * 退款与售后
+     *
+     * @param callback
+     */
+    public void getMallAftermarketList(HttpEngine.HttpResponseResultListCallback<HttpResponse.getMallAftermarketListResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_AFTER_MARKET_LIST)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.getMallAftermarketListResponse.class, callback, mContext);
+    }
+
+    /**
      * 修改个人信息
      *
      * @param callback
@@ -1061,6 +1090,87 @@ public class HttpManager {
                 .post(requestBody)
                 .build();
         mHttpEngine.request(request, HttpResponse.addAppraiseResponse.class, callback, mContext);
+    }
+
+    /**
+     * 删除售后记录
+     *
+     * @param callback
+     */
+    public void deleteAfterSale(int id, HttpEngine.HttpResponseResultCallback<HttpResponse.deleteAfterSaleResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_ORDER_DELETE_AFTER_SALE)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.deleteAfterSaleResponse.class, callback, mContext);
+    }
+
+    /**
+     * 取消售后
+     *
+     * @param callback
+     */
+    public void cancelAfterSale(int id, HttpEngine.HttpResponseResultCallback<HttpResponse.cancelAfterSaleResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_ORDER_CANCEL_AFTER_SALE)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.cancelAfterSaleResponse.class, callback, mContext);
+    }
+
+    /**
+     * 确认收货
+     *
+     * @param callback
+     */
+    public void confirmReceipts(int id, HttpEngine.HttpResponseResultCallback<HttpResponse.confirmReceiptsResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_CONFIRM_RECEIPTS)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.confirmReceiptsResponse.class, callback, mContext);
+    }
+
+    /**
+     * 取消订单
+     *
+     * @param callback
+     */
+    public void cancelOrder(int id, HttpEngine.HttpResponseResultCallback<HttpResponse.cancelOrderResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_ORDER_CANCEL_ORDER)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.cancelOrderResponse.class, callback, mContext);
+    }
+
+    /**
+     * 填写订单编号
+     *
+     * @param callback
+     */
+    public void addReturnWaybill(int id,String ids, HttpEngine.HttpResponseResultCallback<HttpResponse.addReturnWaybillResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_IDS, ids + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_ORDER_ADD_RETURN_WAY)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.addReturnWaybillResponse.class, callback, mContext);
     }
 
     public void cancelRequest(String cancelUrl) {

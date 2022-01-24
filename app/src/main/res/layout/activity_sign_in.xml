@@ -7,6 +7,7 @@
     tools:context=".activity.SignInActivity">
 
     <LinearLayout
+        android:id="@+id/layout_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_sign_in_top"
@@ -16,7 +17,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_48"
-            android:layout_marginTop="@dimen/dp_24"
             android:navigationIcon="@drawable/ic_unite_return_black"
             app:layout_scrollFlags="enterAlways"
             app:navigationIcon="@drawable/ic_unite_return"
@@ -87,6 +87,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/dp_204"

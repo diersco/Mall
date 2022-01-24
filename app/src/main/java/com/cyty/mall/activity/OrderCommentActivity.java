@@ -77,7 +77,7 @@ public class OrderCommentActivity extends BaseActivity {
     @BindView(R.id.et_message)
     EditText etMessage;
     private OrderDetailInfo.OrderDetailsListBean orderDetailsListBean;
-    private String orderID;
+    private String orderId;
     private AddImageAdapter addImageAdapter;
     private List<String> mSelectList = new ArrayList<>();
     private List<String> mUploadList = new ArrayList<>();
@@ -90,10 +90,10 @@ public class OrderCommentActivity extends BaseActivity {
 
     }
 
-    public static void startActivity(Context mContext, OrderDetailInfo.OrderDetailsListBean orderDetailsListBean, String orderID) {
+    public static void startActivity(Context mContext, OrderDetailInfo.OrderDetailsListBean orderDetailsListBean, String orderId) {
         Intent mIntent = new Intent(mContext, OrderCommentActivity.class);
         mIntent.putExtra(Constant.INTENT_DATA, orderDetailsListBean);
-        mIntent.putExtra(Constant.INTENT_ID, orderID);
+        mIntent.putExtra(Constant.INTENT_ID, orderId);
         mContext.startActivity(mIntent);
     }
 
@@ -105,7 +105,7 @@ public class OrderCommentActivity extends BaseActivity {
     @Override
     protected void initView() {
         orderDetailsListBean = (OrderDetailInfo.OrderDetailsListBean) getIntent().getParcelableExtra(Constant.INTENT_DATA);
-        orderID = getIntent().getStringExtra(Constant.INTENT_ID);
+        orderId = getIntent().getStringExtra(Constant.INTENT_ID);
     }
 
     @Override
@@ -217,6 +217,7 @@ public class OrderCommentActivity extends BaseActivity {
                         if (mSelectList.size() < 9) {
                             mSelectList.add("");
                         }
+                        uploadImgs();
                         addImageAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -228,7 +229,7 @@ public class OrderCommentActivity extends BaseActivity {
     public void onViewClicked() {
         comment = etMessage.getText().toString().trim();
         if (!StringUtils.isEmpty(comment)) {
-            uploadImgs();
+            addAppraise();
         } else {
             ToastUtils.show("评价内容不能为空！");
         }
@@ -245,7 +246,6 @@ public class OrderCommentActivity extends BaseActivity {
                     public void onResponse(boolean result, String message, HttpResponse.uploadImgsResponse data) {
                         if (result) {
                             commentPicture = data.customerService;
-                            updateUserInfo();
                         } else {
                             ToastUtils.show(message);
                         }
@@ -253,8 +253,8 @@ public class OrderCommentActivity extends BaseActivity {
                 });
     }
 
-    private void updateUserInfo() {
-        HttpManager.getInstance().addAppraise(comment, commentPicture, orderID,
+    private void addAppraise() {
+        HttpManager.getInstance().addAppraise(comment, commentPicture, orderId,
                 new HttpEngine.HttpResponseResultCallback<HttpResponse.addAppraiseResponse>() {
                     @Override
                     public void onResponse(boolean result, String message, HttpResponse.addAppraiseResponse data) {

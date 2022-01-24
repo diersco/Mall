@@ -66,6 +66,7 @@ public class OrderDetailActivity extends BaseActivity {
     TextView tvTotalGoodsPrice;
 
     private int id;
+    private String orderId;
     private OrderDetailInfo orderDetailInfo;
     private OrderDetailAdapter mAdapter;
     private List<OrderDetailInfo.OrderDetailsListBean> orderDetailsListBeanList = new ArrayList<>();
@@ -139,6 +140,7 @@ public class OrderDetailActivity extends BaseActivity {
             tvCoupon.setText("-￥" + orderDetailInfo.getDiscountAmount());
         if (!orderDetailInfo.getOrderTime().isEmpty())
             tvOrderTime.setText(orderDetailInfo.getOrderTime().split(" ")[0]);
+        orderId = orderDetailInfo.getId()+"";
     }
 
     private void initAdapter() {
@@ -156,12 +158,12 @@ public class OrderDetailActivity extends BaseActivity {
                 } else if (view.getId() == R.id.tv_after_sales) {
                     if (orderDetailsListBean.getAfterSale() == 1) {
                         //跳转申请售后
-                        SelectAftermarketTypeActivity.startActivity(mContext, orderDetailsListBean, id + "");
+                        SelectAftermarketTypeActivity.startActivity(mContext, orderDetailsListBean, orderId);
                     }
                 } else if (view.getId() == R.id.tv_evaluate) {
                     if (orderDetailsListBean.getEvaluateStatus() == 2 || orderDetailsListBean.getEvaluateStatus() == 3) {
                         //评价页面
-                        OrderCommentActivity.startActivity(mContext, orderDetailsListBean, id + "");
+                        OrderCommentActivity.startActivity(mContext, orderDetailsListBean, orderId);
                     }
                 }
             }

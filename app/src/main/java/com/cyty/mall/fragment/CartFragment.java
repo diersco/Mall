@@ -20,9 +20,7 @@ import com.cyty.mall.activity.ConfirmOrderActivity;
 import com.cyty.mall.adapter.ShoppingCartAdapter;
 import com.cyty.mall.base.BaseFragment;
 import com.cyty.mall.bean.CartGoodsInfo;
-import com.cyty.mall.bean.ConfirmOrderInfo;
 import com.cyty.mall.contants.MKParameter;
-import com.cyty.mall.event.MainJumpEvent;
 import com.cyty.mall.event.RefreshUniversalListEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
@@ -151,12 +149,12 @@ public class CartFragment extends BaseFragment {
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                 mAdapter.click(position);
                 chooseAll = mAdapter.getAllDataChoiceType();
-                if (chooseAll){
+                if (chooseAll) {
                     Drawable drawableLeft = ContextCompat.getDrawable(getContext(),
                             R.drawable.ic_address_selected);
                     tvSelectAll.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
                             null, null, null);
-                }else {
+                } else {
                     Drawable drawableLeft = ContextCompat.getDrawable(getContext(),
                             R.drawable.ic_address_unselected);
                     tvSelectAll.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
@@ -180,12 +178,12 @@ public class CartFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.tv_select_all:
                 chooseAll = !chooseAll;
-                if (chooseAll){
+                if (chooseAll) {
                     Drawable drawableLeft = ContextCompat.getDrawable(getContext(),
                             R.drawable.ic_address_selected);
                     tvSelectAll.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
                             null, null, null);
-                }else {
+                } else {
                     Drawable drawableLeft = ContextCompat.getDrawable(getContext(),
                             R.drawable.ic_address_unselected);
                     tvSelectAll.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
@@ -214,13 +212,14 @@ public class CartFragment extends BaseFragment {
                 totalPrice = totalPrice + Double.parseDouble(cartGoodsInfo.getPrice()) * cartGoodsInfo.getQuantity();
             }
             ids = strId.toString().substring(0, strId.toString().length() - 1);
-            tvTotalGoodsPrice.setText(totalPrice+"");
+            tvTotalGoodsPrice.setText(totalPrice + "");
         } else {
             tvTotalGoodsPrice.setText("0.00");
             ids = "";
         }
 
     }
+
     /**
      * 跳转
      */

@@ -44,7 +44,6 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.umeng.socialize.media.UMWeb;
 import com.youth.banner.Banner;
-import com.youth.banner.indicator.CircleIndicator;
 import com.youth.banner.indicator.RoundLinesIndicator;
 import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.util.BannerUtils;
@@ -301,7 +300,7 @@ public class GoodsDetailActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.iv_collect, R.id.iv_share, R.id.tv_shopping_cart, R.id.tv_add_to_cart, R.id.tv_buy_now})
+    @OnClick({R.id.iv_collect, R.id.iv_share, R.id.tv_shopping_cart, R.id.tv_add_to_cart, R.id.tv_buy_now, R.id.iv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_collect:
@@ -310,7 +309,7 @@ public class GoodsDetailActivity extends BaseActivity {
                 }
                 break;
             case R.id.iv_share:
-                shareWeb(GoodsDetailActivity.this, "https://appmall.ciyuantiaoyue.com/h5/index.html?goodsId=" + goodsInfo.getGoodsId(), goodsInfo.getTitle(), goodsInfo.getDetails(), SHARE_MEDIA.WEIXIN);
+                share(goodsInfo.getTitle(), goodsInfo.getDetails(), goodsInfo.getGoodsId() + "");
                 break;
             case R.id.tv_shopping_cart:
                 finish();
@@ -326,6 +325,9 @@ public class GoodsDetailActivity extends BaseActivity {
                     new GoodsFormatPopup(mContext, goodsInfo, 1).showPopupWindow();
                 }
                 break;
+            case R.id.iv_back:
+                finish();
+                break;
         }
     }
 
@@ -336,7 +338,7 @@ public class GoodsDetailActivity extends BaseActivity {
      */
     public static void shareWeb(final Activity activity, String WebUrl, String title, String description, SHARE_MEDIA
             platform) {
-        UMImage thumb = new UMImage(activity, R.mipmap.ic_launcher);
+        UMImage thumb = new UMImage(activity, R.mipmap.ic_logo);
         UMWeb web = new UMWeb(WebUrl);//连接地址(注意链接开头必须包含http)
         web.setTitle(title);//标题
         web.setDescription(description);//描述
@@ -415,7 +417,7 @@ public class GoodsDetailActivity extends BaseActivity {
     @Override
     protected void setStatusBar() {
 
-        StatusBarUtil.setTransparentForImageView(this,null);
+        StatusBarUtil.setTransparentForImageView(this, null);
         setLightStatusBarForM(this, true);
     }
 

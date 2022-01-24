@@ -228,6 +228,14 @@ public class ServerApiConstants {
      */
     public static final String URL_ORDER_AFTER_SALE = BASE_URL + "/api/order/afterSale";
     /**
+     * 删除售后记录
+     */
+    public static final String URL_ORDER_DELETE_AFTER_SALE = BASE_URL + "/api/order/deleteAfterSale";
+    /**
+     * 取消售后记录
+     */
+    public static final String URL_ORDER_CANCEL_AFTER_SALE = BASE_URL + "/api/order/cancelAfterSale";
+    /**
      * 修改个人信息
      */
     public static final String URL_UPDATE_USER_INFO = BASE_URL + "/basic/updateUserInfo";
@@ -235,5 +243,17 @@ public class ServerApiConstants {
      * 评价
      */
     public static final String URL_ORDER_ADD_APPRAISE = BASE_URL + "/api/order/addAppraise";
+    /**
+     * 填写退货单号
+     */
+    public static final String URL_ORDER_ADD_RETURN_WAY = BASE_URL + "/api/order/addReturnWaybill";
+    /**
+     * 取消订单
+     */
+    public static final String URL_ORDER_CANCEL_ORDER = BASE_URL + "/api/order/cancelOrder";
+    /**
+     * 查询售后详情
+     */
+    public static final String URL_ORDER_SELECTED_AFTER_SALE = BASE_URL + "/api/order/selectAfterSaleById";
 
 }

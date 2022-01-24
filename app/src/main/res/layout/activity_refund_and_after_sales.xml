@@ -11,9 +11,25 @@
     <include layout="@layout/layout_title" />
 
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+        android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/dp_8"
-        tools:listitem="@layout/item_refund_and_after_sales" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/include">
+
+        <com.scwang.smart.refresh.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/include"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/dp_100"
+            tools:listitem="@layout/item_refund_and_after_sales" />
+
+
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 </LinearLayout>

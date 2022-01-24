@@ -32,7 +32,7 @@ public class IntegralOrderListAdapter extends BaseQuickAdapter<IntegralOrderInfo
         baseViewHolder.setText(R.id.tv_time, orderListInfo.getExchangeTime().split(" ")[0])
                 .setText(R.id.tv_paymentAmount, orderListInfo.getPayPoints() + "积分")
                 .setText(R.id.tv_goods_title, orderListInfo.getGoodsTitle())
-                .setText(R.id.tv_price, "￥" + orderListInfo.getPayPoints() + "积分")
+                .setText(R.id.tv_price,  orderListInfo.getPayPoints() + "积分")
                 .setText(R.id.tv_format, "规格：" + orderListInfo.getSpec());
         ImageView ivCover = baseViewHolder.getView(R.id.iv_cover);
         GlideUtil.with(getContext()).displayImage(orderListInfo.getThumbnail(), ivCover);

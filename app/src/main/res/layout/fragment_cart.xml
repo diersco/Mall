@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/layout_content"
     android:background="#FBFBFB"
     android:orientation="vertical"
     tools:context=".fragment.CartFragment">
@@ -13,7 +14,7 @@
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48"
-        android:layout_marginTop="@dimen/dp_24"
+        android:layout_marginTop="@dimen/dp_30"
         android:background="@color/white"
         android:gravity="center"
         android:text="购物车"

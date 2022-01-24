@@ -234,6 +234,7 @@ public class OrderProcessingActivity extends BaseActivity {
                         if (mSelectList.size() < 9) {
                             mSelectList.add("");
                         }
+                        uploadImgs();
                         addImageAdapter.notifyDataSetChanged();
                     }
                     break;
@@ -252,7 +253,8 @@ public class OrderProcessingActivity extends BaseActivity {
     public void onViewClicked() {
         appeal = etMessage.getText().toString().trim();
         if (!StringUtils.isEmpty(appeal)) {
-            uploadImgs();
+
+            selectMallMember();
         } else {
             ToastUtils.show("评价内容不能为空！");
         }
@@ -268,7 +270,7 @@ public class OrderProcessingActivity extends BaseActivity {
                     public void onResponse(boolean result, String message, HttpResponse.uploadImgsResponse data) {
                         if (result) {
                             appealPicture = data.url;
-                            selectMallMember();
+
                         } else {
                             ToastUtils.show(message);
                         }

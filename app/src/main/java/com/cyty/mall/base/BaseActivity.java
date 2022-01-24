@@ -4,10 +4,12 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -23,6 +25,7 @@ import com.cyty.mall.callback.EmptyCallback;
 import com.cyty.mall.callback.ErrorCallback;
 import com.cyty.mall.callback.LoadingCallback;
 import com.cyty.mall.http.HttpManager;
+import com.cyty.mall.util.AppUtils;
 import com.cyty.mall.util.LoadingDialogUtils;
 import com.hjq.toast.ToastUtils;
 import com.jaeger.library.StatusBarUtil;
@@ -30,6 +33,13 @@ import com.kingja.loadsir.callback.Callback;
 import com.kingja.loadsir.core.LoadService;
 import com.kingja.loadsir.core.LoadSir;
 import com.tencent.mmkv.MMKV;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
+import com.umeng.socialize.media.UMWeb;
+import com.zsml.dialoglibrary.widget.CustomDialog;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -322,6 +332,95 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
             result = getResources().getDimensionPixelSize(resourceId);
         }
         return result;
+    }
+
+    private CustomDialog shareDialog;
+
+    public void share(String title, String desc, String id) {
+
+        if (shareDialog == null) {
+
+            shareDialog = new CustomDialog.Builder(this)
+                    .view(R.layout.share_dialog)
+                    .setWidthPX(AppUtils.getScreenWidth(mContext))
+                    .setHeightDP(180)
+                    .setDialogPosition(Gravity.BOTTOM)
+                    .build();
+        }
+        View dialogView = shareDialog.getDialogView();
+        /****微信好友***/
+        dialogView.findViewById(R.id.ll_share_one).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareTwo(title, desc, id, SHARE_MEDIA.WEIXIN);
+                shareDialog.dismiss();
+            }
+        });
+        /****微信朋友圈***/
+        dialogView.findViewById(R.id.ll_share_two).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareTwo(title, desc, id, SHARE_MEDIA.WEIXIN_CIRCLE);
+                shareDialog.dismiss();
+            }
+        });
+        /****取消***/
+        dialogView.findViewById(R.id.tv_cancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                shareDialog.dismiss();
+            }
+        });
+        shareDialog.show();
+    }
+
+    private final String url = "https://appmall.ciyuantiaoyue.com/h5/index.html?goodsId=%1s";
+
+    public void shareTwo(String title, String desc, String id, SHARE_MEDIA shareMedia) {
+        //通用分享
+        UMImage image = new UMImage(mContext, R.mipmap.ic_logo);//资源文件
+        UMWeb web = new UMWeb(String.format(url, id));
+        web.setTitle(title);//标题
+        web.setThumb(image);  //缩略图
+        web.setDescription(desc);//描述
+        new ShareAction(this)
+                .withMedia(web)
+                .setCallback(shareListener)
+                .setPlatform(shareMedia)
+                .share();
+
+    }
+
+    private UMShareListener shareListener = new UMShareListener() {
+        /**
+         * @param platform 平台类型
+         * @descrption 分享开始的回调
+         */
+        @Override
+        public void onStart(SHARE_MEDIA platform) {
+        }
+
+        @Override
+        public void onResult(SHARE_MEDIA share_media) {
+            ToastUtils.show("分享成功");
+
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+            ToastUtils.show("分享失败");
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media) {
+            ToastUtils.show("分享取消");
+        }
+    };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get(mContext).onActivityResult(requestCode, resultCode, data);
     }
 }
 

@@ -254,7 +254,6 @@ public class ConfirmOrderActivity extends BaseActivity {
                             payForAli(sign);
                         } else {
                             ToastUtils.show(message);
-
                         }
                     }
                 });
@@ -347,18 +346,6 @@ public class ConfirmOrderActivity extends BaseActivity {
         }
     };
 
-    /**
-     * 将 H5 网页版支付转换成支付宝 App 支付的示例
-     */
-    public void h5Pay(View v) {
-        WebView.setWebContentsDebuggingEnabled(true);
-        Intent intent = new Intent(this, H5PayActivity.class);
-        Bundle extras = new Bundle();
-        String url = "https://m.taobao.com";
-        extras.putString("url", url);
-        intent.putExtras(extras);
-        startActivity(intent);
-    }
 
     private void initAddress() {
         layoutAddress.setVisibility(View.VISIBLE);
@@ -435,11 +422,9 @@ public class ConfirmOrderActivity extends BaseActivity {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void weiXinPayResult(WeChartPayEvent event) {
 
-
         if (System.currentTimeMillis() - time < 1000) {
             return;
         }
-
         time = System.currentTimeMillis();
 
         int errCode = event.getErrCode();

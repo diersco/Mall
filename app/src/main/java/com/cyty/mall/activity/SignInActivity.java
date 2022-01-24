@@ -10,9 +10,11 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.cyty.mall.R;
 import com.cyty.mall.base.BaseActivity;
@@ -21,7 +23,9 @@ import com.cyty.mall.bean.SignInInfo;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
+import com.cyty.mall.util.DensityUtil;
 import com.cyty.mall.util.DisplayUtils;
+import com.cyty.mall.util.NumberToChineseUtil;
 import com.cyty.mall.util.StringUtils;
 import com.hjq.toast.ToastUtils;
 import com.jaeger.library.StatusBarUtil;
@@ -52,6 +56,8 @@ public class SignInActivity extends BaseActivity {
     WebView mWebView;
     @BindView(R.id.layout_content)
     LinearLayout layoutContent;
+    @BindView(R.id.layout)
+    LinearLayout layout;
 
 
     private int type = 4;
@@ -81,7 +87,12 @@ public class SignInActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        signIn();
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(toolbar.getLayoutParams());
+        lp.setMargins(0, getStatusBarHeight(), 0, 0);
+        toolbar.setLayoutParams(lp);
+        RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(layout.getLayoutParams());
+        lps.setMargins(0, getStatusBarHeight() + DensityUtil.dip2px(mContext, 204), 0, 0);
+        layout.setLayoutParams(lps);
         signInRecord();
         getArticle();
     }
@@ -134,6 +145,7 @@ public class SignInActivity extends BaseActivity {
                     public void onResponse(boolean result, String message, HttpResponse.signInResponse data) {
                         if (result) {
                             ToastUtils.show("签到成功！");
+                            signInRecord();
                         } else {
                             ToastUtils.show(message);
                         }
@@ -162,25 +174,46 @@ public class SignInActivity extends BaseActivity {
     @SuppressLint("SetTextI18n")
     private void initSignInData() {
         tvSignInNum.setText(mSignInInfo.getContinuity() + "");
-        tvScore.setText("当前积分 " + mSignInInfo.getUserIntegral() + "分");
+        tvScore.setText("当前积分 " + mSignInInfo.getUserIntegral());
         addGroupImage();
     }
 
     //size:代码中获取到的图片数量
     private void addGroupImage() {
         layoutContent.removeAllViews();
-        int num = mSignInInfo.getContinuity() % 7;
+        //余
+        int moreThan = mSignInInfo.getContinuity() % 7;
+        //商
+        int merchant = mSignInInfo.getContinuity() / 7;
         for (int i = 0; i < 7; i++) {
             ImageView imageView = new ImageView(this);
             LinearLayout.LayoutParams layoutparams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             layoutparams.setMargins(DisplayUtils.dip2px(mContext, 3), 0, DisplayUtils.dip2px(mContext, 3), 0);
             View view = LayoutInflater.from(this).inflate(R.layout.item_sign_view, null);
-            TextView tvAddIntegral = findViewById(R.id.tv_add_integral);
-            ImageView ivStarSelected = findViewById(R.id.iv_star_selected);
-            TextView tvDay = findViewById(R.id.tv_day);
-
+            TextView tvAddIntegral = view.findViewById(R.id.tv_add_integral);
+            ImageView ivStarSelected = view.findViewById(R.id.iv_star_selected);
+            TextView tvDay = view.findViewById(R.id.tv_day);
             imageView.setLayoutParams(layoutparams);
+            if (i < moreThan) {
+                ivStarSelected.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_sign_in_star_selected));
+            } else {
+                ivStarSelected.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_sign_in_star_un_selected));
+            }
+            //未签到才展示且添加点击事件
+            if (mSignInInfo.getSignIn() == 1) {
+                if (i == moreThan) {
+                    tvAddIntegral.setText("+" + mSignInInfo.getCheckPoints());
+                    ivStarSelected.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            signIn();
+                        }
+                    });
+                }
+            }
+
+            tvDay.setText("第" + NumberToChineseUtil.intToChinese(merchant * 7 + i + 1) + "天");
             if (i <= 5) {
                 imageView.setImageResource(R.drawable.ic_arrow_right_pair); //图片资源
             }
@@ -215,6 +248,7 @@ public class SignInActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_ask:
+                CommonActivity.startActivity(mContext, 5);
                 break;
             case R.id.tv_score_dynamics:
                 MyScoresActivity.startActivity(mContext, mSignInInfo.getUserIntegral() + "");

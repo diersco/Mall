@@ -39,6 +39,7 @@ public class CommonActivity extends BaseActivity {
     // 从哪里跳进来的  1=关于我们,2=用户协议,3=隐私政策
     private int type;
     private ArticleInfo mArticleInfo;
+
     @Override
     protected void onNetReload(View v) {
 
@@ -79,6 +80,9 @@ public class CommonActivity extends BaseActivity {
             case 3:
                 tvTitle.setText("隐私政策");
                 break;
+            case 5:
+                tvTitle.setText("签到规则");
+                break;
 
         }
     }
@@ -88,6 +92,7 @@ public class CommonActivity extends BaseActivity {
         initWebView();
         getArticle();
     }
+
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
         WebSettings settings = mWebView.getSettings();

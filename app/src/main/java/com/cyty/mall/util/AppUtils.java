@@ -1,5 +1,8 @@
 package com.cyty.mall.util;
 
+import android.content.Context;
+import android.view.WindowManager;
+
 import com.cyty.mall.contants.Constant;
 
 import java.util.regex.Matcher;
@@ -27,4 +30,17 @@ public class AppUtils {
         }
         return false;
     }
+
+    public static int getScreenWidth(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        int screenWidth = wm.getDefaultDisplay().getWidth();//屏幕宽度
+        return screenWidth;
+    }
+
+    public static int getScreenHeigh(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        int screenHeight = wm.getDefaultDisplay().getHeight();
+        return screenHeight;
+    }
+
 }

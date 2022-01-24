@@ -290,7 +290,7 @@ public class SeckillGoodsDetailActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.tv_shopping_cart, R.id.tv_add_to_cart, R.id.tv_buy_now})
+    @OnClick({R.id.tv_shopping_cart, R.id.tv_add_to_cart, R.id.tv_buy_now, R.id.iv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 
@@ -308,6 +308,9 @@ public class SeckillGoodsDetailActivity extends BaseActivity {
                     new GoodsFormatPopup(mContext, goodsInfo, 5).showPopupWindow();
                 }
                 break;
+            case R.id.iv_back:
+                finish();
+                break;
         }
     }
 
@@ -315,7 +318,7 @@ public class SeckillGoodsDetailActivity extends BaseActivity {
     @Override
     protected void setStatusBar() {
 
-        StatusBarUtil.setTransparentForImageView(this,null);
+        StatusBarUtil.setTransparentForImageView(this, null);
         setLightStatusBarForM(this, true);
     }
 

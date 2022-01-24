@@ -157,6 +157,7 @@ dependencies {
     implementation 'com.github.chrisbanes:PhotoView:2.1.4'
     //间隔
     implementation 'com.github.fondesa:recycler-view-divider:3.3.0'
+    implementation 'com.superluo:dialog:1.0.1'
     //友盟
     implementation files('libs/umeng-common-9.4.6.jar')
     implementation files('libs/umeng-share-core-7.1.7.jar')
