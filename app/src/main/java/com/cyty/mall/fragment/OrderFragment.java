@@ -114,10 +114,11 @@ public class OrderFragment extends BaseFragment {
                 int state = orderListInfo.getOrderStatus();
                 if (view.getId() == R.id.tv_line_gary) {
                     if (state == 1) {
-                        GoodsDetailActivity.startActivity(mActivity, orderListInfo.getOrderDetailsList().get(0).getGoodsId());
+                        //取消订单
+
                     } else if (state == 3) {
                         //查看物流
-                        LogisticsInformationActivity.startActivity(mActivity,orderListInfo.getId());
+                        LogisticsInformationActivity.startActivity(mActivity, orderListInfo.getId());
                     }
                 } else if (view.getId() == R.id.tv_round_purple) {
                     if (state == 1) {

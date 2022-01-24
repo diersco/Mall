@@ -6,11 +6,14 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.cyty.mall.R;
 import com.cyty.mall.adapter.IntegralOrderListAdapter;
 import com.cyty.mall.base.BaseActivity;
@@ -119,7 +122,18 @@ public class IntegralOrderListActivity extends BaseActivity {
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setAdapter(mAdapter);
+        mAdapter.addChildClickViewIds(R.id.tv_line_gary);
+        mAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
+                IntegralOrderInfo integralOrderInfo = integralOrderInfoList.get(position);
+                if (view.getId() == R.id.tv_line_gary) {
+                    LogisticsInformationActivity.startActivity(mContext, integralOrderInfo.getId());
+                }
+            }
+        });
     }
+
     @Override
     protected void setStatusBar() {
         setLightStatusBarForM(this, true);

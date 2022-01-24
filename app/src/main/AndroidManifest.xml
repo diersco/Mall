@@ -46,9 +46,15 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="q">
-        <activity android:name=".activity.PersonalInformationActivity"></activity>
-        <activity android:name=".activity.OrderProcessingActivity" />
-        <activity android:name=".activity.MemberBenefitsActivity" />
+        <activity
+            android:name=".activity.PersonalInformationActivity"
+            android:screenOrientation="portrait" /> <!-- 个人资料 -->
+        <activity
+            android:name=".activity.OrderProcessingActivity"
+            android:screenOrientation="portrait" /><!-- 订单处理 -->
+        <activity
+            android:name=".activity.MemberBenefitsActivity"
+            android:screenOrientation="portrait" /> <!-- 会员权益 -->
         <activity
             android:name=".activity.SeckillConfirmOrderActivity"
             android:screenOrientation="portrait" /> <!-- 秒杀创建订单 -->

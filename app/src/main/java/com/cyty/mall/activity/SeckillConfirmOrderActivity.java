@@ -111,6 +111,7 @@ public class SeckillConfirmOrderActivity extends BaseActivity {
     private int shoppingCart;
     //支付方式 2 支付宝 1 微信  默认支付宝
     private int paymentType = 2;
+    private int couponId = -1;
 
     @Override
     protected void onNetReload(View v) {
@@ -220,7 +221,7 @@ public class SeckillConfirmOrderActivity extends BaseActivity {
      * 创建订单
      */
     private void createOrder() {
-        HttpManager.getInstance().seckillCreateOrder(addressId, ids, shoppingCart, paymentType,
+        HttpManager.getInstance().seckillCreateOrder(addressId, ids, shoppingCart, paymentType, couponId,
                 new HttpEngine.HttpResponseResultCallback<HttpResponse.createOrderResponse>() {
                     @Override
                     public void onResponse(boolean result, String message, HttpResponse.createOrderResponse data) {
@@ -374,7 +375,7 @@ public class SeckillConfirmOrderActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.layout_coupon:
-                GoodsCouponActivity.startActivity(mContext, ids, totalPrice,2);
+                GoodsCouponActivity.startActivity(mContext, ids, totalPrice, 2);
                 break;
             case R.id.tv_no_address:
             case R.id.layout_address:
@@ -463,7 +464,8 @@ public class SeckillConfirmOrderActivity extends BaseActivity {
     public void discountEvent(DiscountEvent event) {
         double price = Double.parseDouble(mConfirmOrderInfo.getTotalPrice()) - event.getDiscount();
         tvTotalGoodsPrice.setText("￥" + price);
-        tvCoupon.setText("-￥"+event.getDiscount());
-
+        tvCoupon.setText("-￥" + event.getDiscount());
+        couponId = event.getCouponId();
     }
+
 }

@@ -29,6 +29,7 @@ public class GoodsInfo implements Parcelable {
     private int goodsId;
     private String atlas;
     private double price;
+    private double priceSpike;
     private int totalStock;
     private String details;
     private int id;
@@ -41,6 +42,7 @@ public class GoodsInfo implements Parcelable {
         salesVolume = in.readInt();
         goodsId = in.readInt();
         atlas = in.readString();
+        priceSpike = in.readDouble();
         price = in.readDouble();
         totalStock = in.readInt();
         integral = in.readInt();
@@ -92,6 +94,14 @@ public class GoodsInfo implements Parcelable {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public double getPriceSpike() {
+        return priceSpike;
+    }
+
+    public void setPriceSpike(double priceSpike) {
+        this.priceSpike = priceSpike;
     }
 
     public int getTotalStock() {
@@ -161,6 +171,7 @@ public class GoodsInfo implements Parcelable {
         parcel.writeInt(goodsId);
         parcel.writeString(atlas);
         parcel.writeDouble(price);
+        parcel.writeDouble(priceSpike);
         parcel.writeInt(totalStock);
         parcel.writeString(details);
         parcel.writeInt(id);

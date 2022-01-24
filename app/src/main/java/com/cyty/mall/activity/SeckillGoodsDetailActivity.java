@@ -1,16 +1,15 @@
 package com.cyty.mall.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -37,12 +36,6 @@ import com.jaeger.library.StatusBarUtil;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
-import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareAPI;
-import com.umeng.socialize.UMShareListener;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.media.UMWeb;
 import com.youth.banner.Banner;
 import com.youth.banner.indicator.RoundLinesIndicator;
 import com.youth.banner.listener.OnBannerListener;
@@ -56,7 +49,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import timber.log.Timber;
 
 /**
  * 秒杀商品详情页面
@@ -68,12 +60,12 @@ public class SeckillGoodsDetailActivity extends BaseActivity {
     Banner bannerClass;
     @BindView(R.id.tv_goods_price)
     TextView tvGoodsPrice;
+    @BindView(R.id.tv_spike_price)
+    TextView tvSpikePrice;
     @BindView(R.id.tv_goods_name)
     TextView tvGoodsName;
     @BindView(R.id.tv_sales)
     TextView tvSales;
-    @BindView(R.id.iv_collect)
-    ImageView ivCollect;
     @BindView(R.id.tv_inventory)
     TextView tvInventory;
     @BindView(R.id.tv_evaluation_num)
@@ -239,15 +231,12 @@ public class SeckillGoodsDetailActivity extends BaseActivity {
             imgList = Arrays.asList(split);
             initBanner();
         }
-        if (goodsInfo.getPrice() >= 0) tvGoodsPrice.setText("￥" + goodsInfo.getPrice());
+        tvSpikePrice.getPaint().setFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+        if (goodsInfo.getPriceSpike() >= 0) tvGoodsPrice.setText("￥" + goodsInfo.getPriceSpike());
+        if (goodsInfo.getPrice() >= 0) tvSpikePrice.setText("￥" + goodsInfo.getPrice());
         if (!StringUtils.isEmpty(goodsInfo.getDetails())) tvGoodsName.setText(goodsInfo.getTitle());
         if (goodsInfo.getSalesVolume() >= 0) tvSales.setText("销量：" + goodsInfo.getSalesVolume());
         if (goodsInfo.getTotalStock() >= 0) tvInventory.setText("库存：" + goodsInfo.getTotalStock());
-        if (goodsInfo.getCollection() == 1) {
-            ivCollect.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_goods_collect));
-        } else {
-            ivCollect.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_goods_un_collect));
-        }
         if (!TextUtils.isEmpty(goodsInfo.getDetails())) {
             String content = goodsInfo.getDetails();
             mWebView.loadDataWithBaseURL(null, StringUtils.getHtmlData(content), "text/html", "UTF-8", null);
@@ -301,17 +290,10 @@ public class SeckillGoodsDetailActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.iv_collect, R.id.iv_share, R.id.tv_shopping_cart, R.id.tv_add_to_cart, R.id.tv_buy_now})
+    @OnClick({R.id.tv_shopping_cart, R.id.tv_add_to_cart, R.id.tv_buy_now})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.iv_collect:
-                if (goodsInfo != null) {
-                    new GoodsFormatPopup(mContext, goodsInfo, 3).showPopupWindow();
-                }
-                break;
-            case R.id.iv_share:
-                shareWeb(SeckillGoodsDetailActivity.this, "https://appmall.ciyuantiaoyue.com/h5/index.html?goodsId=" + goodsInfo.getGoodsId(), goodsInfo.getTitle(), goodsInfo.getDetails(), SHARE_MEDIA.WEIXIN);
-                break;
+
             case R.id.tv_shopping_cart:
                 finish();
                 EventBus.getDefault().post(new MainJumpEvent(2));
@@ -329,93 +311,12 @@ public class SeckillGoodsDetailActivity extends BaseActivity {
         }
     }
 
-    /**
-     * 友盟分享
-     * 上下文activity、分享的链接、标题、内容、类型
-     * 若是要分享视频、音乐可看官方文档
-     */
-    public static void shareWeb(final Activity activity, String WebUrl, String title, String description, SHARE_MEDIA
-            platform) {
-        UMImage thumb = new UMImage(activity, R.mipmap.ic_launcher);
-        UMWeb web = new UMWeb(WebUrl);//连接地址(注意链接开头必须包含http)
-        web.setTitle(title);//标题
-        web.setDescription(description);//描述
-        web.setThumb(thumb);//缩略图
-        new ShareAction(activity)
-                //分享的平台
-                .setPlatform(platform)
-                .withMedia(web)
-                .setCallback(new UMShareListener() {
-                    /**
-                     * @descrption 分享开始的回调
-                     * @param share_media 平台类型
-                     */
-                    @Override
-                    public void onStart(SHARE_MEDIA share_media) {
-                        Timber.e("onStart开始分享的平台: " + share_media);
-                    }
-
-                    /**
-                     * @descrption 分享成功的回调
-                     * @param share_media 平台类型
-                     */
-                    @Override
-                    public void onResult(final SHARE_MEDIA share_media) {
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(activity, " 分享成功 ", Toast.LENGTH_SHORT).show();
-                                Timber.e("onStart分享成功的平台: " + share_media);
-                            }
-                        });
-                    }
-
-                    /**
-                     * @descrption 分享失败的回调
-                     * @param share_media 平台类型
-                     * @param throwable 错误原因
-                     */
-                    @Override
-                    public void onError(final SHARE_MEDIA share_media, final Throwable throwable) {
-                        if (throwable != null) {
-                            //失败原因
-                            Timber.e("throw:" + throwable.getMessage());
-                        }
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(activity, share_media + " 分享失败", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-
-                    /**
-                     * @descrption 分享取消的回调
-                     * @param share_media 平台类型
-                     */
-                    @Override
-                    public void onCancel(final SHARE_MEDIA share_media) {
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(activity, " 分享取消 ", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                })
-                .share();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-    }
 
     @Override
     protected void setStatusBar() {
+
+        StatusBarUtil.setTransparentForImageView(this,null);
         setLightStatusBarForM(this, true);
-        StatusBarUtil.setTransparent(this);
     }
 
 

@@ -113,11 +113,12 @@
                 android:src="@drawable/ic_evaluation_fill_in" />
 
             <EditText
+                android:id="@+id/et_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_8"
                 android:background="@null"
-                android:hint="写下你对该商品的评价，可以帮助更多想买的人"
+                android:hint="写下你对申请的理由"
                 android:textColor="@color/default_font_gray_999"
                 android:textSize="@dimen/sp_12" />
         </LinearLayout>

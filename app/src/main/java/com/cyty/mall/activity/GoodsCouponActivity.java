@@ -151,6 +151,7 @@ public class GoodsCouponActivity extends BaseActivity {
                             mAdapter.notifyDataSetChanged();
                             recyclerview.scrollToPosition(0);
                         } else {
+                            showEmpty();
                             ToastUtils.show(message);
                         }
                     }

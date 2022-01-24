@@ -414,8 +414,9 @@ public class GoodsDetailActivity extends BaseActivity {
 
     @Override
     protected void setStatusBar() {
+
+        StatusBarUtil.setTransparentForImageView(this,null);
         setLightStatusBarForM(this, true);
-        StatusBarUtil.setTransparent(this);
     }
 
 

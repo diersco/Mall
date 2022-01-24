@@ -41,28 +41,45 @@ public class HttpManager {
         this.mContext = context;
     }
 
-
     /**
-     * 获取首页数据
+     * 上传图片
      *
-     * @param callback callback
+     * @param callback
      */
-    public void uploadImg(List<String> mImgUrls, HttpEngine.HttpResponseResultCallback<HttpResponse.uploadImgResponse> callback) {
-        JsonObject jsonObject = new JsonObject();
-        // mImgUrls为存放图片的url集合
-        MultipartBody.Builder builder = new MultipartBody.Builder().setType(MultipartBody.FORM);
-        for (int i = 0; i < mImgUrls.size(); i++) {
-            File f = new File(mImgUrls.get(i));
-            if (f != null) {
-                builder.addFormDataPart("img", f.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), f));
-            }
-        }
-        MultipartBody requestBody = builder.build();
+    public void uploadImg(File file, HttpEngine.HttpResponseResultCallback<HttpResponse.uploadImgResponse> callback) {
+        MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder();
+        multipartBodyBuilder.setType(MultipartBody.FORM);
+        multipartBodyBuilder.addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), file));
+        //构建请求体
+        RequestBody requestBody = multipartBodyBuilder.build();
         Request request = new Request.Builder().url(ServerApiConstants.URL_OSS_UPLOAD)
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
         mHttpEngine.request(request, HttpResponse.uploadImgResponse.class, callback, mContext);
+    }
+
+    /**
+     * 获取多张图片
+     *
+     * @param callback callback
+     */
+    public void uploadImgs(List<String> mImgUrls, HttpEngine.HttpResponseResultCallback<HttpResponse.uploadImgsResponse> callback) {
+        MultipartBody.Builder multipartBodyBuilder = new MultipartBody.Builder();
+        multipartBodyBuilder.setType(MultipartBody.FORM);
+        for (int i = 0; i < mImgUrls.size(); i++) {
+            File file = new File(mImgUrls.get(i));
+            if (file != null) {
+                multipartBodyBuilder.addFormDataPart("file", file.getName(), RequestBody.create(MediaType.parse("application/octet-stream"), file));
+            }
+        }
+        //构建请求体
+        RequestBody requestBody = multipartBodyBuilder.build();
+        Request request = new Request.Builder().url(ServerApiConstants.URL_OSS_UPLOADS)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.uploadImgsResponse.class, callback, mContext);
     }
 
     /**
@@ -538,13 +555,13 @@ public class HttpManager {
     }
 
     /**
-     * 确认订单
+     * 确认秒杀订单
      */
     public void seckillConfirmOrder(String ids, HttpEngine.HttpResponseResultCallback<HttpResponse.confirmOrderResponse> callback) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_IDS, ids);
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
-        Request request = new Request.Builder().url(ServerApiConstants.URL_SEC_KILL_CREATE_ORDER)
+        Request request = new Request.Builder().url(ServerApiConstants.URL_SEC_KILL_CONFIRM_ORDER)
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
@@ -568,6 +585,7 @@ public class HttpManager {
                 .build();
         mHttpEngine.request(request, HttpResponse.calculatedAmountResponse.class, callback, mContext);
     }
+
     /**
      * 秒杀计算金额
      *
@@ -594,12 +612,16 @@ public class HttpManager {
      * @param paymentType  支付方式 1微信 2支付宝
      * @param callback
      */
-    public void createOrder(int addressId, String goodsInfo, int shoppingCart, int paymentType, HttpEngine.HttpResponseResultCallback<HttpResponse.createOrderResponse> callback) {
+    public void createOrder(int addressId, String goodsInfo, int shoppingCart, int paymentType, int couponId, HttpEngine.HttpResponseResultCallback<HttpResponse.createOrderResponse> callback) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("addressId", addressId);
         jsonObject.addProperty("goodsInfo", goodsInfo);
         jsonObject.addProperty("shoppingCart", shoppingCart);
         jsonObject.addProperty("paymentType", paymentType);
+        if (couponId > 0) {
+            jsonObject.addProperty("couponId", couponId);
+        }
+
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
         Request request = new Request.Builder().url(ServerApiConstants.URL_CREATE_ORDER)
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
@@ -616,14 +638,17 @@ public class HttpManager {
      * @param paymentType  支付方式 1微信 2支付宝
      * @param callback
      */
-    public void seckillCreateOrder(int addressId, String goodsInfo, int shoppingCart, int paymentType, HttpEngine.HttpResponseResultCallback<HttpResponse.createOrderResponse> callback) {
+    public void seckillCreateOrder(int addressId, String goodsInfo, int shoppingCart, int paymentType, int couponId, HttpEngine.HttpResponseResultCallback<HttpResponse.createOrderResponse> callback) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("addressId", addressId);
         jsonObject.addProperty("goodsInfo", goodsInfo);
         jsonObject.addProperty("shoppingCart", shoppingCart);
         jsonObject.addProperty("paymentType", paymentType);
+        if (couponId > 0) {
+            jsonObject.addProperty("couponId", couponId);
+        }
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
-        Request request = new Request.Builder().url(ServerApiConstants.URL_SEC_KILL_CONFIRM_ORDER)
+        Request request = new Request.Builder().url(ServerApiConstants.URL_SEC_KILL_CREATE_ORDER)
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
@@ -904,7 +929,7 @@ public class HttpManager {
     }
 
     /**
-     * 签到记录
+     * 物流信息
      *
      * @param callback
      */
@@ -979,7 +1004,7 @@ public class HttpManager {
         jsonObject.addProperty("orderDetailsId", orderDetailsId);
         jsonObject.addProperty("salesType", salesType);
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
-        Request request = new Request.Builder().url(ServerApiConstants.URL_MALL_MEMBER)
+        Request request = new Request.Builder().url(ServerApiConstants.URL_ORDER_AFTER_SALE)
                 .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
                 .post(requestBody)
                 .build();
@@ -999,6 +1024,43 @@ public class HttpManager {
                 .post(requestBody)
                 .build();
         mHttpEngine.request(request, HttpResponse.selectSeckillListResponse.class, callback, mContext);
+    }
+
+    /**
+     * 修改个人信息
+     *
+     * @param callback
+     */
+    public void updateUserInfo(String cellPhoneNumber, String dateBirth, String headPortrait, String nickname, HttpEngine.HttpResponseResultCallback<HttpResponse.updateUserInfoResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("cellPhoneNumber", cellPhoneNumber);
+        jsonObject.addProperty("dateBirth", dateBirth);
+        jsonObject.addProperty("headPortrait", headPortrait);
+        jsonObject.addProperty("nickname", nickname);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_UPDATE_USER_INFO)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.updateUserInfoResponse.class, callback, mContext);
+    }
+
+    /**
+     * 评价
+     *
+     * @param callback
+     */
+    public void addAppraise(String comment, String commentPicture, String orderDetailsId, HttpEngine.HttpResponseResultCallback<HttpResponse.addAppraiseResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("comment", comment);
+        jsonObject.addProperty("commentPicture", commentPicture);
+        jsonObject.addProperty("orderDetailsId", orderDetailsId);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_ORDER_ADD_APPRAISE)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.addAppraiseResponse.class, callback, mContext);
     }
 
     public void cancelRequest(String cancelUrl) {

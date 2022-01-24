@@ -2,6 +2,7 @@ package com.cyty.mall.activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.view.View;
@@ -9,18 +10,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.chad.library.adapter.base.listener.OnItemChildLongClickListener;
 import com.cyty.mall.R;
 import com.cyty.mall.adapter.AddImageAdapter;
 import com.cyty.mall.base.BaseActivity;
 import com.cyty.mall.bean.OrderDetailInfo;
 import com.cyty.mall.contants.Constant;
+import com.cyty.mall.event.RefreshOrderDetailEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
@@ -37,6 +42,8 @@ import com.permissionx.guolindev.request.ForwardScope;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +73,8 @@ public class OrderProcessingActivity extends BaseActivity {
     TextView tvPrice;
     @BindView(R.id.tv_num)
     TextView tvNum;
+    @BindView(R.id.et_message)
+    TextView etMessage;
     @BindView(R.id.recyclerView_images)
     RecyclerView recyclerViewImages;
     private String orderID;
@@ -76,8 +85,8 @@ public class OrderProcessingActivity extends BaseActivity {
     private List<String> mUploadList = new ArrayList<>();
     private static final int REQUEST_CODE_HEAD = 0x123;
     private String appeal;
-    private String orderDetailsId;
-    private String salesType;
+    private String appealPicture;
+
 
     protected void onNetReload(View v) {
 
@@ -180,10 +189,32 @@ public class OrderProcessingActivity extends BaseActivity {
                     intent.putExtra("imageList", new Gson().toJson(mUploadList));
                     mContext.startActivity(intent);
                 }
-
             }
+        });
+        addImageAdapter.addChildLongClickViewIds(R.id.iv_cover);
+        addImageAdapter.setOnItemChildLongClickListener(new OnItemChildLongClickListener() {
+            @Override
+            public boolean onItemChildLongClick(BaseQuickAdapter adapter, View view, int position) {
+
+                if (view.getId() == R.id.iv_cover) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setItems(new String[]{"删除图片"}, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case 0:
+                                    mSelectList.remove(position);
+                                    mUploadList.remove(position);
+                                    addImageAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+                    builder.show();
+                }
 
 
+                return true;
+            }
         });
     }
 
@@ -216,15 +247,28 @@ public class OrderProcessingActivity extends BaseActivity {
         StatusBarUtil.setColor(this, Color.WHITE, 0);
     }
 
+
+    @OnClick(R.id.tv_sure)
+    public void onViewClicked() {
+        appeal = etMessage.getText().toString().trim();
+        if (!StringUtils.isEmpty(appeal)) {
+            uploadImgs();
+        } else {
+            ToastUtils.show("评价内容不能为空！");
+        }
+    }
+
     /**
-     * 售后
+     * 上传多张图片
      */
-    private void selectMallMember() {
-        HttpManager.getInstance().afterSale(appeal, orderDetailsId, salesType, orderID,
-                new HttpEngine.HttpResponseResultCallback<HttpResponse.afterSaleResponse>() {
+    private void uploadImgs() {
+        HttpManager.getInstance().uploadImgs(mUploadList,
+                new HttpEngine.HttpResponseResultCallback<HttpResponse.uploadImgsResponse>() {
                     @Override
-                    public void onResponse(boolean result, String message, HttpResponse.afterSaleResponse data) {
+                    public void onResponse(boolean result, String message, HttpResponse.uploadImgsResponse data) {
                         if (result) {
+                            appealPicture = data.url;
+                            selectMallMember();
                         } else {
                             ToastUtils.show(message);
                         }
@@ -232,21 +276,18 @@ public class OrderProcessingActivity extends BaseActivity {
                 });
     }
 
-
-    @OnClick(R.id.tv_sure)
-    public void onViewClicked() {
-        getHomePageData();
-    }
-
     /**
-     * 获取首页数据
+     * 售后
      */
-    private void getHomePageData() {
-        HttpManager.getInstance().uploadImg(mUploadList,
-                new HttpEngine.HttpResponseResultCallback<HttpResponse.uploadImgResponse>() {
+    private void selectMallMember() {
+        HttpManager.getInstance().afterSale(appeal, appealPicture, orderID, type + "",
+                new HttpEngine.HttpResponseResultCallback<HttpResponse.afterSaleResponse>() {
                     @Override
-                    public void onResponse(boolean result, String message, HttpResponse.uploadImgResponse data) {
+                    public void onResponse(boolean result, String message, HttpResponse.afterSaleResponse data) {
                         if (result) {
+                            EventBus.getDefault().post(new RefreshOrderDetailEvent());
+                            ToastUtils.show("申请成功！");
+                            finish();
                         } else {
                             ToastUtils.show(message);
                         }

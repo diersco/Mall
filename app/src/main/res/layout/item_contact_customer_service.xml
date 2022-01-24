@@ -49,5 +49,5 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_1"
         android:layout_marginTop="@dimen/dp_12"
-        android:background="#D7D7D7" />
+        android:background="@color/default_font_gray_f5f" />
 </LinearLayout>

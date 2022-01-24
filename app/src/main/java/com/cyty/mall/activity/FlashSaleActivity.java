@@ -11,18 +11,18 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.cyty.mall.R;
 import com.cyty.mall.base.BaseActivity;
 import com.cyty.mall.bean.SkillTypeInfo;
-import com.cyty.mall.fragment.ClassificationFragment;
-import com.cyty.mall.fragment.ClassificationSubpageFragment;
 import com.cyty.mall.fragment.FlashSaleFragment;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
 import com.cyty.mall.view.WrapContentHeightViewPager;
 import com.hjq.toast.ToastUtils;
+import com.jaeger.library.StatusBarUtil;
 
 import net.lucode.hackware.magicindicator.MagicIndicator;
 import net.lucode.hackware.magicindicator.ViewPagerHelper;
@@ -50,9 +50,10 @@ public class FlashSaleActivity extends BaseActivity {
     @BindView(R.id.magic_indicator)
     MagicIndicator magicIndicator;
     @BindView(R.id.view_pager)
-    WrapContentHeightViewPager viewPager;
+    ViewPager viewPager;
     private List<SkillTypeInfo> skillTypeInfoList = new ArrayList<>();
     private ArrayList<Fragment> mFragments = new ArrayList<>();
+
     @Override
     protected void onNetReload(View v) {
 
@@ -107,12 +108,14 @@ public class FlashSaleActivity extends BaseActivity {
                     }
                 });
     }
+
     private void initTab() {
         mFragments.clear();
         for (int i = 0; i < skillTypeInfoList.size(); i++) {
+//            mFragments.add(FlashSaleFragment.newInstance(skillTypeInfoList.get(i).getStartTime()));
             mFragments.add(FlashSaleFragment.newInstance(skillTypeInfoList.get(i).getStartTime()));
         }
-        FlashSaleActivity.ViewPagerAdapter mViewPagerAdapter = new FlashSaleActivity.ViewPagerAdapter(getSupportFragmentManager(), mFragments);
+        ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mFragments);
         viewPager.setOffscreenPageLimit(skillTypeInfoList.size());
         viewPager.setAdapter(mViewPagerAdapter);
     }
@@ -136,6 +139,7 @@ public class FlashSaleActivity extends BaseActivity {
             return fragmentList.size();
         }
     }
+
     private void initMagicIndicator() {
         CommonNavigator commonNavigator = new CommonNavigator(mContext);
         commonNavigator.setEnablePivotScroll(true);
@@ -215,5 +219,11 @@ public class FlashSaleActivity extends BaseActivity {
         });
         magicIndicator.setNavigator(commonNavigator);
         ViewPagerHelper.bind(magicIndicator, viewPager);
+    }
+
+    @Override
+    protected void setStatusBar() {
+        setLightStatusBarForM(this, true);
+        StatusBarUtil.setColor(this, Color.WHITE, 0);
     }
 }

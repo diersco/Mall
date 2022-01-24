@@ -9,11 +9,16 @@ public class ServerApiConstants {
     /**
      * base url
      */
-    public static final String BASE_URL = "http://47.108.236.123:9528";
+//    public static final String BASE_URL = "http://47.108.236.123:9528";
+    public static final String BASE_URL = " https://appmall.ciyuantiaoyue.com/prod-api/";
     /**
      * 上传图片
      */
-    public static final String URL_OSS_UPLOAD = BASE_URL + "/ossUploads";
+    public static final String URL_OSS_UPLOADS = BASE_URL + "/ossUploads";
+    /**
+     * 上传图片
+     */
+    public static final String URL_OSS_UPLOAD = BASE_URL + "/ossUpload";
     /**
      * 获取首页数据
      */
@@ -222,6 +227,13 @@ public class ServerApiConstants {
      * 售后
      */
     public static final String URL_ORDER_AFTER_SALE = BASE_URL + "/api/order/afterSale";
-
+    /**
+     * 修改个人信息
+     */
+    public static final String URL_UPDATE_USER_INFO = BASE_URL + "/basic/updateUserInfo";
+    /**
+     * 评价
+     */
+    public static final String URL_ORDER_ADD_APPRAISE = BASE_URL + "/api/order/addAppraise";
 
 }

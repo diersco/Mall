@@ -26,6 +26,7 @@ public class UserInfo implements Parcelable {
 
     private String gradeName;
     private String cellPhoneNumber;
+    private String dateBirth;
     private int collectionNum;
     private int integral;
     private String nickname;
@@ -37,6 +38,7 @@ public class UserInfo implements Parcelable {
     protected UserInfo(Parcel in) {
         gradeName = in.readString();
         cellPhoneNumber = in.readString();
+        dateBirth = in.readString();
         collectionNum = in.readInt();
         integral = in.readInt();
         nickname = in.readString();
@@ -44,6 +46,25 @@ public class UserInfo implements Parcelable {
         id = in.readInt();
         headPortrait = in.readString();
         memberId = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(gradeName);
+        dest.writeString(cellPhoneNumber);
+        dest.writeString(dateBirth);
+        dest.writeInt(collectionNum);
+        dest.writeInt(integral);
+        dest.writeString(nickname);
+        dest.writeInt(couponsNum);
+        dest.writeInt(id);
+        dest.writeString(headPortrait);
+        dest.writeInt(memberId);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
     public static final Creator<UserInfo> CREATOR = new Creator<UserInfo>() {
@@ -72,6 +93,14 @@ public class UserInfo implements Parcelable {
 
     public void setCellPhoneNumber(String cellPhoneNumber) {
         this.cellPhoneNumber = cellPhoneNumber;
+    }
+
+    public String getDateBirth() {
+        return dateBirth;
+    }
+
+    public void setDateBirth(String dateBirth) {
+        this.dateBirth = dateBirth;
     }
 
     public int getCollectionNum() {
@@ -128,23 +157,5 @@ public class UserInfo implements Parcelable {
 
     public void setMemberId(int memberId) {
         this.memberId = memberId;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(gradeName);
-        parcel.writeString(cellPhoneNumber);
-        parcel.writeInt(collectionNum);
-        parcel.writeInt(integral);
-        parcel.writeString(nickname);
-        parcel.writeInt(couponsNum);
-        parcel.writeInt(id);
-        parcel.writeString(headPortrait);
-        parcel.writeInt(memberId);
     }
 }

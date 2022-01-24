@@ -2,6 +2,7 @@ package com.cyty.mall.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
 import com.hjq.toast.ToastUtils;
+import com.jaeger.library.StatusBarUtil;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -102,5 +104,10 @@ public class NotificationDetailActivity extends BaseActivity {
         if (!newsInfo.getNewsContent().isEmpty()) {
             tvMessage.setText(newsInfo.getNewsContent());
         }
+    }
+    @Override
+    protected void setStatusBar() {
+        setLightStatusBarForM(this, true);
+        StatusBarUtil.setColor(this, Color.WHITE, 0);
     }
 }

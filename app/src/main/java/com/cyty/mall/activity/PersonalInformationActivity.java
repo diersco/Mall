@@ -2,10 +2,12 @@ package com.cyty.mall.activity;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -16,8 +18,15 @@ import androidx.appcompat.widget.Toolbar;
 import com.bumptech.glide.Glide;
 import com.cyty.mall.R;
 import com.cyty.mall.base.BaseActivity;
+import com.cyty.mall.bean.UserInfo;
+import com.cyty.mall.event.RefreshUserInfoEvent;
+import com.cyty.mall.http.HttpEngine;
+import com.cyty.mall.http.HttpManager;
+import com.cyty.mall.http.HttpResponse;
+import com.cyty.mall.util.AppUtils;
 import com.cyty.mall.util.DateTools;
 import com.cyty.mall.util.FileUtils;
+import com.cyty.mall.util.GlideUtil;
 import com.hjq.toast.ToastUtils;
 import com.jaeger.library.StatusBarUtil;
 import com.jzxiang.pickerview.TimePickerDialog;
@@ -32,6 +41,8 @@ import com.permissionx.guolindev.request.ForwardScope;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 import com.zhihu.matisse.internal.entity.CaptureStrategy;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.List;
@@ -66,7 +77,10 @@ public class PersonalInformationActivity extends BaseActivity {
     private TimePickerDialog birthdayDialog;
     private long years = 100L * 365 * 1000 * 60 * 60 * 24L;
     private String birthday;
+    private String nikeName;
+    private String phone;
     private static final int REQUEST_CODE_HEAD = 0x123;
+    private String headUrl;
 
     @Override
     protected void onNetReload(View v) {
@@ -123,8 +137,41 @@ public class PersonalInformationActivity extends BaseActivity {
                 .setWheelItemTextSelectorColor(getResources().getColor(R.color.timepicker_toolbar_bg))
                 .setWheelItemTextSize(14)
                 .build();
+        getUserInfo();
     }
 
+    /**
+     * 获取用户信息
+     */
+    private void getUserInfo() {
+        HttpManager.getInstance().getUserInfo(
+                new HttpEngine.HttpResponseResultCallback<HttpResponse.getUserInfoResponse>() {
+                    @Override
+                    public void onResponse(boolean result, String message, HttpResponse.getUserInfoResponse data) {
+                        if (result) {
+                            setUserInfo(data.data);
+                        } else {
+                            ToastUtils.show(message);
+                        }
+                    }
+                });
+    }
+
+    /**
+     * 设置我的页面信息
+     *
+     * @param userInfo 数据
+     */
+    @SuppressLint("SetTextI18n")
+    private void setUserInfo(UserInfo userInfo) {
+        if (!TextUtils.isEmpty(userInfo.getNickname())) etNickName.setText(userInfo.getNickname());
+        if (!TextUtils.isEmpty(userInfo.getCellPhoneNumber()))
+            etPhone.setText(userInfo.getCellPhoneNumber());
+        if (!TextUtils.isEmpty(userInfo.getDateBirth()))
+            tvBirthday.setText(userInfo.getDateBirth());
+        if (!TextUtils.isEmpty(userInfo.getHeadPortrait()))
+            GlideUtil.with(mContext).displayImage(userInfo.getHeadPortrait(), ivHead);
+    }
 
     @OnClick(R.id.iv_head)
     public void onViewClicked() {
@@ -169,11 +216,28 @@ public class PersonalInformationActivity extends BaseActivity {
                         Glide.with(mContext).load(result2.get(0))
                                 .into(ivHead);
                         File file = FileUtils.uriToFile(result2.get(0), mContext);
-//                        uploadHead(file);
+                        uploadImg(file);
                     }
                     break;
             }
         }
+    }
+
+    /**
+     * 上传图片
+     */
+    private void uploadImg(File file) {
+        HttpManager.getInstance().uploadImg(file,
+                new HttpEngine.HttpResponseResultCallback<HttpResponse.uploadImgResponse>() {
+                    @Override
+                    public void onResponse(boolean result, String message, HttpResponse.uploadImgResponse data) {
+                        if (result) {
+                            headUrl = data.url;
+                        } else {
+                            ToastUtils.show(message);
+                        }
+                    }
+                });
     }
 
     @Override
@@ -189,7 +253,37 @@ public class PersonalInformationActivity extends BaseActivity {
                 birthdayDialog.show(getSupportFragmentManager(), "all");
                 break;
             case R.id.tv_sure:
+                nikeName = etNickName.getText().toString().trim();
+                phone = etPhone.getText().toString().trim();
+                if (TextUtils.isEmpty(nikeName)) {
+                    ToastUtils.show("请输入昵称");
+                    return;
+                }
+                if (!AppUtils.isPhoneNumber(phone)) {
+                    ToastUtils.show("请输入正确的手机号");
+                    return;
+                }
+                if (TextUtils.isEmpty(birthday)) {
+                    ToastUtils.show("请选择出生日期");
+                    return;
+                }
+                updateUserInfo();
                 break;
         }
+    }
+
+
+    private void updateUserInfo() {
+        HttpManager.getInstance().updateUserInfo(phone, birthday, headUrl, nikeName,
+                new HttpEngine.HttpResponseResultCallback<HttpResponse.updateUserInfoResponse>() {
+                    @Override
+                    public void onResponse(boolean result, String message, HttpResponse.updateUserInfoResponse data) {
+                        if (result) {
+                            EventBus.getDefault().post(new RefreshUserInfoEvent());
+                        } else {
+                            ToastUtils.show(message);
+                        }
+                    }
+                });
     }
 }

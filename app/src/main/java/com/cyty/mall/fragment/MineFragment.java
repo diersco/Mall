@@ -17,12 +17,12 @@ import com.cyty.mall.activity.MyScoresActivity;
 import com.cyty.mall.activity.NotificationListActivity;
 import com.cyty.mall.activity.OrderActivity;
 import com.cyty.mall.activity.PersonalSettingsActivity;
-import com.cyty.mall.activity.SelectAftermarketTypeActivity;
 import com.cyty.mall.activity.SignInActivity;
 import com.cyty.mall.base.BaseFragment;
 import com.cyty.mall.bean.UserInfo;
 import com.cyty.mall.contants.MKParameter;
 import com.cyty.mall.event.RefreshNewsListEvent;
+import com.cyty.mall.event.RefreshUserInfoEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
@@ -221,12 +221,22 @@ public class MineFragment extends BaseFragment {
     }
 
     /**
-     * 刷新列表
+     * 刷新可读信息
      *
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshNewsListEvent(RefreshNewsListEvent event) {
         selectReadNews();
+    }
+
+    /**
+     * 刷新用户信息
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshUserInfoEvent(RefreshUserInfoEvent event) {
+        getUserInfo();
     }
 }

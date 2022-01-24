@@ -20,12 +20,16 @@ import com.cyty.mall.adapter.OrderDetailAdapter;
 import com.cyty.mall.base.BaseActivity;
 import com.cyty.mall.bean.OrderDetailInfo;
 import com.cyty.mall.contants.Constant;
+import com.cyty.mall.event.RefreshOrderDetailEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
 import com.cyty.mall.util.DigitUtil;
 import com.hjq.toast.ToastUtils;
 import com.jaeger.library.StatusBarUtil;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,6 +100,7 @@ public class OrderDetailActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        isUseEventBus(true);
         id = getIntent().getIntExtra(Constant.INTENT_ID, 0);
     }
 
@@ -130,6 +135,8 @@ public class OrderDetailActivity extends BaseActivity {
             tvTotalGoodsPrice.setText("￥" + orderDetailInfo.getPaymentAmount());
         if (!orderDetailInfo.getFreight().isEmpty())
             tvFreight.setText("￥" + orderDetailInfo.getFreight());
+        if (!orderDetailInfo.getDiscountAmount().isEmpty())
+            tvCoupon.setText("-￥" + orderDetailInfo.getDiscountAmount());
         if (!orderDetailInfo.getOrderTime().isEmpty())
             tvOrderTime.setText(orderDetailInfo.getOrderTime().split(" ")[0]);
     }
@@ -154,7 +161,7 @@ public class OrderDetailActivity extends BaseActivity {
                 } else if (view.getId() == R.id.tv_evaluate) {
                     if (orderDetailsListBean.getEvaluateStatus() == 2 || orderDetailsListBean.getEvaluateStatus() == 3) {
                         //评价页面
-                        OrderCommentActivity.startActivity(mContext);
+                        OrderCommentActivity.startActivity(mContext, orderDetailsListBean, id + "");
                     }
                 }
             }
@@ -174,5 +181,15 @@ public class OrderDetailActivity extends BaseActivity {
     protected void setStatusBar() {
         setLightStatusBarForM(this, true);
         StatusBarUtil.setColor(this, Color.WHITE, 0);
+    }
+
+    /**
+     * 刷新用户信息
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshOrderDetailEvent(RefreshOrderDetailEvent event) {
+        selectMallOrderDetailsById();
     }
 }

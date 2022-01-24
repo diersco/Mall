@@ -111,6 +111,7 @@ public class ConfirmOrderActivity extends BaseActivity {
     private int shoppingCart;
     //支付方式 2 支付宝 1 微信  默认支付宝
     private int paymentType = 2;
+    private int couponId = -1;
 
     @Override
     protected void onNetReload(View v) {
@@ -220,7 +221,7 @@ public class ConfirmOrderActivity extends BaseActivity {
      * 创建订单
      */
     private void createOrder() {
-        HttpManager.getInstance().createOrder(addressId, ids, shoppingCart, paymentType,
+        HttpManager.getInstance().createOrder(addressId, ids, shoppingCart, paymentType, couponId,
                 new HttpEngine.HttpResponseResultCallback<HttpResponse.createOrderResponse>() {
                     @Override
                     public void onResponse(boolean result, String message, HttpResponse.createOrderResponse data) {
@@ -464,6 +465,6 @@ public class ConfirmOrderActivity extends BaseActivity {
         double price = Double.parseDouble(mConfirmOrderInfo.getTotalPrice()) - event.getDiscount();
         tvTotalGoodsPrice.setText("￥" + price);
         tvCoupon.setText("-￥" + event.getDiscount());
-
+        couponId = event.getCouponId();
     }
 }

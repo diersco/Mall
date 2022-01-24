@@ -141,10 +141,10 @@ dependencies {
     implementation 'com.bigkoo:alertview:1.0.3'
     //tabLayout
     implementation 'io.github.h07000223:flycoTabLayout:3.0.0'
-    //微信支付
-    implementation 'com.tencent.mm.opensdk:wechat-sdk-android:6.8.0'
     //时间选择
     implementation 'com.jzxiang.pickerview:TimePickerDialog:1.0.1'
+    //微信支付
+    implementation 'com.tencent.mm.opensdk:wechat-sdk-android:6.8.0'
     //完整版引入
     implementation 'com.shuyu:GSYVideoPlayer:7.1.4'
     implementation (name: 'alipaysdk-15.8.06.211122170115', ext: 'aar')

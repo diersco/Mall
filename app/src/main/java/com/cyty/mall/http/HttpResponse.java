@@ -23,6 +23,7 @@ import com.cyty.mall.bean.OrderListInfo;
 import com.cyty.mall.bean.OrderUserInfo;
 import com.cyty.mall.bean.ProblemInfo;
 import com.cyty.mall.bean.ScoreGoodsInfo;
+import com.cyty.mall.bean.SeckillGoodsInfo;
 import com.cyty.mall.bean.SignInInfo;
 import com.cyty.mall.bean.SignInfo;
 import com.cyty.mall.bean.SkillTypeInfo;
@@ -40,13 +41,21 @@ public class HttpResponse {
     public int code;
     public int total;
     public String customerService;
+    public String url;
 
+
+    /**
+     * 上传多张图片
+     */
+    public static class uploadImgsResponse extends HttpResponse {
+        public String data;
+    }
 
     /**
      * 上传图片
      */
     public static class uploadImgResponse extends HttpResponse {
-        public HomeDataInfo data;
+        public String data;
     }
 
     /**
@@ -298,7 +307,7 @@ public class HttpResponse {
      * 获取秒杀排期商品
      */
     public static class selectSchedulingListResponse extends HttpResponse {
-        public List<ScoreGoodsInfo> rows;
+        public List<SeckillGoodsInfo> data;
     }
 
     /**
@@ -372,9 +381,23 @@ public class HttpResponse {
     }
 
     /**
+     * 修改个人信息
+     */
+    public static class updateUserInfoResponse extends HttpResponse {
+        public MemberBenefitsInfo data;
+    }
+
+    /**
      * 秒杀排期
      */
     public static class selectSeckillListResponse extends HttpResponse {
         public List<SkillTypeInfo> data;
+    }
+
+    /**
+     * 添加评价
+     */
+    public static class addAppraiseResponse extends HttpResponse {
+        public MemberBenefitsInfo data;
     }
 }

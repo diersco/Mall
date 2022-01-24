@@ -85,7 +85,6 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
             mBaseLoadService = LoadSir.getDefault()
                     .register(view, (Callback.OnReloadListener) v -> onNetReload(view));
         }
-
     }
 
     private boolean isShowedContent = false;
@@ -309,8 +308,10 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
             decor.setSystemUiVisibility(ui);
         }
     }
+
     /**
      * 利用反射获取状态栏高度
+     *
      * @return
      */
     public int getStatusBarHeight() {

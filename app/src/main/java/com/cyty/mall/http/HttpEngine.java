@@ -92,6 +92,7 @@ public class HttpEngine {
 
                     String message = resp.msg;
                     String customerService = resp.customerService;
+                    String url = resp.url;
 
                     boolean isTrue = false;
                     if (resp.code == 200) isTrue = true;

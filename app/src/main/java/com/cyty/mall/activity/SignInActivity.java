@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -20,6 +21,7 @@ import com.cyty.mall.bean.SignInInfo;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
+import com.cyty.mall.util.DisplayUtils;
 import com.cyty.mall.util.StringUtils;
 import com.hjq.toast.ToastUtils;
 import com.jaeger.library.StatusBarUtil;
@@ -50,6 +52,8 @@ public class SignInActivity extends BaseActivity {
     WebView mWebView;
     @BindView(R.id.layout_content)
     LinearLayout layoutContent;
+
+
     private int type = 4;
     private ArticleInfo mArticleInfo;
     private SignInInfo mSignInInfo;
@@ -164,49 +168,25 @@ public class SignInActivity extends BaseActivity {
 
     //size:代码中获取到的图片数量
     private void addGroupImage() {
-        layoutContent.removeAllViews();  //clear linearlayout
-        int num = mSignInInfo.getContinuity() / 7;
+        layoutContent.removeAllViews();
+        int num = mSignInInfo.getContinuity() % 7;
         for (int i = 0; i < 7; i++) {
             ImageView imageView = new ImageView(this);
             LinearLayout.LayoutParams layoutparams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            layoutparams.setMargins(20, 20, 20, 20);
+            layoutparams.setMargins(DisplayUtils.dip2px(mContext, 3), 0, DisplayUtils.dip2px(mContext, 3), 0);
+            View view = LayoutInflater.from(this).inflate(R.layout.item_sign_view, null);
+            TextView tvAddIntegral = findViewById(R.id.tv_add_integral);
+            ImageView ivStarSelected = findViewById(R.id.iv_star_selected);
+            TextView tvDay = findViewById(R.id.tv_day);
+
             imageView.setLayoutParams(layoutparams);
-            View view = createView(i,num);
             if (i <= 5) {
                 imageView.setImageResource(R.drawable.ic_arrow_right_pair); //图片资源
             }
-            layoutContent.addView(view); //动态添加图片
-            layoutContent.addView(imageView); //动态添加图片
+            layoutContent.addView(view);
+            layoutContent.addView(imageView);
         }
-    }
-
-    private View createView(int i, int num) {
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        LinearLayout view = new LinearLayout(this);
-        view.setOrientation(LinearLayout.VERTICAL);// 设置子View的Linearlayout// 为垂直方向布局
-        TextView tv1 = new TextView(this);
-        ImageView star = new ImageView(this);
-        lp.setMargins(0, 20, 0, 0);
-        star.setLayoutParams(lp);
-        if (i <= num) {
-            star.setImageResource(R.drawable.ic_sign_in_star_selected); //图片资源
-        } else {
-            star.setImageResource(R.drawable.ic_sign_in_star_un_selected); //图片资源
-            if (i == num + 1) {
-                tv1.setText("+" + mSignInInfo.getCheckPoints());
-                star.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ToastUtils.show("点击了");
-                    }
-                });
-            }
-        }
-        view.addView(tv1);
-        view.addView(star);
-        return view;
     }
 
     /**
@@ -237,7 +217,7 @@ public class SignInActivity extends BaseActivity {
             case R.id.tv_ask:
                 break;
             case R.id.tv_score_dynamics:
-                MyScoresActivity.startActivity(mContext, "0");
+                MyScoresActivity.startActivity(mContext, mSignInInfo.getUserIntegral() + "");
                 break;
         }
     }
