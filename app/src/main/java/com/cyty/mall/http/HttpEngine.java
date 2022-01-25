@@ -100,6 +100,7 @@ public class HttpEngine {
                         ActivityCollector.finishAll();
                         MkUtils.clearAll();
                         LoginActivity.startActivity(mContext);
+                        return;
                     }
 
                     if (callback != null) {
@@ -163,6 +164,7 @@ public class HttpEngine {
                         ActivityCollector.finishAll();
                         MkUtils.clearAll();
                         LoginActivity.startActivity(mContext);
+                        return;
                     }
 
                     if (callback != null) {
