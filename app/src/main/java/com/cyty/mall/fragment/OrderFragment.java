@@ -24,6 +24,8 @@ import com.cyty.mall.adapter.OrderListAdapter;
 import com.cyty.mall.base.BaseFragment;
 import com.cyty.mall.bean.OrderListInfo;
 import com.cyty.mall.bean.SignInfo;
+import com.cyty.mall.event.RefreshOrderListEvent;
+import com.cyty.mall.event.WeChartPayEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
@@ -33,6 +35,10 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +91,7 @@ public class OrderFragment extends BaseFragment {
     @Override
     protected void initView() {
         super.initView();
+        isUseEventBus(true);
         setLoadSir(refreshLayout);
         if (getArguments() != null) {
             type = getArguments().getInt(ARG_TYPE, 0);
@@ -168,7 +175,7 @@ public class OrderFragment extends BaseFragment {
                     public void onResponse(boolean result, String message, HttpResponse.confirmReceiptsResponse data) {
                         if (result) {
                             ToastUtils.show("确认收货成功");
-                            selectMallPaymentOrderList();
+                            EventBus.getDefault().post(new RefreshOrderListEvent());
                         } else {
                             ToastUtils.show(message);
                         }
@@ -186,7 +193,7 @@ public class OrderFragment extends BaseFragment {
                     public void onResponse(boolean result, String message, HttpResponse.cancelOrderResponse data) {
                         if (result) {
                             ToastUtils.show("取消成功");
-                            selectMallPaymentOrderList();
+                            EventBus.getDefault().post(new RefreshOrderListEvent());
                         } else {
                             ToastUtils.show(message);
                         }
@@ -277,7 +284,7 @@ public class OrderFragment extends BaseFragment {
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
-//                                    CoursePaySuccessActivity.startActivity(mContext, orderId);
+                                    EventBus.getDefault().post(new RefreshOrderListEvent());
                                     ToastUtils.show("支付成功");
                                 }
 
@@ -297,6 +304,31 @@ public class OrderFragment extends BaseFragment {
             }
         }
     };
+
+    private long time;
+
+    /**
+     * 微信支付结果
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void weiXinPayResult(WeChartPayEvent event) {
+
+        if (System.currentTimeMillis() - time < 1000) {
+            return;
+        }
+        time = System.currentTimeMillis();
+
+        int errCode = event.getErrCode();
+        if (errCode == 0) {
+            EventBus.getDefault().post(new RefreshOrderListEvent());
+        } else if (errCode == -2) {
+            //用户取消
+            ToastUtils.show("取消支付");
+        } else if (errCode == -1) {
+            //支付失败
+            ToastUtils.show("支付失败");
+        }
+    }
 
     /**
      * 订单列表
@@ -365,6 +397,16 @@ public class OrderFragment extends BaseFragment {
     private void refreshData() {
         state = STATE_REFRESH;
         pageIndex = 1;
+        selectMallPaymentOrderList();
+    }
+
+    /**
+     * 刷新
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshOrderListEvent(RefreshOrderListEvent event) {
         selectMallPaymentOrderList();
     }
 }

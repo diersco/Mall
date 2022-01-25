@@ -94,7 +94,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dp_12"
                             android:layout_toRightOf="@+id/tv_hour"
-                            android:text="10"
+                            android:text="00"
                             android:textColor="@color/white"
                             android:textSize="@dimen/sp_11" />
 
@@ -104,11 +104,18 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="@dimen/dp_12"
                             android:layout_toRightOf="@+id/tv_minute"
-                            android:text="10"
+                            android:text="00"
                             android:textColor="@color/white"
                             android:textSize="@dimen/sp_11" />
 
                     </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_10"
+                        android:text="开抢"
+                        android:textSize="@dimen/sp_10" />
 
                     <Space
                         android:layout_width="0dp"

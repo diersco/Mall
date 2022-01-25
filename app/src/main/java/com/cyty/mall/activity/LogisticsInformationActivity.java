@@ -1,5 +1,7 @@
 package com.cyty.mall.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -49,6 +51,7 @@ public class LogisticsInformationActivity extends BaseActivity {
     private String information;
     private List<LogisticsInfo.DataBean> dataBeanList = new ArrayList<>();
     private LogisticsInformationAdapter mAdapter;
+    private String orderNumber;
 
     @Override
     protected void onNetReload(View v) {
@@ -103,7 +106,8 @@ public class LogisticsInformationActivity extends BaseActivity {
                             //Gson类中有一个方法 fromJSon 参数分别为Json类型的字符串 还有T类型的.class
                             //此方法会返回一个T类型的值
                             LogisticsInfo logisticsInfo = gson.fromJson(information, LogisticsInfo.class);
-                            tvOrderNumbering.setText(logisticsInfo.getNu());
+                            orderNumber = logisticsInfo.getNu();
+                            tvOrderNumbering.setText(orderNumber);
                             dataBeanList = logisticsInfo.getData();
                             initAdapter();
                         } else {
@@ -123,7 +127,14 @@ public class LogisticsInformationActivity extends BaseActivity {
 
     @OnClick(R.id.tv_copy)
     public void onViewClicked() {
+        //获取剪贴板管理器：
+        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        // 创建普通字符型ClipData
+        ClipData mClipData = ClipData.newPlainText("orderNumber", orderNumber);
+        // 将ClipData内容放到系统剪贴板里。
+        cm.setPrimaryClip(mClipData);
     }
+
     @Override
     protected void setStatusBar() {
         setLightStatusBarForM(this, true);

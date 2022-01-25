@@ -3,6 +3,7 @@ package com.cyty.mall.base;
 import android.app.Activity;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -45,6 +46,25 @@ public class ActivityCollector {
             if (!activity.isFinishing()) {
 
                 activity.finish();
+            }
+        }
+    }
+    /**
+     * 保留指定界面
+     *
+     * @param cls
+     */
+    public static void finishAllActivityExcept(Class<?> cls) {
+
+        if (mActivities == null) {
+            return;
+        }
+        Iterator<Activity> iterator = mActivities.iterator();
+        while (iterator.hasNext()) {
+            Activity activity = iterator.next();
+            if (!activity.getClass().equals(cls)) {
+                activity.finish();
+                iterator.remove();
             }
         }
     }

@@ -325,7 +325,7 @@ public class ConfirmOrderActivity extends BaseActivity {
                                         e.printStackTrace();
                                     }
                                     finish();
-//                                    CoursePaySuccessActivity.startActivity(mContext, orderId);
+                                    PaymentSuccessfulActivity.startActivity(mContext);
                                     ToastUtils.show("支付成功");
                                 }
 
@@ -429,9 +429,9 @@ public class ConfirmOrderActivity extends BaseActivity {
 
         int errCode = event.getErrCode();
         if (errCode == 0) {
-//            CoursePaySuccessActivity.startActivity(mContext, orderId);
+            PaymentSuccessfulActivity.startActivity(mContext);
             finish();
-//            EventBus.getDefault().post(new UpdateOrderListEvent());
+
         } else if (errCode == -2) {
             //用户取消
             ToastUtils.show("取消支付");

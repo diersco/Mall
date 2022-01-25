@@ -310,6 +310,8 @@ public class GoodsDetailActivity extends BaseActivity {
                 break;
             case R.id.iv_share:
                 share(goodsInfo.getTitle(), goodsInfo.getDetails(), goodsInfo.getGoodsId() + "");
+//                shareWeb(GoodsDetailActivity.this,"https://appmall.ciyuantiaoyue.com/h5/index.html?goodsId="+goodsInfo.getGoodsId(),goodsInfo.getTitle()
+//                ,goodsInfo.getDetails(),SHARE_MEDIA.WEIXIN);
                 break;
             case R.id.tv_shopping_cart:
                 finish();
@@ -408,11 +410,11 @@ public class GoodsDetailActivity extends BaseActivity {
                 .share();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+//    }
 
     @Override
     protected void setStatusBar() {
@@ -424,7 +426,6 @@ public class GoodsDetailActivity extends BaseActivity {
 
     @OnClick(R.id.tv_more_evaluation)
     public void onViewClicked() {
-
         ProductEvaluationListActivity.startActivity(mContext, goodsId);
     }
 }

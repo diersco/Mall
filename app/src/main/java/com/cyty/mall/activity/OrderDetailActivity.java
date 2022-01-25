@@ -158,12 +158,12 @@ public class OrderDetailActivity extends BaseActivity {
                 } else if (view.getId() == R.id.tv_after_sales) {
                     if (orderDetailsListBean.getAfterSale() == 1) {
                         //跳转申请售后
-                        SelectAftermarketTypeActivity.startActivity(mContext, orderDetailsListBean, orderId);
+                        SelectAftermarketTypeActivity.startActivity(mContext, orderDetailsListBean, orderDetailsListBean.getId()+"");
                     }
                 } else if (view.getId() == R.id.tv_evaluate) {
                     if (orderDetailsListBean.getEvaluateStatus() == 2 || orderDetailsListBean.getEvaluateStatus() == 3) {
                         //评价页面
-                        OrderCommentActivity.startActivity(mContext, orderDetailsListBean, orderId);
+                        OrderCommentActivity.startActivity(mContext, orderDetailsListBean, orderDetailsListBean.getId()+"");
                     }
                 }
             }
