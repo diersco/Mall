@@ -164,7 +164,10 @@ public class PersonalInformationActivity extends BaseActivity {
      */
     @SuppressLint("SetTextI18n")
     private void setUserInfo(UserInfo userInfo) {
-        if (!TextUtils.isEmpty(userInfo.getNickname())) etNickName.setText(userInfo.getNickname());
+        if (!TextUtils.isEmpty(userInfo.getNickname())) {
+
+        }
+            etNickName.setText(userInfo.getNickname());
         if (!TextUtils.isEmpty(userInfo.getCellPhoneNumber()))
             etPhone.setText(userInfo.getCellPhoneNumber());
         if (!TextUtils.isEmpty(userInfo.getDateBirth()))
@@ -255,6 +258,7 @@ public class PersonalInformationActivity extends BaseActivity {
             case R.id.tv_sure:
                 nikeName = etNickName.getText().toString().trim();
                 phone = etPhone.getText().toString().trim();
+                birthday = tvBirthday.getText().toString().trim();
                 if (TextUtils.isEmpty(nikeName)) {
                     ToastUtils.show("请输入昵称");
                     return;
@@ -279,6 +283,7 @@ public class PersonalInformationActivity extends BaseActivity {
                     @Override
                     public void onResponse(boolean result, String message, HttpResponse.updateUserInfoResponse data) {
                         if (result) {
+                            ToastUtils.show("保存成功！");
                             EventBus.getDefault().post(new RefreshUserInfoEvent());
                         } else {
                             ToastUtils.show(message);

@@ -6,6 +6,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -49,9 +50,17 @@ public class ProductEvaluationAdapter extends BaseQuickAdapter<AppraiseInfo, Bas
     protected void convert(@NotNull BaseViewHolder baseViewHolder, AppraiseInfo appraiseInfo) {
         baseViewHolder.setText(R.id.tv_name, appraiseInfo.getNickname())
                 .setText(R.id.tv_message, appraiseInfo.getComment() + "")
-                .setText(R.id.tv_reply, appraiseInfo.getReply() + "")
+
                 .setText(R.id.tv_time, appraiseInfo.getCreateTime());
         ImageView ivHead = baseViewHolder.getView(R.id.iv_head);
+        TextView tvReply = baseViewHolder.getView(R.id.tv_reply);
+        LinearLayout layoutReply = baseViewHolder.getView(R.id.layout_reply);
+        if (!StringUtils.isEmpty(appraiseInfo.getReply())){
+            tvReply.setText(appraiseInfo.getReply());
+            layoutReply.setVisibility(View.VISIBLE);
+        }else {
+            layoutReply.setVisibility(View.GONE);
+        }
         RecyclerView recyclerview = baseViewHolder.getView(R.id.recyclerview);
         if (!StringUtils.isEmpty(appraiseInfo.getHeadPortrait())) {
             GlideUtil.with(getContext()).displayImage(appraiseInfo.getHeadPortrait(), ivHead);

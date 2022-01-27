@@ -14,9 +14,7 @@ import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.cyty.mall.R;
 import com.cyty.mall.activity.SeckillGoodsDetailActivity;
 import com.cyty.mall.adapter.FlashSaleListAdapter;
-import com.cyty.mall.adapter.OrderListAdapter;
 import com.cyty.mall.base.BaseFragment;
-import com.cyty.mall.bean.HomeSecKillGoodsInfo;
 import com.cyty.mall.bean.SeckillGoodsInfo;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
@@ -112,7 +110,10 @@ public class FlashSaleFragment extends BaseFragment {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                 SeckillGoodsInfo seckillGoodsInfo = seckillGoodsInfoList.get(position);
-                SeckillGoodsDetailActivity.startActivity(mActivity, seckillGoodsInfo.getGoodsId());
+                if (seckillGoodsInfo.getGoodsId() > 0) {
+                    SeckillGoodsDetailActivity.startActivity(mActivity, seckillGoodsInfo.getGoodsId());
+                }
+
             }
         });
         selectSchedulingList();
@@ -153,6 +154,7 @@ public class FlashSaleFragment extends BaseFragment {
                     }
                 });
     }
+
     /**
      * 展示数据
      */

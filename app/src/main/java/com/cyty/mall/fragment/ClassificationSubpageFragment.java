@@ -115,7 +115,10 @@ public class ClassificationSubpageFragment extends BaseFragment {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                 GoodsListInfo goodsListInfo = goodsListInfoList.get(position);
-                GoodsDetailActivity.startActivity(mActivity, goodsListInfo.getGoodsId());
+                if (goodsListInfo.getGoodsId()>0) {
+                    GoodsDetailActivity.startActivity(mActivity, goodsListInfo.getGoodsId());
+                }
+
             }
         });
         getGoodsList();
