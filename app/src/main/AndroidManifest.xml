@@ -46,7 +46,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="q">
-        <activity android:name=".activity.RefundDetailsActivity"></activity>
+        <activity android:name=".activity.BindPhoneActivity"></activity>
+        <activity android:name=".activity.RefundDetailsActivity" />
         <activity
             android:name=".activity.PersonalInformationActivity"
             android:screenOrientation="portrait" /> <!-- 个人资料 -->

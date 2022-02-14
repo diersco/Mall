@@ -44,6 +44,7 @@ public class HttpResponse {
     public int total;
     public String customerService;
     public String url;
+    public boolean bind;
 
 
     /**
@@ -145,6 +146,20 @@ public class HttpResponse {
     }
 
     /**
+     * 获取绑定验证码
+     */
+    public static class SendCodeResponse extends HttpResponse {
+        public UserInfo data;
+    }
+
+    /**
+     * 绑定手机号
+     */
+    public static class bindMobileNumberResponse extends HttpResponse {
+        public String data;
+    }
+
+    /**
      * 验证码登录
      */
     public static class SmsLoginResponse extends HttpResponse {
@@ -155,7 +170,7 @@ public class HttpResponse {
      * 微信登录
      */
     public static class weChatLoginResponse extends HttpResponse {
-        public UserInfo data;
+        public String data;
     }
 
     /**

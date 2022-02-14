@@ -80,6 +80,14 @@ public class ServerApiConstants {
      */
     public static final String URL_SEND_SMS_CODE = BASE_URL + "/api/auth/sendSmsCode";
     /**
+     * 绑定发送发送验证码
+     */
+    public static final String URL_SEND_CODE = BASE_URL + "/api/auth/sendCode";
+    /**
+     * 绑定手机号
+     */
+    public static final String URL_BIND_PHONE = BASE_URL + "/api/auth/bindMobileNumber";
+    /**
      * 验证码登录
      */
     public static final String URL_SMS_LOGIN = BASE_URL + "/api/auth/smsLogin";
