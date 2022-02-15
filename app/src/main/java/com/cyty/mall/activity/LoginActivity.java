@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.blankj.utilcode.util.LogUtils;
 import com.cyty.mall.MainActivity;
 import com.cyty.mall.R;
 import com.cyty.mall.base.BaseActivity;
@@ -107,6 +108,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+//        mPhoneNumberAuthHelper.pnsReporterSetLoggerEnable(true);
         if (!MkUtils.decodeString(MKParameter.TOKEN).isEmpty())
             MainActivity.startActivity(mContext);
     }
@@ -436,6 +438,7 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onTokenFailed(String s) {
+                LogUtils.d(s);
                 sdkAvailable = false;
             }
         };

@@ -8,7 +8,7 @@ package com.cyty.mall.contants;
 public interface Constant {
     String WEI_XIN_APP_ID = "wx6495a900821f9933";
     //号码认证
-    String WEI_UMENG_APP_ID = "pNdrnKRU7UdomFdfj/XUErAfa4NPUZEL6LJkFx/VMlGkYRZhCKWW0vID5hdnTNDJ1GXK80qpWfBJqldGRefLsi8U5TpJW9sYvinoAnyIIdzAyYETH84Q9CuWZgCGSTWnUy7pdb8y2W9cVLPWoduczRXpDXLaIOW+yRXT9V1hWJvoOqm7v7DS/2RRvQHAHvwhYJvKi8uPU/kLb56uUE3ZWZMWaKrlqXgySBe467Q9p8lb9J5yQbVLiRPV7lU7PFKZI0FtMk7bgKDiQ+VLKfeH2mhsirs6Bh2AwqiU7huArQK8Jw0CQy949w==";
+    String WEI_UMENG_APP_ID = "FRlF/r3qKmAg/upylL72WcRQKG2ac4cvVMEFMSpaKcNRstsbg1pe4UAUdFPFUFIZHzC12/tgLmXulqEtPhlXO8lXeFlQFMn9ZKuoMS/IR3bb6G0i4mgd9qoHMvEtAPVHZ+Ahm6Y65jSeT+cVVbhe9hjnkQZxJ8xaQf6+2QFWt6Y16jNOl1E/zKbTPkvb6JtMnt0gHSXrMVvhNXN4xNxGsHASua4PvkiDQMvi3CkMu0lzbF2yPS3w1oTvcFJMGBRroU95JZxtJolUiTKDctvC755i2FLjGW6t44tOQ42RbaXUNNM8NbTJzw==";
     /**
      * 手机号正则
      */

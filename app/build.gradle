@@ -36,7 +36,8 @@ android {
         undefined
         release {
             undefined
-            storeFile file("D:/AndroidTool/AndroidProject/Mall/mallJks.jks")
+//            storeFile file("D:/AndroidTool/AndroidProject/Mall/mallJks.jks")
+            storeFile file("D:/Me/Mall/mallJks.jks")
             storePassword "mall2022"
             keyAlias "key0"
             keyPassword "mall2022"
@@ -186,5 +187,8 @@ dependencies {
     //友盟
     implementation files('libs/umeng-common-9.4.6.jar')
     implementation files('libs/umeng-share-core-7.1.7.jar')
+    implementation files('libs/umeng-share-wechat-full-7.1.7.jar')
+    implementation files('libs/umeng-shareboard-widget-7.1.7.jar')
+    implementation files('libs/umeng-sharetool-7.1.7.jar')
 
 }
