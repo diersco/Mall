@@ -106,7 +106,9 @@ public class FrontPageFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        videoPlayer.onVideoResume();
+        if (getUserVisibleHint()) {
+            videoPlayer.onVideoResume();
+        }
     }
 
     /**
@@ -121,7 +123,9 @@ public class FrontPageFragment extends BaseFragment {
         banner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(Object data, int position) {
-                GoodsDetailActivity.startActivity(mActivity, pictureListBeanList.get(position).getGoodsId());
+                if (pictureListBeanList.get(position).getGoodsId()>0) {
+                    GoodsDetailActivity.startActivity(mActivity, pictureListBeanList.get(position).getGoodsId());
+                }
             }
         });
     }
@@ -147,6 +151,8 @@ public class FrontPageFragment extends BaseFragment {
         videoPlayer.getBackButton().setVisibility(View.GONE);
         //全屏按钮
         videoPlayer.getFullscreenButton().setVisibility(View.GONE);
+        //小屏时不触摸滑动
+        videoPlayer.setIsTouchWiget(false);
         //增加封面
         ImageView imageView = new ImageView(mActivity);
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);

@@ -386,9 +386,13 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onResponse(boolean result, String message, HttpResponse.weChatLoginResponse data) {
                         if (result) {
-                            //请求成功后，保存token
-                            MkUtils.encode(MKParameter.TOKEN, data.msg);
-                            MainActivity.startActivity(mContext);
+                            if (data.bind){
+                                //请求成功后，保存token
+                                MkUtils.encode(MKParameter.TOKEN, data.data);
+                                MainActivity.startActivity(mContext);
+                            }else {
+                                BindPhoneActivity.startActivity(mContext,headPortrait,unionId,weChatNickname);
+                            }
                         } else {
                             ToastUtils.show(message);
                         }
@@ -414,6 +418,7 @@ public class LoginActivity extends BaseActivity {
                     }
                 });
     }
+
     public void sdkInit() {
         mCheckListener = new UMTokenResultListener() {
             @Override
@@ -505,6 +510,7 @@ public class LoginActivity extends BaseActivity {
         mPhoneNumberAuthHelper.setAuthListener(mTokenResultListener);
         mPhoneNumberAuthHelper.getLoginToken(this, timeout);
     }
+
     @Override
     protected void setStatusBar() {
         StatusBarUtil.setTranslucentForImageViewInFragment(this, null);

@@ -38,7 +38,6 @@ import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
@@ -216,7 +215,7 @@ public class GoodsDetailActivity extends BaseActivity {
                             goodsInfo = data.data;
                             showData(goodsInfo);
                         } else {
-
+                            ToastUtils.show(message);
                         }
                     }
                 });

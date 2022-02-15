@@ -32,7 +32,7 @@ public class CollectionInfo implements Parcelable {
     private String thumbnail;
     private int specId;
     private String spec;
-    private int price;
+    private String price;
     private int deletes;
 
     protected CollectionInfo(Parcel in) {
@@ -44,7 +44,7 @@ public class CollectionInfo implements Parcelable {
         thumbnail = in.readString();
         specId = in.readInt();
         spec = in.readString();
-        price = in.readInt();
+        price = in.readString();
         deletes = in.readInt();
     }
 
@@ -124,11 +124,11 @@ public class CollectionInfo implements Parcelable {
         this.spec = spec;
     }
 
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 
@@ -155,7 +155,7 @@ public class CollectionInfo implements Parcelable {
         parcel.writeString(thumbnail);
         parcel.writeInt(specId);
         parcel.writeString(spec);
-        parcel.writeInt(price);
+        parcel.writeString(price);
         parcel.writeInt(deletes);
     }
 }

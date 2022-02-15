@@ -138,7 +138,10 @@ public class ClassificationFragment extends BaseFragment {
         banner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(Object data, int position) {
-                GoodsDetailActivity.startActivity(mActivity,classIfPageBannerList.get(position).getGoodsId());
+                if (classIfPageBannerList.get(position).getGoodsId()>0) {
+                    GoodsDetailActivity.startActivity(mActivity,classIfPageBannerList.get(position).getGoodsId());
+                }
+
             }
         });
     }
@@ -286,7 +289,10 @@ public class ClassificationFragment extends BaseFragment {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                 HomeSecKillGoodsInfo.ListBean listBean = listBeanList.get(position);
-                SeckillGoodsDetailActivity.startActivity(mActivity, listBean.getGoodsId());
+                if (listBean.getGoodsId()>0) {
+                    SeckillGoodsDetailActivity.startActivity(mActivity, listBean.getGoodsId());
+                }
+
 
             }
         });

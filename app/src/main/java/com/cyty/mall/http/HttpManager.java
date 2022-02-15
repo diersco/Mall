@@ -347,7 +347,6 @@ public class HttpManager {
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("cellPhoneNumber", cellPhoneNumber);
-
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
         Request request = new Request.Builder().url(ServerApiConstants.URL_SEND_SMS_CODE)
                 .post(requestBody)
@@ -355,6 +354,46 @@ public class HttpManager {
         mHttpEngine.request(request, HttpResponse.SendSmsCodeResponse.class, callback, mContext);
     }
 
+    /**
+     * 获取绑定验证码
+     *
+     * @param cellPhoneNumber 手机号
+     * @param callback
+     */
+    public void sendCode(String cellPhoneNumber, HttpEngine.HttpResponseResultCallback<HttpResponse.SendCodeResponse> callback) {
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("cellPhoneNumber", cellPhoneNumber);
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_SEND_CODE)
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.SendCodeResponse.class, callback, mContext);
+    }
+
+    /**
+     * 获取绑定验证码
+     *
+     * @param cellPhoneNumber 手机号
+     * @param callback
+     */
+    public void bindMobileNumber(String cellPhoneNumber, String code, String headPortrait, String unionId, String wechatNickname,
+                                 HttpEngine.HttpResponseResultCallback<HttpResponse.bindMobileNumberResponse> callback) {
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("cellPhoneNumber", cellPhoneNumber);
+        jsonObject.addProperty("code", code);
+        jsonObject.addProperty("headPortrait", headPortrait);
+        jsonObject.addProperty("unionId", unionId);
+        jsonObject.addProperty("wechatNickname", wechatNickname);
+
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_BIND_PHONE)
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.bindMobileNumberResponse.class, callback, mContext);
+    }
 
     /**
      * 验证码登录
@@ -1161,7 +1200,7 @@ public class HttpManager {
      *
      * @param callback
      */
-    public void addReturnWaybill(int id,String ids, HttpEngine.HttpResponseResultCallback<HttpResponse.addReturnWaybillResponse> callback) {
+    public void addReturnWaybill(int id, String ids, HttpEngine.HttpResponseResultCallback<HttpResponse.addReturnWaybillResponse> callback) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
         jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_IDS, ids + "");

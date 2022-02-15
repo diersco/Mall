@@ -134,7 +134,10 @@ public class CollectionActivity extends BaseActivity {
             @Override
             public void onItemClick(@NonNull BaseQuickAdapter<?, ?> adapter, @NonNull View view, int position) {
                 CollectionInfo collectionInfo = collectionInfoList.get(position);
-                GoodsDetailActivity.startActivity(mContext, collectionInfo.getGoodsId());
+                if (collectionInfo.getGoodsId()>0) {
+                    GoodsDetailActivity.startActivity(mContext, collectionInfo.getGoodsId());
+                }
+
             }
         });
         getCollectionsList();

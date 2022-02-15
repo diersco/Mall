@@ -92,6 +92,7 @@ public class HttpEngine {
 
                     String message = resp.msg;
                     String customerService = resp.customerService;
+                    boolean bind = resp.bind;
                     String url = resp.url;
 
                     boolean isTrue = false;
