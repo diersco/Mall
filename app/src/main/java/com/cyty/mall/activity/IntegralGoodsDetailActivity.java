@@ -8,8 +8,8 @@ import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bigkoo.alertview.AlertView;
 import com.cyty.mall.R;
 import com.cyty.mall.adapter.GoodsBannerAdapter;
 import com.cyty.mall.base.BaseActivity;
@@ -20,11 +20,13 @@ import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
 import com.cyty.mall.util.StringUtils;
 import com.cyty.mall.view.GoodsFormatPopup;
-import com.hjq.toast.ToastUtils;
+import com.jaeger.library.StatusBarUtil;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.youth.banner.Banner;
 import com.youth.banner.indicator.CircleIndicator;
+import com.youth.banner.indicator.RoundLinesIndicator;
 import com.youth.banner.listener.OnBannerListener;
+import com.youth.banner.util.BannerUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,6 +62,7 @@ public class IntegralGoodsDetailActivity extends BaseActivity {
     private GoodsInfo goodsInfo;
     private List<String> imgList = new ArrayList<>();
     private GoodsBannerAdapter goodsBannerAdapter;
+
     @Override
     protected void onNetReload(View v) {
 
@@ -120,7 +123,7 @@ public class IntegralGoodsDetailActivity extends BaseActivity {
             imgList = Arrays.asList(split);
             initBanner();
         }
-        if (goodsInfo.getIntegral() >= 0) tvGoodsPrice.setText(goodsInfo.getIntegral()+ "积分");
+        if (goodsInfo.getIntegral() >= 0) tvGoodsPrice.setText(goodsInfo.getIntegral() + "积分");
         if (!StringUtils.isEmpty(goodsInfo.getDetails())) tvGoodsName.setText(goodsInfo.getTitle());
         if (goodsInfo.getSalesVolume() >= 0) tvSales.setText("销量：" + goodsInfo.getSalesVolume());
         if (goodsInfo.getTotalStock() >= 0) tvInventory.setText("库存：" + goodsInfo.getTotalStock());
@@ -129,6 +132,7 @@ public class IntegralGoodsDetailActivity extends BaseActivity {
             mWebView.loadDataWithBaseURL(null, StringUtils.getHtmlData(content), "text/html", "UTF-8", null);
         }
     }
+
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
         WebSettings settings = mWebView.getSettings();
@@ -151,6 +155,7 @@ public class IntegralGoodsDetailActivity extends BaseActivity {
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE); // 不加载缓存内容
     }
+
     /**
      * 加载banner
      */
@@ -158,7 +163,8 @@ public class IntegralGoodsDetailActivity extends BaseActivity {
         goodsBannerAdapter = new GoodsBannerAdapter(imgList, mContext);
         banner.setAdapter(goodsBannerAdapter).addBannerLifecycleObserver(this)//添加生命周期观察者
                 .isAutoLoop(true)
-                .setIndicator(new CircleIndicator(mContext));
+                .setIndicator(new RoundLinesIndicator(mContext));
+        banner.setIndicatorSelectedWidth((int) BannerUtils.dp2px(15));
         banner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(Object data, int position) {
@@ -166,10 +172,33 @@ public class IntegralGoodsDetailActivity extends BaseActivity {
             }
         });
     }
+
     @OnClick(R.id.tv_sure)
     public void onViewClicked() {
         if (goodsInfo != null) {
-            new GoodsFormatPopup(mContext, goodsInfo, 4).showPopupWindow();
+            //删除提示框
+            AlertView alertView = new AlertView("提示", "是否确定兑换该商品？", null, null, new String[]{"取消", "确定"}, mContext, AlertView.Style.Alert, new com.bigkoo.alertview.OnItemClickListener() {
+                @Override
+                public void onItemClick(Object o, int position) {
+                    if (position == 1) {
+                        new GoodsFormatPopup(mContext, goodsInfo, 4).showPopupWindow();
+                    }
+                }
+            });
+            alertView.show();
+
         }
+    }
+
+    @OnClick(R.id.iv_back)
+    public void onViewBackClicked() {
+        finish();
+    }
+
+    @Override
+    protected void setStatusBar() {
+
+        StatusBarUtil.setTransparentForImageView(this, null);
+        setLightStatusBarForM(this, true);
     }
 }

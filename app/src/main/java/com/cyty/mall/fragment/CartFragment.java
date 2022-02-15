@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.blankj.utilcode.util.StringUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -26,6 +25,7 @@ import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
 import com.cyty.mall.util.MkUtils;
+import com.cyty.mall.view.SlideRecyclerView;
 import com.hjq.toast.ToastUtils;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -44,7 +44,7 @@ import butterknife.OnClick;
 public class CartFragment extends BaseFragment {
 
     @BindView(R.id.recyclerview)
-    RecyclerView recyclerview;
+    SlideRecyclerView recyclerview;
     @BindView(R.id.tv_total_goods_price)
     TextView tvTotalGoodsPrice;
     @BindView(R.id.tv_is_freight)
@@ -121,7 +121,7 @@ public class CartFragment extends BaseFragment {
         recyclerview.setLayoutManager(new LinearLayoutManager(mActivity));
         recyclerview.setItemAnimator(new DefaultItemAnimator());
         recyclerview.setAdapter(mAdapter);
-        mAdapter.addChildClickViewIds(R.id.tv_reduce_num, R.id.tv_add_num);
+        mAdapter.addChildClickViewIds(R.id.tv_reduce_num, R.id.tv_add_num, R.id.tv_delete);
         mAdapter.setOnItemChildClickListener(new OnItemChildClickListener() {
             @Override
             public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
@@ -141,6 +141,8 @@ public class CartFragment extends BaseFragment {
                         showBuyData();
                         mAdapter.notifyDataSetChanged();
                     }
+                } else if (view.getId() == R.id.tv_delete) {
+                    deleteShoppingCart(cartGoodsInfo.getId(),position);
                 }
             }
         });
@@ -218,6 +220,40 @@ public class CartFragment extends BaseFragment {
             ids = "";
         }
 
+    }
+
+    /**
+     * 删除购物车
+     */
+    private void deleteShoppingCart(int id, int position) {
+        HttpManager.getInstance().deleteShoppingCart(id,
+                new HttpEngine.HttpResponseResultCallback<HttpResponse.deleteShoppingCartResponse>() {
+                    @Override
+                    public void onResponse(boolean result, String message, HttpResponse.deleteShoppingCartResponse data) {
+                        if (result) {
+                            //删除
+                            cartGoodsInfoList.remove(position);
+                            mAdapter.notifyDataSetChanged();
+                            //再判断是否全选
+                            chooseAll = mAdapter.getAllDataChoiceType();
+                            if (chooseAll) {
+                                Drawable drawableLeft = ContextCompat.getDrawable(getContext(),
+                                        R.drawable.ic_address_selected);
+                                tvSelectAll.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
+                                        null, null, null);
+                            } else {
+                                Drawable drawableLeft = ContextCompat.getDrawable(getContext(),
+                                        R.drawable.ic_address_unselected);
+                                tvSelectAll.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
+                                        null, null, null);
+                            }
+                            showBuyData();
+                            ToastUtils.show("删除成功");
+                        } else {
+                            ToastUtils.show(message);
+                        }
+                    }
+                });
     }
 
     /**

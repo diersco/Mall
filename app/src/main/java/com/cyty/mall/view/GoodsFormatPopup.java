@@ -165,9 +165,15 @@ public class GoodsFormatPopup extends BasePopupWindow {
             @Override
             public void onClick(View view) {
                 if (type == 1) {
-                    ids = formatId + "|" + buyNum;
-                    ConfirmOrderActivity.startActivity(mContext, ids);
-                    dismiss();
+                    if (buyNum < totalStock) {
+                        ids = formatId + "|" + buyNum;
+                        ConfirmOrderActivity.startActivity(mContext, ids);
+                        dismiss();
+                    } else {
+                        dismiss();
+                        ToastUtils.show("库存不足！");
+                    }
+
                 } else if (type == 2) {
                     addShoppingCart();
                     dismiss();
@@ -175,13 +181,23 @@ public class GoodsFormatPopup extends BasePopupWindow {
                     collections();
                     dismiss();
                 } else if (type == 4) {
-                    String f = formatId;
-                    IntegralConfirmOrderActivity.startActivity(mContext, title, listBean.getThumbnail(), spec, listBean.getIntegral(), formatId);
-                    dismiss();
+                    if (totalStock > 0) {
+                        IntegralConfirmOrderActivity.startActivity(mContext, title, listBean.getThumbnail(), spec, listBean.getIntegral(), formatId);
+                        dismiss();
+                    } else {
+                        dismiss();
+                        ToastUtils.show("库存不足！");
+                    }
+
                 } else if (type == 5) {
-                    ids = formatId + "|" + buyNum;
-                    SeckillConfirmOrderActivity.startActivity(mContext, ids);
-                    dismiss();
+                    if (buyNum < totalStock) {
+                        ids = formatId + "|" + buyNum;
+                        SeckillConfirmOrderActivity.startActivity(mContext, ids);
+                        dismiss();
+                    } else {
+                        dismiss();
+                        ToastUtils.show("库存不足！");
+                    }
                 }
             }
         });

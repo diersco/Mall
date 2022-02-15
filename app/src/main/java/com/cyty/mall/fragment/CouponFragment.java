@@ -15,6 +15,7 @@ import com.cyty.mall.R;
 import com.cyty.mall.adapter.CouponAdapter;
 import com.cyty.mall.base.BaseFragment;
 import com.cyty.mall.bean.CouponInfo;
+import com.cyty.mall.event.FinishCouponEvent;
 import com.cyty.mall.event.MainJumpEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
@@ -114,7 +115,7 @@ public class CouponFragment extends BaseFragment {
             @Override
             public void onItemChildClick(@NonNull BaseQuickAdapter adapter, @NonNull View view, int position) {
                 if (view.getId() == R.id.tv_use_type) {
-                    MainActivity.startActivity(mActivity);
+                    EventBus.getDefault().post(new FinishCouponEvent());
                     EventBus.getDefault().post(new MainJumpEvent(1));
                 }
             }

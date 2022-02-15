@@ -309,8 +309,7 @@ public class GoodsDetailActivity extends BaseActivity {
                 break;
             case R.id.iv_share:
                 share(goodsInfo.getTitle(), goodsInfo.getDetails(), goodsInfo.getGoodsId() + "");
-//                shareWeb(GoodsDetailActivity.this,"https://appmall.ciyuantiaoyue.com/h5/index.html?goodsId="+goodsInfo.getGoodsId(),goodsInfo.getTitle()
-//                ,goodsInfo.getDetails(),SHARE_MEDIA.WEIXIN);
+
                 break;
             case R.id.tv_shopping_cart:
                 finish();
@@ -332,88 +331,6 @@ public class GoodsDetailActivity extends BaseActivity {
         }
     }
 
-    /**
-     * 友盟分享
-     * 上下文activity、分享的链接、标题、内容、类型
-     * 若是要分享视频、音乐可看官方文档
-     */
-    public static void shareWeb(final Activity activity, String WebUrl, String title, String description, SHARE_MEDIA
-            platform) {
-        UMImage thumb = new UMImage(activity, R.mipmap.ic_logo);
-        UMWeb web = new UMWeb(WebUrl);//连接地址(注意链接开头必须包含http)
-        web.setTitle(title);//标题
-        web.setDescription(description);//描述
-        web.setThumb(thumb);//缩略图
-        new ShareAction(activity)
-                //分享的平台
-                .setPlatform(platform)
-                .withMedia(web)
-                .setCallback(new UMShareListener() {
-                    /**
-                     * @descrption 分享开始的回调
-                     * @param share_media 平台类型
-                     */
-                    @Override
-                    public void onStart(SHARE_MEDIA share_media) {
-                        Timber.e("onStart开始分享的平台: " + share_media);
-                    }
-
-                    /**
-                     * @descrption 分享成功的回调
-                     * @param share_media 平台类型
-                     */
-                    @Override
-                    public void onResult(final SHARE_MEDIA share_media) {
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(activity, " 分享成功 ", Toast.LENGTH_SHORT).show();
-                                Timber.e("onStart分享成功的平台: " + share_media);
-                            }
-                        });
-                    }
-
-                    /**
-                     * @descrption 分享失败的回调
-                     * @param share_media 平台类型
-                     * @param throwable 错误原因
-                     */
-                    @Override
-                    public void onError(final SHARE_MEDIA share_media, final Throwable throwable) {
-                        if (throwable != null) {
-                            //失败原因
-                            Timber.e("throw:" + throwable.getMessage());
-                        }
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(activity, share_media + " 分享失败", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-
-                    /**
-                     * @descrption 分享取消的回调
-                     * @param share_media 平台类型
-                     */
-                    @Override
-                    public void onCancel(final SHARE_MEDIA share_media) {
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(activity, " 分享取消 ", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                })
-                .share();
-    }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-//    }
 
     @Override
     protected void setStatusBar() {

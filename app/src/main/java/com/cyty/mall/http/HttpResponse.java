@@ -293,6 +293,12 @@ public class HttpResponse {
     }
 
     /**
+     * 删除购物车
+     */
+    public static class deleteShoppingCartResponse extends HttpResponse {
+        public List<CartGoodsInfo> rows;
+    }
+    /**
      * 我的积分变动流水列表
      */
     public static class selectMallFlowListResponse extends HttpResponse {

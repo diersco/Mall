@@ -10,7 +10,7 @@ public class ServerApiConstants {
      * base url
      */
 //    public static final String BASE_URL = "http://47.108.236.123:9528";
-    public static final String BASE_URL = " https://appmall.ciyuantiaoyue.com/prod-api/";
+    public static final String BASE_URL = " https://appmall.ciyuantiaoyue.com/prod-api";
     /**
      * 上传图片
      */
@@ -167,6 +167,10 @@ public class ServerApiConstants {
      * 购物车列表
      */
     public static final String URL_SHOPPING_LIST = BASE_URL + "/api/cart/selectShoppingCartList";
+    /**
+     * 删除购物车
+     */
+    public static final String URL_DELETE_SHOPPING_LIST = BASE_URL + "/api/cart/deleteShoppingCart";
     /**
      * 我的积分变动流水列表
      */

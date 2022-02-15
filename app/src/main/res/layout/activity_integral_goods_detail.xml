@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:banner="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -30,8 +31,20 @@
                     <com.youth.banner.Banner
                         android:id="@+id/banner"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        banner:banner_indicator_marginBottom="@dimen/dp_50"
+                        banner:banner_indicator_normal_color="@color/default_font_gray_333"
+                        banner:banner_indicator_normal_width="@dimen/dp_20"
+                        banner:banner_indicator_selected_color="@color/white"
+                        banner:banner_indicator_selected_width="@dimen/dp_20" />
 
+                    <ImageView
+                        android:id="@+id/iv_back"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_15"
+                        android:layout_marginTop="@dimen/dp_50"
+                        android:src="@drawable/ic_unite_return_black" />
 
                 </RelativeLayout>
 

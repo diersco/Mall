@@ -36,8 +36,8 @@ android {
         undefined
         release {
             undefined
-//            storeFile file("D:/AndroidTool/AndroidProject/Mall/mallJks.jks")
-            storeFile file("D:/Me/Mall/mallJks.jks")
+            storeFile file("D:/AndroidTool/AndroidProject/Mall/mallJks.jks")
+//            storeFile file("D:/Me/Mall/mallJks.jks")
             storePassword "mall2022"
             keyAlias "key0"
             keyPassword "mall2022"

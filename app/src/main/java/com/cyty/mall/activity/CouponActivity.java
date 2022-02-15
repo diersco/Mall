@@ -13,9 +13,14 @@ import androidx.viewpager.widget.ViewPager;
 import com.cyty.mall.R;
 import com.cyty.mall.adapter.CommPagerAdapter;
 import com.cyty.mall.base.BaseActivity;
+import com.cyty.mall.event.FinishCouponEvent;
+import com.cyty.mall.event.RefreshUniversalListEvent;
 import com.cyty.mall.fragment.CouponFragment;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.jaeger.library.StatusBarUtil;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -69,6 +74,7 @@ public class CouponActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        isUseEventBus(true);
         initTab();
     }
 
@@ -94,5 +100,13 @@ public class CouponActivity extends BaseActivity {
         setLightStatusBarForM(this, true);
         StatusBarUtil.setColor(this, Color.WHITE, 0);
     }
-
+    /**
+     * 关闭
+     *
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void FinishCouponEvent(FinishCouponEvent event) {
+        finish();
+    }
 }

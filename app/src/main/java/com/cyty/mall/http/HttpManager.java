@@ -817,7 +817,21 @@ public class HttpManager {
                 .build();
         mHttpEngine.request(request, HttpResponse.addShoppingCartResponse.class, callback, mContext);
     }
-
+    /**
+     * 删除购物车
+     *
+     * @param callback
+     */
+    public void deleteShoppingCart(int id, HttpEngine.HttpResponseResultCallback<HttpResponse.deleteShoppingCartResponse> callback) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty(HttpConfig.RequestKey.FORM_KEY_ID, id + "");
+        RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), String.valueOf(jsonObject));
+        Request request = new Request.Builder().url(ServerApiConstants.URL_DELETE_SHOPPING_LIST)
+                .addHeader("Authorization", "Bearer " + MkUtils.decodeString(MKParameter.TOKEN))
+                .post(requestBody)
+                .build();
+        mHttpEngine.request(request, HttpResponse.deleteShoppingCartResponse.class, callback, mContext);
+    }
     /**
      * 我的积分变动流水列表
      *

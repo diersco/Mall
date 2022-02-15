@@ -236,7 +236,9 @@ public class PointsMallActivity extends BaseActivity {
         banner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(Object data, int position) {
-                IntegralGoodsDetailActivity.startActivity(mContext, classIfPageBannerList.get(position).getGoodsId());
+                if (classIfPageBannerList.get(position).getGoodsId()>0) {
+                    IntegralGoodsDetailActivity.startActivity(mContext, classIfPageBannerList.get(position).getGoodsId());
+                }
             }
         });
     }
