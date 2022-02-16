@@ -16,6 +16,7 @@ import com.cyty.mall.activity.SeckillConfirmOrderActivity;
 import com.cyty.mall.adapter.GoodsFormatAdapter;
 import com.cyty.mall.adapter.GoodsFormatTwoAdapter;
 import com.cyty.mall.bean.GoodsInfo;
+import com.cyty.mall.event.RefreshGoodsEvent;
 import com.cyty.mall.event.RefreshUniversalListEvent;
 import com.cyty.mall.event.RefreshUserInfoEvent;
 import com.cyty.mall.http.HttpEngine;
@@ -247,6 +248,7 @@ public class GoodsFormatPopup extends BasePopupWindow {
                             ToastUtils.show("收藏成功！");
                             EventBus.getDefault().post(new RefreshUniversalListEvent());
                             EventBus.getDefault().post(new RefreshUserInfoEvent());
+                            EventBus.getDefault().post(new RefreshGoodsEvent());
                         } else {
                             ToastUtils.show(message);
                         }

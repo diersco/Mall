@@ -257,9 +257,8 @@ public class CartFragment extends BaseFragment {
     }
 
     /**
-     * 跳转
+     * 刷新
      */
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void refreshUniversalListEvent(RefreshUniversalListEvent event) {
         selectShoppingCartList();

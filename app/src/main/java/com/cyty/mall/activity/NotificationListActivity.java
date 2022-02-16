@@ -95,12 +95,13 @@ public class NotificationListActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        isUseEventBus(true);
         id = getIntent().getIntExtra(Constant.INTENT_ID, 0);
     }
 
     @Override
     protected void initData() {
-        isUseEventBus(true);
+
         setLoadSir(refreshLayout);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override

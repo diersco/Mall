@@ -27,6 +27,8 @@ import com.cyty.mall.bean.GoodsInfo;
 import com.cyty.mall.bean.OrderUserInfo;
 import com.cyty.mall.contants.Constant;
 import com.cyty.mall.event.MainJumpEvent;
+import com.cyty.mall.event.RefreshGoodsEvent;
+import com.cyty.mall.event.RefreshUniversalListEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
@@ -46,12 +48,13 @@ import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.util.BannerUtils;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -117,6 +120,7 @@ public class GoodsDetailActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        isUseEventBus(true);
         goodsId = getIntent().getIntExtra(Constant.INTENT_ID, 0);
         initWebView();
     }
@@ -401,7 +405,6 @@ public class GoodsDetailActivity extends BaseActivity {
     }
 
 
-
     @Override
     protected void setStatusBar() {
 
@@ -410,6 +413,13 @@ public class GoodsDetailActivity extends BaseActivity {
     }
 
 
+    /**
+     * 刷新
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void refreshGoodsEvent(RefreshGoodsEvent event) {
+        getGoodsInfo(goodsId);
+    }
     @OnClick(R.id.tv_more_evaluation)
     public void onViewClicked() {
         ProductEvaluationListActivity.startActivity(mContext, goodsId);
