@@ -1,5 +1,6 @@
 package com.cyty.mall.adapter;
 
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -56,6 +57,8 @@ public class OrderDetailAdapter extends BaseQuickAdapter<OrderDetailInfo.OrderDe
         switch (orderDetailsListBean.getEvaluateStatus()) {
             case 1:
                 tvEvaluate.setText("未出货");
+                tvAfterSales.setVisibility(View.GONE);
+                tvEvaluate.setVisibility(View.GONE);
                 break;
             case 2:
                 tvEvaluate.setText("待评价");

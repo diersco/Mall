@@ -1,16 +1,16 @@
 package com.cyty.mall.activity;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -30,6 +30,9 @@ import com.cyty.mall.event.MainJumpEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
+import com.cyty.mall.util.DisplayUtils;
+import com.cyty.mall.util.EncodingUtils;
+import com.cyty.mall.util.ImageUtil;
 import com.cyty.mall.util.StringUtils;
 import com.cyty.mall.view.GoodsFormatPopup;
 import com.hjq.toast.ToastUtils;
@@ -37,11 +40,6 @@ import com.jaeger.library.StatusBarUtil;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
-import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareListener;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.media.UMWeb;
 import com.youth.banner.Banner;
 import com.youth.banner.indicator.RoundLinesIndicator;
 import com.youth.banner.listener.OnBannerListener;
@@ -49,13 +47,18 @@ import com.youth.banner.util.BannerUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import timber.log.Timber;
 
 /**
  * 商品详情页面
@@ -73,6 +76,8 @@ public class GoodsDetailActivity extends BaseActivity {
     TextView tvSales;
     @BindView(R.id.iv_collect)
     ImageView ivCollect;
+    @BindView(R.id.iv_save)
+    ImageView ivSave;
     @BindView(R.id.tv_inventory)
     TextView tvInventory;
     @BindView(R.id.tv_evaluation_num)
@@ -298,10 +303,27 @@ public class GoodsDetailActivity extends BaseActivity {
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE); // 不加载缓存内容
     }
 
+    private final String url = "https://appmall.ciyuantiaoyue.com/h5/index.html?goodsId=%1s";
 
-    @OnClick({R.id.iv_collect, R.id.iv_share, R.id.tv_shopping_cart, R.id.tv_add_to_cart, R.id.tv_buy_now, R.id.iv_back})
+    @OnClick({R.id.iv_save, R.id.iv_collect, R.id.iv_share, R.id.tv_shopping_cart, R.id.tv_add_to_cart, R.id.tv_buy_now, R.id.iv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.iv_save:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        int with = DisplayUtils.dip2px(mContext, 40);
+                        Bitmap bitmap = EncodingUtils.createQRCode(String.format(url, goodsInfo.getGoodsId()), with, with);
+                        Bitmap backBitmap = getBitmap(goodsInfo.getThumbnail());
+                        Bitmap saveBitmap = ImageUtil.combineBitmap(backBitmap, bitmap);
+                        if (ImageUtil.saveBitmap(mContext, saveBitmap, "shareImage")) {
+                            ToastUtils.show("保存成功!");
+                        } else {
+                            ToastUtils.show("保存失败!");
+                        }
+                    }
+                }).start();
+                break;
             case R.id.iv_collect:
                 if (goodsInfo != null) {
                     new GoodsFormatPopup(mContext, goodsInfo, 3).showPopupWindow();
@@ -309,7 +331,6 @@ public class GoodsDetailActivity extends BaseActivity {
                 break;
             case R.id.iv_share:
                 share(goodsInfo.getTitle(), goodsInfo.getDetails(), goodsInfo.getGoodsId() + "");
-
                 break;
             case R.id.tv_shopping_cart:
                 finish();
@@ -330,6 +351,55 @@ public class GoodsDetailActivity extends BaseActivity {
                 break;
         }
     }
+
+    public Bitmap getBitmap(String imgUrl) {
+        InputStream inputStream = null;
+        ByteArrayOutputStream outputStream = null;
+        URL url = null;
+        try {
+            url = new URL(imgUrl);
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestMethod("GET");
+            httpURLConnection.setReadTimeout(2000);
+            httpURLConnection.connect();
+            if (httpURLConnection.getResponseCode() == 200) {
+                //网络连接成功
+                inputStream = httpURLConnection.getInputStream();
+                outputStream = new ByteArrayOutputStream();
+                byte buffer[] = new byte[1024 * 8];
+                int len = -1;
+                while ((len = inputStream.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, len);
+                }
+                byte[] bu = outputStream.toByteArray();
+
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bu, 0, bu.length);
+                return bitmap;
+            } else {
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+        return null;
+    }
+
 
 
     @Override

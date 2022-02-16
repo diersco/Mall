@@ -28,6 +28,7 @@ public class GoodsInfo implements Parcelable {
     private int salesVolume;
     private int goodsId;
     private String atlas;
+    private String thumbnail;
     private double price;
     private double priceSpike;
     private int totalStock;
@@ -42,6 +43,7 @@ public class GoodsInfo implements Parcelable {
         salesVolume = in.readInt();
         goodsId = in.readInt();
         atlas = in.readString();
+        thumbnail = in.readString();
         priceSpike = in.readDouble();
         price = in.readDouble();
         totalStock = in.readInt();
@@ -86,6 +88,14 @@ public class GoodsInfo implements Parcelable {
 
     public void setAtlas(String atlas) {
         this.atlas = atlas;
+    }
+
+    public String getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     public double getPrice() {
@@ -170,6 +180,7 @@ public class GoodsInfo implements Parcelable {
         parcel.writeInt(salesVolume);
         parcel.writeInt(goodsId);
         parcel.writeString(atlas);
+        parcel.writeString(thumbnail);
         parcel.writeDouble(price);
         parcel.writeDouble(priceSpike);
         parcel.writeInt(totalStock);

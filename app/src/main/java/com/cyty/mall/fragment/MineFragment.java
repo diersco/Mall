@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.StringUtils;
+import com.bumptech.glide.Glide;
 import com.cyty.mall.R;
 import com.cyty.mall.activity.AddressManagementActivity;
 import com.cyty.mall.activity.CollectionActivity;
@@ -140,8 +141,12 @@ public class MineFragment extends BaseFragment {
             myIntegral = userInfo.getIntegral();
             tvMyScoresNum.setText(userInfo.getIntegral() + "");
         }
-        if (!TextUtils.isEmpty(userInfo.getHeadPortrait()))
+        if (!TextUtils.isEmpty(userInfo.getHeadPortrait())){
             GlideUtil.with(mActivity).displayImage(userInfo.getHeadPortrait(), imgAvatar);
+        }else {
+            Glide.with(this).load(R.drawable.ic_normal_head).into(imgAvatar);
+        }
+
     }
 
     /**
