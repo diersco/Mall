@@ -143,8 +143,6 @@ public class MineFragment extends BaseFragment {
         }
         if (!TextUtils.isEmpty(userInfo.getHeadPortrait())){
             GlideUtil.with(mActivity).displayImage(userInfo.getHeadPortrait(), imgAvatar);
-        }else {
-            Glide.with(this).load(R.drawable.ic_normal_head).into(imgAvatar);
         }
 
     }

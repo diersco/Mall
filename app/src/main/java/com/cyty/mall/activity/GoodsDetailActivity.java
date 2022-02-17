@@ -28,12 +28,12 @@ import com.cyty.mall.bean.OrderUserInfo;
 import com.cyty.mall.contants.Constant;
 import com.cyty.mall.event.MainJumpEvent;
 import com.cyty.mall.event.RefreshGoodsEvent;
-import com.cyty.mall.event.RefreshUniversalListEvent;
 import com.cyty.mall.http.HttpEngine;
 import com.cyty.mall.http.HttpManager;
 import com.cyty.mall.http.HttpResponse;
 import com.cyty.mall.util.DisplayUtils;
 import com.cyty.mall.util.EncodingUtils;
+import com.cyty.mall.util.GlideUtil;
 import com.cyty.mall.util.ImageUtil;
 import com.cyty.mall.util.StringUtils;
 import com.cyty.mall.view.GoodsFormatPopup;
@@ -42,6 +42,8 @@ import com.jaeger.library.StatusBarUtil;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.youth.banner.Banner;
 import com.youth.banner.indicator.RoundLinesIndicator;
 import com.youth.banner.listener.OnBannerListener;
@@ -97,6 +99,8 @@ public class GoodsDetailActivity extends BaseActivity {
     RecyclerView recyclerviewEvaluation;
     @BindView(R.id.tv_more_evaluation)
     TextView tvMoreEvaluation;
+    @BindView(R.id.video_player)
+    StandardGSYVideoPlayer videoPlayer;
     //商品编号
     private int goodsId;
 
@@ -236,11 +240,20 @@ public class GoodsDetailActivity extends BaseActivity {
      */
     @SuppressLint("SetTextI18n")
     private void showData(GoodsInfo goodsInfo) {
-        if (!StringUtils.isEmpty(goodsInfo.getAtlas())) {
-            String[] split = goodsInfo.getAtlas().split(",");
-            imgList = Arrays.asList(split);
-            initBanner();
+        if (!StringUtils.isEmpty(goodsInfo.getVideos())){
+            videoPlayer.setVisibility(View.VISIBLE);
+            bannerClass.setVisibility(View.GONE);
+            initVideo();
+        }else {
+            videoPlayer.setVisibility(View.GONE);
+            bannerClass.setVisibility(View.VISIBLE);
+            if (!StringUtils.isEmpty(goodsInfo.getAtlas())) {
+                String[] split = goodsInfo.getAtlas().split(",");
+                imgList = Arrays.asList(split);
+                initBanner();
+            }
         }
+
         if (goodsInfo.getPrice() >= 0) tvGoodsPrice.setText("￥" + goodsInfo.getPrice());
         if (!StringUtils.isEmpty(goodsInfo.getDetails())) tvGoodsName.setText(goodsInfo.getTitle());
         if (goodsInfo.getSalesVolume() >= 0) tvSales.setText("销量：" + goodsInfo.getSalesVolume());
@@ -283,7 +296,25 @@ public class GoodsDetailActivity extends BaseActivity {
             }
         });
     }
-
+    /**
+     * 加载视频
+     */
+    private void initVideo() {
+        //增加title
+        videoPlayer.getTitleTextView().setVisibility(View.GONE);
+        //设置返回键
+        videoPlayer.getBackButton().setVisibility(View.GONE);
+        //全屏按钮
+        videoPlayer.getFullscreenButton().setVisibility(View.GONE);
+        //小屏时不触摸滑动
+        videoPlayer.setIsTouchWiget(false);
+        //增加封面
+        ImageView imageView = new ImageView(mContext);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        GlideUtil.with(mContext).displayImage(goodsInfo.getVideoss(), imageView);
+        videoPlayer.setThumbImageView(imageView);
+        videoPlayer.setUp(goodsInfo.getVideos(), true, "");
+    }
     @SuppressLint("SetJavaScriptEnabled")
     private void initWebView() {
         WebSettings settings = mWebView.getSettings();
@@ -413,6 +444,30 @@ public class GoodsDetailActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        videoPlayer.onVideoPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        videoPlayer.onVideoResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (videoPlayer != null) {
+            videoPlayer.release();
+            //释放所有
+            videoPlayer.setVideoAllCallBack(null);
+        }
+
+        GSYVideoManager.releaseAllVideos();
+    }
+
     /**
      * 刷新
      */
@@ -420,6 +475,7 @@ public class GoodsDetailActivity extends BaseActivity {
     public void refreshGoodsEvent(RefreshGoodsEvent event) {
         getGoodsInfo(goodsId);
     }
+
     @OnClick(R.id.tv_more_evaluation)
     public void onViewClicked() {
         ProductEvaluationListActivity.startActivity(mContext, goodsId);

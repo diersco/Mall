@@ -159,8 +159,6 @@ public class FrontPageFragment extends BaseFragment {
         GlideUtil.with(mActivity).displayImage(videoBean.getCover(), imageView);
         videoPlayer.setThumbImageView(imageView);
         videoPlayer.setUp(videoBean.getResourceLink(), true, "");
-
-
     }
 
     @Override

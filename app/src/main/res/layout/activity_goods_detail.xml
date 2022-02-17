@@ -31,9 +31,6 @@
                     android:layout_height="@dimen/dp_360">
 
 
-
-
-
                     <com.youth.banner.Banner
                         android:id="@+id/banner_class"
                         android:layout_width="match_parent"
@@ -43,6 +40,12 @@
                         banner:banner_indicator_normal_width="@dimen/dp_20"
                         banner:banner_indicator_selected_color="@color/white"
                         banner:banner_indicator_selected_width="@dimen/dp_20" />
+
+                    <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
+                        android:id="@+id/video_player"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone"/>
 
                     <ImageView
                         android:id="@+id/iv_back"

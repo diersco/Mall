@@ -29,6 +29,8 @@ public class GoodsInfo implements Parcelable {
     private int goodsId;
     private String atlas;
     private String thumbnail;
+    private String videoss;
+    private String videos;
     private double price;
     private double priceSpike;
     private int totalStock;
@@ -44,6 +46,8 @@ public class GoodsInfo implements Parcelable {
         goodsId = in.readInt();
         atlas = in.readString();
         thumbnail = in.readString();
+        videoss = in.readString();
+        videos = in.readString();
         priceSpike = in.readDouble();
         price = in.readDouble();
         totalStock = in.readInt();
@@ -96,6 +100,22 @@ public class GoodsInfo implements Parcelable {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public String getVideoss() {
+        return videoss;
+    }
+
+    public void setVideoss(String videoss) {
+        this.videoss = videoss;
+    }
+
+    public String getVideos() {
+        return videos;
+    }
+
+    public void setVideos(String videos) {
+        this.videos = videos;
     }
 
     public double getPrice() {
@@ -181,6 +201,8 @@ public class GoodsInfo implements Parcelable {
         parcel.writeInt(goodsId);
         parcel.writeString(atlas);
         parcel.writeString(thumbnail);
+        parcel.writeString(videoss);
+        parcel.writeString(videos);
         parcel.writeDouble(price);
         parcel.writeDouble(priceSpike);
         parcel.writeInt(totalStock);
@@ -224,7 +246,7 @@ public class GoodsInfo implements Parcelable {
                     '}';
         }
 
-        public static class SpecTwoListBean implements Parcelable{
+        public static class SpecTwoListBean implements Parcelable {
             /**
              * thumbnail : https://app-malll.oss-cn-chengdu.aliyuncs.com/upload/202112311539247787024.png
              * price : 130.00

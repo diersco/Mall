@@ -46,8 +46,20 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:targetApi="q">
-        <activity android:name=".activity.BindPhoneActivity"></activity>
-        <activity android:name=".activity.RefundDetailsActivity" />
+        <activity
+            android:name=".activity.SplashActivity"
+            android:launchMode="standard"
+            android:screenOrientation="portrait"
+            android:theme="@style/ThemeSplash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity><!-- 闪屏 -->
+        <activity android:name=".activity.BindPhoneActivity" /><!-- 绑定电话号码 -->
+        <activity android:name=".activity.RefundDetailsActivity" /><!-- 退款详情页面 -->
         <activity
             android:name=".activity.PersonalInformationActivity"
             android:screenOrientation="portrait" /> <!-- 个人资料 -->
@@ -156,12 +168,8 @@
         <activity
             android:name=".activity.PersonalSettingsActivity"
             android:screenOrientation="portrait" /> <!-- 个人设置 -->
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".MainActivity"><!--主-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <provider
